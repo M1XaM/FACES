@@ -1,0 +1,173 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Readex Pro', sans-serif;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items to the top */
+    padding: 0 40px;
+}
+
+header {
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+}
+
+.logo {
+    flex-shrink: 0;
+}
+
+.logo img {
+    height: 40px;
+}
+
+nav {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    padding: 10px;
+}
+
+.get-started {
+    background-color: #000;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.get-started::after {
+    content: '\2192';
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+/* Hero Section Styling */
+.hero-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items to the top */
+    background: linear-gradient(180deg, #FDFBFB 0%, #E9ECEF 100%);
+    padding: 100px 0;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    text-align: left; /* Ensure section content is aligned to the left */
+}
+
+.hero-content {
+    max-width: 600px;
+    text-align: left; /* Align text to the left */
+}
+
+.text-block {
+    color: #333;
+    text-align: left; /* Make sure all text inside is left-aligned */
+}
+
+.text-block h2 {
+    color: #4a7745;
+    font-size: 18px;
+    text-align: left; /* Left-align heading */
+}
+
+.text-block h1 {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 20px 0;
+    text-align: left; /* Left-align heading */
+}
+
+.text-block h1 span {
+    color: #0056ff;
+}
+
+.text-block p {
+    color: #7a7a7a;
+    font-size: 18px;
+    margin: 20px 0;
+    text-align: left; /* Left-align paragraph */
+}
+
+/* Workflow Diagram Section */
+.workflow-diagram {
+    background-color: #EEEFF1;
+    padding: 40px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin-left: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left; /* Left-align workflow diagram content */
+}
+.workflow-diagram img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .get-started {
+        margin-top: 10px;
+    }
+
+    .hero-section {
+        flex-direction: column;
+        text-align: left; /* Ensure text stays left-aligned */
+        align-items: flex-start; /* Left-align section contents */
+    }
+
+    .hero-content {
+        text-align: left; /* Keep the text aligned left */
+        align-items: flex-start;
+    }
+
+    .workflow-diagram {
+        margin-top: 40px;
+        align-self: center;
+    }
+}
