@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F.A.C.E.S Landing Page</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/da3cee17bc.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <header>
         <div class="container">
             <div class="logo">
@@ -16,8 +16,26 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="#">Features</a></li>
-                    <li><a href="#">Use Cases</a></li>
+                    <li>
+                        <div class="dropdown">  
+                            <button onclick="MyFunction()" class="dropbtn">Features<i class="fa-solid fa-arrow-up"></i></button>
+                            <div id="MyDropdown" class="dropdown-content">
+                                <a href="#">Link1</a>
+                                <a href="#">Link2</a>
+                                <a href="#">Link3</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dropdown2">
+                            <button onclick="MyFunctiontwo()" class="dropbtn">Use Cases</button>
+                            <div id="MyDropdown2" class="dropdown-content2">
+                                <a href="#">Link4</a>
+                                <a href="#">Link5</a>
+                                <a href="#">Link6</a>
+                            </div>
+                        </div>
+                    </li>
                     <li><a href="#">Pricing</a></li>
                 </ul>
             </nav>
@@ -41,6 +59,8 @@
             </div>
         </div>
     </section>
+    <script src="Dropdown.js"></script>
+
     
 </body>
 </html>
