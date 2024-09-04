@@ -22,15 +22,12 @@ body {
     background-color: transparent;
 }
 
-.fa-arrow-up {
-    transform: rotate(0deg);
-    transition: 1s linear;
-  }
-  
-.fa-arrow-up.open {
-    transform: rotate(-180deg);
-    transition: 1s linear;
-  }
+.rotate {
+    transition: transform 0.3s ease;
+    transform: rotate(180deg);
+}
+
+
 .dropdown, .dropdown2 {
     position: relative;
     display: inline-block;
