@@ -1,66 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F.A.C.E.S Landing Page</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>F.A.C.E.S</title>
     <script src="https://kit.fontawesome.com/da3cee17bc.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="logo">
-                <img src="logo.png" alt="Logo">
-            </div>
-            <nav>
-                <ul>
-                    <li>
-                        <div class="dropdown">  
-                            <button onclick="MyFunction()" class="dropbtn">Features<i class="fa-solid fa-arrow-up"></i></button>
-                            <div id="MyDropdown" class="dropdown-content">
-                                <a href="#">Link1</a>
-                                <a href="#">Link2</a>
-                                <a href="#">Link3</a>
-                            </div>
+        <img src="logo_url.png" alt="Logo" width="40" height="40"/>
+             <nav>
+                    <div class="dropdown">  
+                        <button onclick="MyFunction()" class="dropbtn">Features<i class="fa-solid fa-arrow-up"></i></button>
+                        <div id="MyDropdown" class="dropdown-content">
+                            <a href="#">Link1</a>
+                            <a href="#">Link2</a>
+                            <a href="#">Link3</a>
                         </div>
-                    </li>
-                    <li>
-                        <div class="dropdown2">
-                            <button onclick="MyFunctiontwo()" class="dropbtn">Use Cases<i class="fa-solid fa-arrow-up"></i></button>
-                            <div id="MyDropdown2" class="dropdown-content2">
-                                <a href="#">Link4</a>
-                                <a href="#">Link5</a>
-                                <a href="#">Link6</a>
-                            </div>
+                    </div>
+
+                    <div class="dropdown2">
+                        <button onclick="MyFunctiontwo()" class="dropbtn">Use Cases<i class="fa-solid fa-arrow-up"></i></button>
+                        <div id="MyDropdown2" class="dropdown-content2">
+                            <a href="#">Link4</a>
+                            <a href="#">Link5</a>
+                            <a href="#">Link6</a>
                         </div>
-                    </li>
-                    <li><a href="#">Pricing</a></li>
-                </ul>
-            </nav>
-            <a href="#" class="get-started">Get Started</a>
-        </div>
+                    </div>
+                    <a href="#">Pricing</a></li>
+                </nav>
+        <button class="btn-primary">Get Started</button>
     </header>
-    
-    <section class="hero-section">
-        <div class="container">
-            <div class="text-block">
-                <h2>Welcome to F.A.C.E.S</h2>
-                <h1>YOUR FULLY <span>AUTOMATED</span> CLIENT ENGAGEMENT <span>SYSTEM</span></h1>
-                <p>Automate your client interactions and boost engagement effortlessly</p>
-                <div class="hero-buttons">
-                    <a href="#" class="btn-dark">Watch Intro Video</a>
-                    <a href="#" class="btn-light">Request a Demo</a>
-                </div>
+    <section class="hero">
+        <div>
+            <h1>Welcome to F.A.C.E.S YOUR FULLY <span>AUTOMATED</span><br>CLIENT ENGAGEMENT <span>SYSTEM</span></h1>
+            <p>Automate your client interactions and boost engagement effortlessly.</p>
+            <button class="btn-primary">Learn More</button>
+            <button class="btn-secondary">Request a Demo</button>
+        </div>
+        <img src="image.png" alt="Illustration of automated client engagement system" width="400" height="400"/>
+    </section>
+    <section class="section">
+        <h2>Discover How <span style="color: #1a73e8;">F.A.C.E.S</span> Transforms Client Engagement</h2>
+        <p>See how F.A.C.E.S can enhance your client interactions and streamline your workflow.</p>
+        <img src="client_engagement_image_url.png" alt="Image showing client engagement" width="996" height="532"/>
+    </section>
+    <section class="section">
+        <h2>Discover the Powerful Features of <span style="color: #1a73e8;">F.A.C.E.S</span></h2>
+        <div class="features">
+            <div class="feature">
+                <h3><i class="fas fa-envelope"></i> Automated Emails</h3>
+                <p>Craft, schedule, and send personalized emails to your clients automatically.</p>
+                <a href="#">Learn More</a>
             </div>
-            <div class="workflow-diagram">
-                <img src="workflow-image.png" alt="Workflow Diagram">
+            <div class="feature">
+                <h3><i class="fas fa-robot"></i> AI-Powered Interactions</h3>
+                <p>Utilize AI to enhance your client interactions and provide a seamless experience.</p>
+                <a href="#">Learn More</a>
+            </div>
+            <div class="feature">
+                <h3><i class="fas fa-chart-line"></i> In-Depth Reporting</h3>
+                <p>Gain valuable insights with detailed reports on your client engagement.</p>
+                <a href="#">Learn More</a>
+            </div>
+            <div class="feature">
+                <h3><i class="fas fa-sms"></i> Automated SMS</h3>
+                <p>Send timely SMS notifications and reminders to keep your clients informed.</p>
+                <a href="#">Learn More</a>
+            </div>
+            <div class="feature">
+                <h3><i class="fas fa-bullseye"></i> Personalized Campaigns</h3>
+                <p>Create targeted campaigns tailored to your clients' needs and preferences.</p>
+                <a href="#">Learn More</a>
+            </div>
+            <div class="feature">
+                <h3><i class="fas fa-plug"></i> Seamless Integration</h3>
+                <p>Integrate F.A.C.E.S with your existing tools and systems effortlessly.</p>
+                <a href="#">Learn More</a>
             </div>
         </div>
     </section>
+<section class="section">
+    <h2>How <span style="color: #1a73e8;">F.A.C.E.S</span> Works</h2>
+    <p>Explore how F.A.C.E.S simplifies new client onboarding with step-by-step<br> flow diagrams, illustrating the streamlined process from initial client entry<br> to follow-up</p>
+    <div class="info">
+        <div class="closeinfo" data-number="1">
+            <h3>Connect CRM Systems</h3>
+            <p>Seamlessly integrate with your existing platforms.</p>
+        </div>
+        <div class="closeinfo" data-number="2">
+            <h3>Set Up Workflows</h3>
+            <p>Create automated workflows with timed and triggered events.</p>
+        </div>
+        <div class="closeinfo" data-number="3">
+            <h3>Automate Communication</h3>
+            <p>Use AI to determine the best interaction method and frequency.</p>
+        </div>
+        <div class="closeinfo" data-number="4">
+            <h3>Monitor & Optimize</h3>
+            <p>Analyze customer trends with in-depth reporting and adjust your strategy.</p>
+        </div>
+    </div>
+</section>
+    <section class="workflow">
+        <h2>See <span style="color: #1a73e8;">F.A.C.E.S</span> in Action</h2>
+        <p>Explore how F.A.C.E.S simplifies new client onboarding with step-by-step<br> flow diagrams, illustrating the streamlined process from initial client entry<br> to follow-up.</p>
+        <div class="dotted">
+            
+
+        </div>
+    </section>
+    <section class="section">
+        <h2>How <span style="color: #1a73e8;">F.A.C.E.S</span> Works</h2>
+        <p>Explore how F.A.C.E.S simplifies new client onboarding with step-by-step flow diagrams, illustrating the streamlined process from initial client entry to follow-up.</p>
+        <div class="features">
+            <div class="feature">
+                <h3>Connect CRM Systems</h3>
+                <p>Seamlessly integrate with your existing CRM platforms.</p>
+            </div>
+            <div class="feature">
+                <h3>Set Up Workflows</h3>
+                <p>Create automated workflows with timed and triggered events.</p>
+            </div>
+            <div class="feature">
+                <h3>Automate Communication</h3>
+                <p>Use AI to determine the best interaction method and frequency.</p>
+            </div>
+            <div class="feature">
+                <h3>Monitor & Optimize</h3>
+                <p>Analyze customer trends with in-depth reporting and adjust your strategy.</p>
+            </div>
+        </div>
+    </section>
+    <section class="ai-communication">
+        <h2>AI-Powered Customer Communication</h2>
+        <p>Delivering the Right Message at the Right Time</p>
+        <div class="features">
+            <div class="feature">
+                <h3>Personalized Messaging</h3>
+                <p>Send personalized messages to your clients based on their behavior and preferences.</p>
+            </div>
+            <div class="feature">
+                <h3>Optimal Timing</h3>
+                <p>Ensure your messages are delivered at the optimal time for maximum engagement.</p>
+            </div>
+            <div class="feature">
+                <h3>Continuous Learning</h3>
+                <p>Our AI continuously learns and improves to provide better client interactions.</p>
+            </div>
+        </div>
+    </section>
+    <section class="template-library">
+        <h2>Extensive Template Library</h2>
+        <p>Access a wide range of professionally designed templates to kickstart your campaigns.</p>
+        <div class="features">
+            <img src="template1_image_url.png" alt="Template 1" width="200" height="300"/>
+            <img src="template2_image_url.png" alt="Template 2" width="200" height="300"/>
+            <img src="template3_image_url.png" alt="Template 3" width="200" height="300"/>
+            <img src="template4_image_url.png" alt="Template 4" width="200" height="300"/>
+        </div>
+    </section>
+    <section class="cta">
+        <h2>Get Started with <span style="color: #1a73e8;">F.A.C.E.S</span> Today</h2>
+        <p>To learn more and see how we can transform your client engagement, contact us today!</p>
+        <button class="btn-primary">Request a Demo</button>
+        <button class="btn-secondary">Subscribe</button>
+    </section>
     <script src="Dropdown.js"></script>
 
-    
+    <footer>
+        <div class="links">
+            <a href="#">Company</a>
+            <a href="#">Help</a>
+            <a href="#">Newsletter</a>
+        </div>
+        <div class="newsletter">
+            <input type="email" placeholder="Enter your email"/>
+            <button>Subscribe</button>
+        </div>
+    </footer>
 </body>
 </html>
