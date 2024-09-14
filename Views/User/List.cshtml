@@ -1,0 +1,45 @@
+@model IEnumerable<User>
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@* would be comfortable to use this in Shared folder and use a personal file as a storage for all kind of 'temporary notifications' *@
+@* if using Shared folder, than we write not if statement, but: *@
+@* <partial name="_FileName"/> *@
+@* the line above can be put in any other file, same as in layout files *@
+@if(TempData["success"] != null)  
+{
+    <h2>Temporar message.</h2>
+}
+
+<h1>User List</h1>
+
+<table class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                User ID
+            </th>
+            <th>
+                UserName
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var obj in Model)
+        {
+            <tr>
+                <td width="10%">
+                    @obj.Id
+                </td>
+                <td width="45%">
+                    @obj.FirstName
+                </td>
+                <td width="45%">
+                @obj.CreationTime
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

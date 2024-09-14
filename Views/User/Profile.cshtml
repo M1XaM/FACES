@@ -1,0 +1,35 @@
+@model FACES.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h2>Welcome, @Model.User.FirstName!</h2>
+
+<p>Email: @Model.User.Email</p>
+
+<a asp-action="Logout" class="btn btn-secondary">Logout</a>
+<a asp-action="ModifyProfile" class="btn btn-primary">Modify profile</a>
+<a asp-action="ConfirmDeleteProfile" class="btn btn-primary">Delete profile</a>
+<a asp-action="GetCreateProject" asp-controller="Project" class="btn btn-primary"> Create Project </a>
+
+<h3>Projects</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var project in Model.Projects)
+        {
+            <tr>
+                <td>
+                <a href="@Url.Action("OpenProject", "Project", new { id = project.Id })">
+                        @project.Name
+                </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
