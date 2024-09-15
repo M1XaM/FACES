@@ -1,4 +1,0 @@
-FirstName,LastName,DateOfBirth,Gender,Email
-John,Doe,1990-05-14,Male,john.doe@example.com
-Jane,Smith,1985-08-24,Female,jane.smith@example.com
-Bob,Brown,1992-11-03,Male,bob.brown@example.com
