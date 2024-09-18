@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace FACES.Models;
 // see more about relationshipsin databases on https://learn.microsoft.com/en-us/ef/core/modeling/relationships
-public class User 
+public class User : IEntity
 {
     [Key]  // see more annotations on https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations?view=net-8.0
     public int Id { get; set; }

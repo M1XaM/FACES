@@ -1,5 +1,6 @@
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
+using FACES.Repositories;
 using FACES.Data;
 using FACES.Models;
 
@@ -17,6 +18,12 @@ builder.Logging.AddConsole();
 // also dont forget to migrate all of this 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// For generic repositories pattern
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+// For email notification
+builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
+builder.Services.AddTransient<IEmailService, SendGridEmailService>();
 
 builder.Services.AddSession(options =>
 {
@@ -39,10 +46,6 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}"
-);
+app.MapControllers();
 
 app.Run();

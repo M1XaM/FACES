@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
 namespace FACES.Models;
-public class Project
+public class Project : IEntity
 {
     [Key]
     public int Id { get; set; }

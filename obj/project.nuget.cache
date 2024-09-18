@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "NEE0Ix9+1Lcjozg7+vEJnMRyL28UcoXB6Cvi9GT2rFyIWdo40Ke9pBQOkqSOJJTUbGEuGoaIxmSqDPOkSeHV0g==",
+  "dgSpecHash": "F5Yvxh2UcArS6TUg9eXpbE1Oy/j5HBHdQrvsMzcmTCc90izpUOpjuiJHtHtZxXEEw1Y3loEC97mh0wSGAStE3g==",
   "success": true,
   "projectFilePath": "/home/maxim/MyFolder/FACES/FACES.csproj",
   "expectedPackageFiles": [
@@ -115,6 +115,8 @@
     "/home/maxim/.nuget/packages/nuget.projectmodel/6.9.1/nuget.projectmodel.6.9.1.nupkg.sha512",
     "/home/maxim/.nuget/packages/nuget.protocol/6.9.1/nuget.protocol.6.9.1.nupkg.sha512",
     "/home/maxim/.nuget/packages/nuget.versioning/6.9.1/nuget.versioning.6.9.1.nupkg.sha512",
+    "/home/maxim/.nuget/packages/sendgrid/9.29.3/sendgrid.9.29.3.nupkg.sha512",
+    "/home/maxim/.nuget/packages/starkbank-ecdsa/1.3.3/starkbank-ecdsa.1.3.3.nupkg.sha512",
     "/home/maxim/.nuget/packages/system.codedom/5.0.0/system.codedom.5.0.0.nupkg.sha512",
     "/home/maxim/.nuget/packages/system.collections.immutable/7.0.0/system.collections.immutable.7.0.0.nupkg.sha512",
     "/home/maxim/.nuget/packages/system.composition/7.0.0/system.composition.7.0.0.nupkg.sha512",

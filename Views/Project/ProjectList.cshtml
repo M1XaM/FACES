@@ -9,6 +9,7 @@
 
 <a asp-action="AddClient" asp-route-projectId="@Model.Project.Id" class="btn btn-primary">Add Client</a>
 <a asp-action="ImportClients" class="btn btn-primary">Import Clients</a>
+<a asp-action="SendEmail" asp-route-id="@Model.Project.Id" class="btn btn-primary">Send email</a>
 
 <h3>Clients</h3>
 <table class="table">

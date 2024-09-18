@@ -30,13 +30,12 @@ public class ApiV1Controller : Controller
     }
 
     [HttpGet("")]
-    [Route("api/v1")]
     public IActionResult RedirectToMain()
     {
-        return RedirectToAction(nameof(Main));
+        return RedirectToAction("Main");
     }
  
-    [HttpGet("Main")]
+    [HttpGet("main")]
     public IActionResult Main()
     {
         var hardcodedData = new

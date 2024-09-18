@@ -237,3 +237,5 @@
 /home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.pdb
 /home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.genruntimeconfig.cache
 /home/maxim/MyFolder/FACES/obj/Debug/net8.0/ref/FACES.dll
+/home/maxim/MyFolder/FACES/bin/Debug/net8.0/SendGrid.dll
+/home/maxim/MyFolder/FACES/bin/Debug/net8.0/StarkbankEcdsa.dll

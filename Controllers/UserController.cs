@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using FACES.Repositories;
 using FACES.Models;
 using FACES.Data;
 
@@ -17,17 +18,21 @@ using System.ComponentModel.DataAnnotations;
 
 
 namespace FACES.Controllers;
+[Route("user")]
 public class UserController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly ILogger<UserController> _logger;
+    private readonly IGenericRepository<User> _userRepo;
 
-    public UserController(ApplicationDbContext db, ILogger<UserController> logger)
+    public UserController(ApplicationDbContext db, ILogger<UserController> logger, IGenericRepository<User> userRepo)
     {
         _db = db;
         _logger = logger;
+        _userRepo = userRepo;
     }
 
+    [HttpGet("list")]
     public IActionResult List()
     {
         // more of the actions on db
@@ -37,14 +42,16 @@ public class UserController : Controller
         // var obj = _db.Users.FirstOrDefault();  return empty if no matches, first object if theres is a match or multiples ones
         // var obj = _db.Users.First(); returns error on no matches or first row on multpiple or single match
         // var obj = _db.Users.Find();  returns the row by id (that u pass here as arg)
-        IEnumerable<User> objUserList = _db.Users;
+
+        // IEnumerable<User> objUserList = _db.Users;  // basic approach
+        IEnumerable<User> objUserList = _userRepo.GetAll();  // general repository pattern approach
         return View(objUserList);
     }
 
-    [HttpGet]
+    [HttpGet("registration")]
     public IActionResult Registration() => View();
 
-    [HttpPost]
+    [HttpPost("registration")]
     [ValidateAntiForgeryToken]
     public IActionResult Registration(User obj)
     {
@@ -58,10 +65,11 @@ public class UserController : Controller
         }
         if(ModelState.IsValid)
         {
-            _db.Users.Add(obj);
+            // _db.Users.Add(obj);
+            _userRepo.Add(obj);
             // for modification of existing object use: _db.Users.Update(obj);
             // for deleting an objecting: var obj = _db.Users.Find(id); _db.Users.Remove(obj); id is passed to the action method as argument from the url
-            _db.SaveChanges();
+            // _db.SaveChanges();
 
             // We can use a temporar storage to send just for the next request
             TempData["success"] = "Temporar message";
@@ -70,40 +78,36 @@ public class UserController : Controller
         return View(obj);        
     }
 
-    [HttpGet]
+    [HttpGet("login")]
     public IActionResult Login() => View();
 
-    [HttpPost]
+    [HttpPost("login")]
     [ValidateAntiForgeryToken]
     public IActionResult Login(User user)
     {
         // Fetch the user from the database by their email or username
         var obj = _db.Users.SingleOrDefault(u => u.Email == user.Email);
-        
         if (obj == null)
         {
-            // User with the given email doesn't exist
             ModelState.AddModelError("", "Invalid email or password.");
             return View();
         }
 
         if (obj.Password != user.Password)
         {
-            // Password does not match
             ModelState.AddModelError("", "Invalid email or password.");
             return View();
         }
 
-        // If the user is valid, set session data and redirect to the profile page
+        // Set session data and redirect to the profile page
         HttpContext.Session.SetString("UserId", obj.Id.ToString());
         HttpContext.Session.SetString("Email", obj.Email);
         HttpContext.Session.SetString("SessionStartTime", DateTime.UtcNow.ToString("o")); // ISO 8601 format
-
         return RedirectToAction("Profile");
     }
 
 
-    [HttpGet]
+    [HttpGet("profile")]
     public IActionResult Profile()
     {
         var userIdString = HttpContext.Session.GetString("UserId");
@@ -118,7 +122,8 @@ public class UserController : Controller
             return RedirectToAction("Login");
         }
 
-        var user = _db.Users.SingleOrDefault(u => u.Id == userId);
+        // var user = _db.Users.SingleOrDefault(u => u.Id == userId);
+        var user = _userRepo.GetById(userId);
         if (user == null)
         {
             HttpContext.Session.Clear();
@@ -164,26 +169,25 @@ public class UserController : Controller
 
    
 
-    [HttpGet]
+    [HttpGet("modify-profile")]
     public IActionResult ModifyProfile() => View();
 
-    [HttpPost]
+    [HttpPost("modify-profile")]
     [ValidateAntiForgeryToken]
     public IActionResult ModifyProfile(User updatedUser)
     {
         var userIdString = HttpContext.Session.GetString("UserId");
-        if (string.IsNullOrEmpty(userIdString))
-        {
-            return RedirectToAction("Login");
-        }
-
-        if (!int.TryParse(userIdString, out var userId))
+        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
+        if (!ModelState.IsValid)
+        {
+            return View(updatedUser);
+        }
 
-        var user = _db.Users.SingleOrDefault(u => u.Id == userId);
+        var user = _userRepo.GetById(userId);
         if (user == null)
         {
             HttpContext.Session.Clear();
@@ -195,16 +199,15 @@ public class UserController : Controller
         user.Email = updatedUser.Email;
         user.Password = updatedUser.Password;
 
-        _db.Users.Update(user);
-        _db.SaveChanges();
+        _userRepo.Update(user);
         return RedirectToAction("Profile");
     }
 
 
-    [HttpGet]
+    [HttpGet("confirm-delete-profile")]
     public IActionResult ConfirmDeleteProfile() => View();
 
-    [HttpPost]
+    [HttpPost("confirm-delete-profile")]
     [ValidateAntiForgeryToken]
     public IActionResult DeleteProfile()
     {
@@ -233,15 +236,12 @@ public class UserController : Controller
             return RedirectToAction("Login");
         }
 
-        // User, associated projects, and related clients will be deleted automatically
-        _db.Users.Remove(user);
-        _db.SaveChanges();
-
+        _userRepo.Delete(user);
         HttpContext.Session.Clear(); 
         return RedirectToAction("List");
     }
 
-    [HttpGet]
+    [HttpGet("logout")]
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();

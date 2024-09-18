@@ -15,7 +15,7 @@ public enum CustomerType
 	Premium
 }
 
-public class Client
+public class Client : IEntity
 {
     [Key]
     public int Id { get; set; }

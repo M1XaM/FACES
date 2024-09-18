@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using FACES.Repositories;
 using FACES.Models;
 using FACES.Data;
+
 
 using Microsoft.Extensions.Logging;
 using CsvHelper.Configuration;
@@ -17,21 +19,30 @@ using System.ComponentModel.DataAnnotations;
 
 
 namespace FACES.Controllers;
+[Route("api")]
 public class ProjectController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly ILogger<UserController> _logger;
+    private readonly IGenericRepository<User> _userRepo;
+    private readonly IGenericRepository<Project> _projectRepo;
+    private readonly IGenericRepository<Client> _clientRepo;
+    private readonly IEmailService _emailService;
 
-    public ProjectController(ApplicationDbContext db, ILogger<UserController> logger)
+    public ProjectController(ApplicationDbContext db, IEmailService emailService, ILogger<UserController> logger, IGenericRepository<User> userRepo, IGenericRepository<Project> projectRepo, IGenericRepository<Client> clientRepo)
     {
         _db = db;
+        _emailService = emailService;
         _logger = logger;
+        _userRepo = userRepo;
+        _projectRepo = projectRepo;
+        _clientRepo = clientRepo;
     }
 
-    [HttpGet]
+    [HttpGet("create-project")]
     public IActionResult GetCreateProject() => View();
 
-    [HttpPost]
+    [HttpPost("create-project")]
     [ValidateAntiForgeryToken]
     public IActionResult CreateProject(Project newProject)
     {
@@ -48,7 +59,7 @@ public class ProjectController : Controller
             return RedirectToAction("Login");
         }
 
-        var user = _db.Users.SingleOrDefault(u => u.Id == userId);
+        var user = _userRepo.GetById(userId);
         if (user == null)
         {
             HttpContext.Session.Clear();
@@ -70,10 +81,7 @@ public class ProjectController : Controller
             {
                 Name = newProject.Name,
             };
-
-            // Add the project to the Projects table
-            _db.Projects.Add(project);
-            _db.SaveChanges();
+            _projectRepo.Add(project);
 
             var userProject = new UserProject
             {
@@ -83,15 +91,16 @@ public class ProjectController : Controller
             _db.UserProjects.Add(userProject);
             _db.SaveChanges();
 
-            return RedirectToAction("OpenProject", new { id = userProject.ProjectId });
+            return RedirectToAction("OpenProject", new { id = userProject.ProjectId}); // Redirect to the project list or another appropriate view
         }
 
-        return View("GetCreateProject"); // Return the view with the model to show validation errors
+        return View("GetCreateProject");
     }
 
+    [HttpGet("open-project")]
     public IActionResult OpenProject(int id)
     {
-        var project = _db.Projects.SingleOrDefault(p => p.Id == id);
+        var project = _projectRepo.GetById(id);
         if (project == null)
         {
             return NotFound();
@@ -107,24 +116,22 @@ public class ProjectController : Controller
             Project = project,
             Clients = clients
         };
-
         return View("ProjectList", viewModel);
     }
 
 
-    [HttpGet]
+    [HttpGet("add-client")]
     public IActionResult AddClient(int projectId)
     {
-        var model = new AddClientViewModel
+        var obj = new AddClientViewModel
         {
-            Project = _db.Projects.SingleOrDefault(p => p.Id == projectId),
+            Project = _projectRepo.GetById(projectId),
             Client = new Client()
         };
-
-        return View(model);
+        return View(obj);
     }
 
-    [HttpPost]
+    [HttpPost("add-client")]
     [ValidateAntiForgeryToken]
     public IActionResult AddClient(AddClientViewModel viewModel, int projectId)
     {
@@ -137,14 +144,12 @@ public class ProjectController : Controller
             }
         }
 
-        var project = _db.Projects.SingleOrDefault(p => p.Id == projectId);
+        var project = _projectRepo.GetById(projectId);
         viewModel.Project = project;
 
         if (ModelState.IsValid)
         {
-            _db.Clients.Add(viewModel.Client);
-            _db.SaveChanges();
-
+            _clientRepo.Add(viewModel.Client);
             var projectClient = new ProjectClient
             {
                 ProjectId = projectId,
@@ -161,12 +166,10 @@ public class ProjectController : Controller
         return View("AddClient", viewModel);
     }
 
-    
-
-    [HttpGet]
+    [HttpGet("import-clients")]
     public IActionResult ImportClients() => View();
     
-    [HttpPost]
+    [HttpPost("import-clients")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ImportClients(IFormFile file)
     {
@@ -224,5 +227,16 @@ public class ProjectController : Controller
         return View("ImportClients");
     }
 
+    public async Task<IActionResult> SendEmail(int id)
+    {
+        IEnumerable<Client> clients = _clientRepo.GetAll();
+        var emailTasks = new List<Task>();
+        foreach (Client client in clients)
+        {
+            emailTasks.Add(_emailService.SendEmailAsync(client.Email, "Welcome!", "Hello, this is a test email."));
+        }
 
+        await Task.WhenAll(emailTasks);
+        return RedirectToAction("OpenProject", new { id = id});
+    }
 }
