@@ -45,3 +45,27 @@ document.querySelector('.custom2-button').addEventListener('click', function(eve
         customWorkflowSteps.classList.add('show');
     }, 10);
 });
+
+// Get all project links
+const projectLinks = document.querySelectorAll('.project-link');
+
+// Add click event listener to each project link
+projectLinks.forEach(link => {
+    link.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+
+        // Hide the project section (item4)
+        const item4 = document.querySelector('.item4');
+        item4.classList.remove('show');
+        setTimeout(() => {
+            item4.style.display = 'none';
+        }, 300);
+
+        // Show the dashboard section (section1)
+        const dashboardSection = document.getElementById('section1');
+        dashboardSection.style.display = 'block';
+        setTimeout(() => {
+            dashboardSection.classList.add('show');
+        }, 10);
+    });
+});

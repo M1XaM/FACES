@@ -14,18 +14,33 @@ document.getElementById('createWorkflowBtn').addEventListener('click', function(
   });
 
   document.getElementById('saveAndNextBtn').addEventListener('click', function() {
+    const workflowBuilder = document.getElementById('workflowBuilder');
     const customWorkflowSteps = document.getElementById('customWorkflowSteps');
     const custom3Body = document.getElementById('custom3-body');
+    const headerCustom2 = document.querySelector('.header-custom2');
 
-    // Hide the current workflow steps
-    customWorkflowSteps.classList.remove('show');
+    // Log header-custom2 visibility status
+    console.log('Before change - Header visibility:', window.getComputedStyle(headerCustom2).display);
+
+    // Ensure the header stays visible
+    headerCustom2.style.display = 'flex';
+    headerCustom2.classList.add('show');
+
+    // Log after applying display and class
+    console.log('After change - Header visibility:', window.getComputedStyle(headerCustom2).display);
+
+    // Hide the workflowBuilder form
+    workflowBuilder.classList.remove('show');
     setTimeout(() => {
-        customWorkflowSteps.style.display = 'none'; // Hide the workflow steps section
+        workflowBuilder.style.display = 'none';
     }, 300);
 
-    // Show the next step (custom3Body - Workflow Trigger)
-    custom3Body.style.display = 'block'; // Make it visible
+    // Hide the customWorkflowSteps section
+    customWorkflowSteps.style.display = 'none';
+
+    // Show the next section (custom3Body)
+    custom3Body.style.display = 'block';
     setTimeout(() => {
-        custom3Body.classList.add('show'); // Animate opacity to make it fully visible
+      custom3Body.classList.add('show'); // Ensure smooth transition
     }, 10);
 });

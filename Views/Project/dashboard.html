@@ -16,7 +16,7 @@
       <div class="container">
         <div class="grid item1">
           <div class="logo">
-            <img src="logo.png">
+            <img src="../../Stuff/anotherStuff/logo.png">
           </div>
           <div class="text">
             <p>FACES</p>
@@ -24,21 +24,21 @@
         </div>
 
         <div class="grid item2">
-          <img src="profile.png">
+          <img src="https://placehold.co/40x40">
         </div>
-
+        
         <div class="grid item3">
           <div class="navbar">
             <ul class="button-container">
               <div class="menubuttons">
               <div class="topbuttons">
-              <li><button id="btn1" class="toggle-btn topnav"><i class="fa fa-dashboard"></i>&nbsp; Dashboard</button></li><br>
-              <li><button id="btn2" class="toggle-btn topnav"><i class="fa-solid fa-network-wired"></i>&nbsp; Workflow</button></li><br>
-              <li><button id="btn3" class="toggle-btn topnav"><i class="fa-solid fa-address-book"></i>&nbsp; Contacts</button></li><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+              <li><button id="btn1" class="toggle-btn topnav menu-btn"><img src="../../Stuff/anotherStuff/dashboard.png">&nbsp; Dashboard</button></li>
+              <li><button id="btn2" class="toggle-btn topnav menu-btn"><img src="../../Stuff/anotherStuff/workflow.png">&nbsp; Workflow</button></li>
+              <li><button id="btn3" class="toggle-btn topnav menu-btn"><img src="../../Stuff/anotherStuff/contacts.png">&nbsp; Contacts</button></li>
             </div>
             <div class="botbuttons">
-              <li><button id="btn4" class="toggle-btn topnav"><i class="fa-solid fa-gear"></i>&nbsp; Settings</button></li>
-              <li><button id="btn5" class="toggle-btn topnav"><i class="fa-regular fa-circle-question"></i>&nbsp; Help & Center</button></li>
+              <li><button id="btn4" class="toggle-btn topnav menu-btn"><img src="../../Stuff/anotherStuff/settings.png"></i>&nbsp; Settings</button></li>
+              <li><button id="btn5" class="toggle-btn topnav menu-btn"><img src="../../Stuff/anotherStuff/help.png">&nbsp; Help & Center</button></li>
             </div>
           </div>
             </ul>
@@ -93,6 +93,7 @@
                       <thead>
                         <tr>
                           <th>Name</th>
+
                           <th>Trigger</th>
                           <th>Action</th>
                         </tr>
@@ -186,7 +187,7 @@
                 <div class="custom2-body">
                   <div class="custom2-container">
                     <h1 class="custom2-title">Create new workflow</h1>
-                    <p class="custom2-subtitle">Automated and personalized workflows that cover your needs</p>
+                    <p class="custom2-subtitle">Automated and personalised workflows that cover your needs</p>
                     <form>
                       <label for="name" class="custom2-label">Name</label>
                       <input type="text" id="name" name="name" class="custom2-input" placeholder="Send birthday gift"></textarea>
@@ -204,7 +205,9 @@
                     </div>
                     <div class="steps-custom2">
                         <span class="active-custom2">Trigger</span>
+                        <span><img src="../../Stuff/anotherStuff/Line.png"></span>
                         <span>Settings</span>
+                        <span><img src="../../Stuff/anotherStuff/Line.png"></span>
                         <span>Workflow</span>
                     </div>
                     <button class="save-next-custom2" id="saveAndNextBtn">Save & Next</button>
@@ -216,7 +219,7 @@
                             <div class="category-custom2">
                                 <div>Categories</div>
                                 <div class="dates-button-custom2">
-                                    <i class="fas fa-calendar-alt"></i>
+                                    <img src="../../Stuff/anotherStuff/dates.png">&nbsp;
                                     Dates
                                 </div>
                             </div>
@@ -224,7 +227,9 @@
                             <div class="dates-custom2">
                                 <div class="title-custom2">Dates</div>
                                 <div class="date-box-custom2">
-                                    <i class="fas fa-calendar-alt"></i>
+                                  <div class="boximage">
+                                  <img src="../../Stuff/anotherStuff/dates.png">
+                                </div>
                                     <div class="text-custom2">
                                         <div class="title-custom2">Important Date</div>
                                         <div class="description-custom2">A plan is set for a specific date.</div>
@@ -351,6 +356,19 @@
     <script src="../../wwwroot/js/dates.js"></script>
     <script src="../../wwwroot/js/buttons.js"></script>
     <script>
+      // Get all the buttons
+
+// Get the current URL path (e.g., 'dashboard.html')
+const currentPath = window.location.pathname.split('/').pop();
+
+// Loop through the buttons and add 'active' class if it matches the current page
+buttons.forEach(button => {
+    if (button.getAttribute('href') === currentPath) {
+        button.classList.add('active');
+    }
+});
+
+
 document.getElementById('createWorkflowBtn').addEventListener('click', function() {
   const section2 = document.getElementById('section2');
   const workflowBuilder = document.getElementById('workflowBuilder');
