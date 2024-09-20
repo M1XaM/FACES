@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard-users</title>
+    <link rel="stylesheet" href="../../wwwroot/css/dashboard-users.css">
+</head>
+<body>
+    <div id="overlay" class="overlay"></div>
+    <!-- Всплывающая панель -->
+    <div id="popupPanel" class="edit-settings-panel">
+        <h2>Edit Settings</h2>
+        <p>Manage your settings here.</p>
+        <div class="setting-row">
+        <div class="setting-content">
+                <h3>Send SMS</h3>
+                <p>Instantly reach contracts with quick and coincise messages, perfect for remainders or updates.</p>
+            </div>
+            <button class="toggle-button"></button>
+        </div>
+        <div class="setting-row">
+        <div class="setting-content">
+                <h3>Send Emails</h3>
+                <p>Send personalized emails using preconfigured templates.</p>
+            </div>
+            <button class="toggle-button"></button>
+        </div>
+        <div class="setting-row">
+        <div class="setting-content">
+                <h3>Send Gifts</h3>
+                <p>Allow to send gifts using preselected products, making gifting simple and hussle-free.</p>
+            </div>
+            <button class="toggle-button"></button>
+        </div>
+        <div class="setting-row">          
+        <div class="setting-content">
+                <h3>Send Cards</h3>
+                <p>Allow to send cards using predesigned templates.</p>
+            </div>
+            <button class="toggle-button"></button>
+        </div>
+        <button id="closeButton" class="save-button">Save preferences</button>
+    </div>
+    <header>
+        <div>
+            <nav>                
+                <div class="nav-part picture">
+                    <div class="logo">
+                        <img src="../../Stuff/anotherStuff/faces.png" alt="">
+                    </div>
+                    <div class="menu">
+                        <p>FACES</p>
+                    </div>
+                    <div class="admin">
+                        <p>ADMIN</p>
+                    </div>
+                    <div class="avatar"> 
+                        <img src="../../Stuff/anotherStuff/Ellipse 1.png" alt="">
+                    </div>
+                    <div id="userPanel" class="content-panel active">
+                    <div class="user-panel">
+                        <h2>Users</h2>
+                        <div class="user-menu">
+                            <div class="header avatar-header">Avatar</div>
+                            <div class="header name-header">Full Name</div>
+                            <div class="header email-header">Email</div>
+                            <div class="header"></div>
+                            <!-- Контент таблицы -->
+                            <div class="row">
+                                <div class="user-avatar"><img src="../../Stuff/anotherStuff/Avatar Image.png" alt="User Avatar"></div>
+                                <div class="full-name">John Doe</div>
+                                <div class="email">johndoe@example.com</div>
+                                <div class="header action">
+                                    <button class="dots-button">•••</button>
+                                    <div class="edit-container">
+                                        <button class="edit-button">Edit</button>
+                                    </div>
+                                </div>
+                                                          
+                            </div>
+                            <div class="row">
+                                <div class="user-avatar"><img src="../../Stuff/anotherStuff/Avatar Image.png" alt="User Avatar"></div>
+                                <div class="full-name">Adam Zicker</div>
+                                <div class="email">adamz@example.com</div>
+                                <div class="header action">
+                                    <button class="dots-button">•••</button>
+                                    <div class="edit-container">
+                                        <button class="edit-button">Edit</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="user-avatar"><img src="Avatar Image.png" alt="User Avatar"></div>
+                                <div class="full-name">Boris Bug</div>
+                                <div class="email">adamz@example.com</div>
+                                <div class="header action">
+                                    <button class="dots-button">•••</button>
+                                    <div class="edit-container">
+                                        <button class="edit-button">Edit</button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="user-avatar"><img src="Avatar Image.png" alt="User Avatar"></div>
+                                <div class="full-name">Boris Bug</div>
+                                <div class="email">adamz@example.com</div>
+                                <div class="header action">
+                                    <button class="dots-button">•••</button>
+                                    <div class="edit-container">
+                                        <button class="edit-button">Edit</button>
+                                    </div>
+                                </div>
+
+                                
+                            </div>
+
+                            
+                        </div>
+                    </div>                              
+                </div>
+                </div>
+                    <div id="emailTemplatesPanel" class="content-panel" style="display: none;">
+                        <!-- Здесь будет контент для Email Templates -->
+                        <h2>Email Templates</h2>
+                    </div>
+                    
+                    <div id="cardsTemplatePanel" class="content-panel" style="display: none;">
+                        <!-- Здесь будет контент для Cards Template -->
+                        <h2>Cards Template</h2>
+                    </div>
+                    
+                    <div id="productsPanel" class="content-panel" style="display: none;">
+                        <!-- Здесь будет контент для Products -->
+                        <h2>Products</h2>
+                    </div>  
+
+                    <div id="settingsPanel" class="content-panel" style="display: none;">
+                        <!-- Здесь будет контент для Settings -->
+                        <h2>Settings</h2>
+                    </div>  
+
+                    <div id="helpPanel" class="content-panel" style="display: none;">
+                        <!-- Здесь будет контент для Help & Center -->
+                        <h2>Help & Center</h2>
+                    </div>                  
+                </div>
+            </nav>
+            <div>
+                <div class="line">
+                    <div class="menu-buttons">
+                        <button class="menu-btn">
+                            <img src="../../Stuff/anotherStuff/dashboard1.png" alt="Users" class="btn-icon1">
+                            Users
+                        </button>
+                        <button class="menu-btn">
+                            <img src="../../Stuff/anotherStuff/dashboard2.png" alt="Email Templates" class="btn-icon">
+                            Email Templates
+                        </button>
+                        <button class="menu-btn">
+                            <img src="../../Stuff/anotherStuff/dashboard3.png" alt="Cards Template" class="btn-icon">
+                            Cards Template
+                        </button>
+                        <button class="menu-btn">
+                            <img src="../../Stuff/anotherStuff/dashboard4.png" alt="Products" class="btn-icon">
+                            Products
+                        </button>
+                    </div>
+                    <div class="bottom-buttons">
+                        <button class="menu-btn">
+                            <img src="../../Stuff/anotherStuff/dashboard5.png" alt="Settings" class="btn-icon">
+                            Settings
+                        </button>
+                        <button class="menu-btn">
+                            <img src="../../Stuff/anotherStuff/dashboard6.png" alt="Help & Center" class="btn-icon">
+                            Help & Center
+                        </button>
+                    </div>
+                </div>
+                <div class="back">
+                    
+                </div>
+            </div>
+        </div>
+    </header>
+ 
+    <script src="../../wwwroot/js/dashboard1.js"></script>
+    <script src="../../wwwroot/js/dashboard.js"></script>
+    <script src="../../wwwroot/js/dashboard-edit_panel.js"></script>
+    <script src="../../wwwroot/js/dashboard-users-toggle.js"></script>
+    <script src="../../wwwroot/js/dashboard-users-panel.js"></script>
+</body>
+
+</html>
