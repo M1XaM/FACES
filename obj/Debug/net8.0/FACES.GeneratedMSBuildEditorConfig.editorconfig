@@ -38,6 +38,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUHJvamVjdC9BZGRDbGllbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/home/maxim/MyFolder/FACES/Views/Project/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUHJvamVjdC9EYXNoYm9hcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/maxim/MyFolder/FACES/Views/Project/GetCreateProject.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUHJvamVjdC9HZXRDcmVhdGVQcm9qZWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -76,6 +80,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/home/maxim/MyFolder/FACES/Views/User/ModifyProfile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9Nb2RpZnlQcm9maWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/maxim/MyFolder/FACES/Views/User/OldLogin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9PbGRMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/maxim/MyFolder/FACES/Views/User/Profile.cshtml]

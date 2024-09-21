@@ -73,7 +73,7 @@ public class UserController : Controller
 
             // We can use a temporar storage to send just for the next request
             TempData["success"] = "Temporar message";
-            return RedirectToAction("List"); // also can add the controller name as the second argument (if u want access another controller's action)
+            return RedirectToAction("Dashboard"); // also can add the controller name as the second argument (if u want access another controller's action)
         }
         return View(obj);        
     }
@@ -103,7 +103,8 @@ public class UserController : Controller
         HttpContext.Session.SetString("UserId", obj.Id.ToString());
         HttpContext.Session.SetString("Email", obj.Email);
         HttpContext.Session.SetString("SessionStartTime", DateTime.UtcNow.ToString("o")); // ISO 8601 format
-        return RedirectToAction("Profile");
+        // return RedirectToAction("Profile");
+        return RedirectToAction("Dashboard");
     }
 
 
@@ -246,5 +247,12 @@ public class UserController : Controller
     {
         HttpContext.Session.Clear();
         return RedirectToAction("Login");
+    }
+
+
+    [HttpGet("dashboard")]
+    public IActionResult Dashboard()
+    {
+        return RedirectToAction("Dashboard", "Project");
     }
 }

@@ -14,15 +14,9 @@ public class HomeController : Controller
     }
 
     [HttpGet("")]
-    public IActionResult Index()
-    {
-        return RedirectToAction("List", "User");
-    }
+    public IActionResult Index() => View();
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+    public IActionResult Privacy() => View();
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

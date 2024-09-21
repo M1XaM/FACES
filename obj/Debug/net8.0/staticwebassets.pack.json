@@ -5,12 +5,196 @@
       "PackagePath": "staticwebassets/FACES.bundle.scp.css"
     },
     {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/FACES-1_2.css",
+      "PackagePath": "staticwebassets/css/FACES-1_2.css"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/dashboard-users.css",
+      "PackagePath": "staticwebassets/css/dashboard-users.css"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/dashboard.css",
+      "PackagePath": "staticwebassets/css/dashboard.css"
+    },
+    {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
     },
     {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/styles.css",
+      "PackagePath": "staticwebassets/css/styles.css"
+    },
+    {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/favicon.ico",
       "PackagePath": "staticwebassets/favicon.ico"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/Avatar Image.png",
+      "PackagePath": "staticwebassets/images/Avatar Image.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/Ellipse 1.png",
+      "PackagePath": "staticwebassets/images/Ellipse 1.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/FACES.png",
+      "PackagePath": "staticwebassets/images/FACES.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/Line.png",
+      "PackagePath": "staticwebassets/images/Line.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/Vector 2.png",
+      "PackagePath": "staticwebassets/images/Vector 2.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/backarrow.png",
+      "PackagePath": "staticwebassets/images/backarrow.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/contacts.png",
+      "PackagePath": "staticwebassets/images/contacts.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/dashboard.png",
+      "PackagePath": "staticwebassets/images/dashboard.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/dashboard1.png",
+      "PackagePath": "staticwebassets/images/dashboard1.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/dashboard2.png",
+      "PackagePath": "staticwebassets/images/dashboard2.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/dashboard3.png",
+      "PackagePath": "staticwebassets/images/dashboard3.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/dashboard4.png",
+      "PackagePath": "staticwebassets/images/dashboard4.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/dashboard5.png",
+      "PackagePath": "staticwebassets/images/dashboard5.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/dashboard6.png",
+      "PackagePath": "staticwebassets/images/dashboard6.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/dates.png",
+      "PackagePath": "staticwebassets/images/dates.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/db_faces.png",
+      "PackagePath": "staticwebassets/images/db_faces.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/faces1.png",
+      "PackagePath": "staticwebassets/images/faces1.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/faces10.png",
+      "PackagePath": "staticwebassets/images/faces10.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/faces11.png",
+      "PackagePath": "staticwebassets/images/faces11.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/faces12.png",
+      "PackagePath": "staticwebassets/images/faces12.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/faces2.png",
+      "PackagePath": "staticwebassets/images/faces2.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/faces3.png",
+      "PackagePath": "staticwebassets/images/faces3.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/faces4.png",
+      "PackagePath": "staticwebassets/images/faces4.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/faces5.png",
+      "PackagePath": "staticwebassets/images/faces5.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/faces6.png",
+      "PackagePath": "staticwebassets/images/faces6.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/faces7.png",
+      "PackagePath": "staticwebassets/images/faces7.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/faces8.png",
+      "PackagePath": "staticwebassets/images/faces8.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/faces9.png",
+      "PackagePath": "staticwebassets/images/faces9.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/help.png",
+      "PackagePath": "staticwebassets/images/help.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/logo.png",
+      "PackagePath": "staticwebassets/images/logo.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/settings.png",
+      "PackagePath": "staticwebassets/images/settings.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/images/workflow.png",
+      "PackagePath": "staticwebassets/images/workflow.png"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/Dropdown.js",
+      "PackagePath": "staticwebassets/js/Dropdown.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/buttons.js",
+      "PackagePath": "staticwebassets/js/buttons.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dashboard-edit_panel.js",
+      "PackagePath": "staticwebassets/js/dashboard-edit_panel.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dashboard-users-panel.js",
+      "PackagePath": "staticwebassets/js/dashboard-users-panel.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dashboard-users-toggle.js",
+      "PackagePath": "staticwebassets/js/dashboard-users-toggle.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dashboard.js",
+      "PackagePath": "staticwebassets/js/dashboard.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dashboard1.js",
+      "PackagePath": "staticwebassets/js/dashboard1.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dates.js",
+      "PackagePath": "staticwebassets/js/dates.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/login.js",
+      "PackagePath": "staticwebassets/js/login.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/navigation-to-login.js",
+      "PackagePath": "staticwebassets/js/navigation-to-login.js"
     },
     {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/site.js",

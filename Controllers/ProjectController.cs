@@ -19,7 +19,7 @@ using System.ComponentModel.DataAnnotations;
 
 
 namespace FACES.Controllers;
-[Route("api")]
+[Route("project")]
 public class ProjectController : Controller
 {
     private readonly ApplicationDbContext _db;
@@ -239,4 +239,7 @@ public class ProjectController : Controller
         await Task.WhenAll(emailTasks);
         return RedirectToAction("OpenProject", new { id = id});
     }
+
+    [HttpGet("dashboard")]
+    public IActionResult Dashboard() => View();
 }

@@ -27,7 +27,7 @@ builder.Services.AddTransient<IEmailService, SendGridEmailService>();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(1);
+    options.IdleTimeout = TimeSpan.FromMinutes(5);
 });
 
 var app = builder.Build();
