@@ -1,3 +1,4 @@
+
 document.getElementById('createWorkflowBtn').addEventListener('click', function() {
     const section2 = document.getElementById('section2');
     const workflowBuilder = document.getElementById('workflowBuilder');
