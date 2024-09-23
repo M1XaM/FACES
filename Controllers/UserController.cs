@@ -15,7 +15,7 @@ using CsvHelper;
 
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-
+using Newtonsoft.Json.Linq;
 
 namespace FACES.Controllers;
 [Route("user")]
@@ -51,60 +51,83 @@ public class UserController : Controller
     [HttpGet("registration")]
     public IActionResult Registration() => View();
 
-    [HttpPost("registration")]
+    [HttpPost("registration-post")]
     [ValidateAntiForgeryToken]
-    public IActionResult Registration(User obj)
+    public async Task<IActionResult> RegistrationPost()
     {
-        _logger.LogInformation($"ModelState.IsValid: {ModelState.IsValid}");
-        foreach (var modelState in ModelState)
-        {
-            foreach (var error in modelState.Value.Errors)
-            {
-                _logger.LogInformation($"ModelState Error: {error.ErrorMessage}");
-            }
-        }
-        if(ModelState.IsValid)
-        {
-            // _db.Users.Add(obj);
-            _userRepo.Add(obj);
-            // for modification of existing object use: _db.Users.Update(obj);
-            // for deleting an objecting: var obj = _db.Users.Find(id); _db.Users.Remove(obj); id is passed to the action method as argument from the url
-            // _db.SaveChanges();
+        using var reader = new StreamReader(Request.Body);
+        var json = await reader.ReadToEndAsync();
 
-            // We can use a temporar storage to send just for the next request
-            TempData["success"] = "Temporar message";
-            return RedirectToAction("Dashboard"); // also can add the controller name as the second argument (if u want access another controller's action)
+        _logger.LogInformation($"Received JSON: {json}");
+
+        // Deserialize the JSON into a dynamic object or a specific model
+        var jsonData = JObject.Parse(json);
+
+        var firstName = jsonData["FirstName"]?.ToString();
+        var lastName = jsonData["LastName"]?.ToString();
+        var email = jsonData["Email"]?.ToString();
+        var password = jsonData["Password"]?.ToString();
+
+        if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName) ||
+            string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        {
+            return Json(new { success = false, message = "All fields are required." });
         }
-        return View(obj);        
+
+        // Check if the email already exists
+        var existingUser = await _db.Users.SingleOrDefaultAsync(u => u.Email == email);
+        if (existingUser != null)
+        {
+            return Json(new { success = false, message = "Email is already in use." });
+        }
+
+        // Create a new user object
+        var newUser = new User
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            Email = email,
+            Password = password // Consider hashing this before saving
+        };
+
+        _userRepo.Add(newUser);
+        await _db.SaveChangesAsync(); // Ensure changes are saved
+
+        TempData["success"] = "Registration successful";
+        
+        return Json(new { success = true, message = "Registration successful.", redirectUrl = Url.Action("Dashboard") });
     }
+
 
     [HttpGet("login")]
     public IActionResult Login() => View();
 
-    [HttpPost("login")]
+    [HttpPost("login-post")]
     [ValidateAntiForgeryToken]
-    public IActionResult Login(User user)
+    public async Task<IActionResult> LoginPost()
     {
-        // Fetch the user from the database by their email or username
-        var obj = _db.Users.SingleOrDefault(u => u.Email == user.Email);
-        if (obj == null)
+        using var reader = new StreamReader(Request.Body);
+        var body = await reader.ReadToEndAsync();
+        _logger.LogInformation($"RECEIVEDDDDDDDDDDDDDDDDDDDD JSON: {body}");
+        var jsonData = JObject.Parse(body);
+        var email = jsonData["Email"]?.ToString();
+        var password = jsonData["Password"]?.ToString();
+
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
-            ModelState.AddModelError("", "Invalid email or password.");
-            return View();
+            return Json(new { success = false, message = "Email and password are required." });
         }
 
-        if (obj.Password != user.Password)
+        var obj = await _db.Users.SingleOrDefaultAsync(u => u.Email == email);
+        if (obj == null || obj.Password != password)
         {
-            ModelState.AddModelError("", "Invalid email or password.");
-            return View();
+            return Json(new { success = false, message = "Invalid email or password." });
         }
 
-        // Set session data and redirect to the profile page
         HttpContext.Session.SetString("UserId", obj.Id.ToString());
         HttpContext.Session.SetString("Email", obj.Email);
-        HttpContext.Session.SetString("SessionStartTime", DateTime.UtcNow.ToString("o")); // ISO 8601 format
-        // return RedirectToAction("Profile");
-        return RedirectToAction("Dashboard");
+        HttpContext.Session.SetString("SessionStartTime", DateTime.UtcNow.ToString("o"));
+        return Json(new { success = true, message = "Login successful.", redirectUrl = Url.Action("Dashboard") });
     }
 
 

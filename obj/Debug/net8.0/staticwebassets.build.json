@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "3SsE4ZAaiY8t7MHtUNXMbBBV30FRwvKKy7TV6I56Ia8=",
+  "Hash": "gBTfFBwZQMXuMhG8pUOz5ypLKAVy0R9VP33tvF+QW74=",
   "Source": "FACES",
   "BasePath": "_content/FACES",
   "Mode": "Default",
@@ -929,6 +929,25 @@
       "OriginalItemSpec": "wwwroot/js/Dropdown.js"
     },
     {
+      "Identity": "/home/maxim/MyFolder/FACES/wwwroot/js/login-server.js",
+      "SourceId": "FACES",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/maxim/MyFolder/FACES/wwwroot/",
+      "BasePath": "_content/FACES",
+      "RelativePath": "js/login-server.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/js/login-server.js"
+    },
+    {
       "Identity": "/home/maxim/MyFolder/FACES/wwwroot/js/login.js",
       "SourceId": "FACES",
       "SourceType": "Discovered",
@@ -965,6 +984,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/js/navigation-to-login.js"
+    },
+    {
+      "Identity": "/home/maxim/MyFolder/FACES/wwwroot/js/registration-server.js",
+      "SourceId": "FACES",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/maxim/MyFolder/FACES/wwwroot/",
+      "BasePath": "_content/FACES",
+      "RelativePath": "js/registration-server.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/js/registration-server.js"
     },
     {
       "Identity": "/home/maxim/MyFolder/FACES/wwwroot/js/site.js",

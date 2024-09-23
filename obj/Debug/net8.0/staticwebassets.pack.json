@@ -189,12 +189,20 @@
       "PackagePath": "staticwebassets/js/dates.js"
     },
     {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/login-server.js",
+      "PackagePath": "staticwebassets/js/login-server.js"
+    },
+    {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/login.js",
       "PackagePath": "staticwebassets/js/login.js"
     },
     {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/navigation-to-login.js",
       "PackagePath": "staticwebassets/js/navigation-to-login.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/registration-server.js",
+      "PackagePath": "staticwebassets/js/registration-server.js"
     },
     {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/site.js",
