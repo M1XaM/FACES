@@ -161,12 +161,48 @@
       "PackagePath": "staticwebassets/images/workflow.png"
     },
     {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/Dropdown.js",
-      "PackagePath": "staticwebassets/js/Dropdown.js"
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/Dashboard/add-client.js",
+      "PackagePath": "staticwebassets/js/Dashboard/add-client.js"
     },
     {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/buttons.js",
-      "PackagePath": "staticwebassets/js/buttons.js"
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/Dashboard/buttons.js",
+      "PackagePath": "staticwebassets/js/Dashboard/buttons.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/Dashboard/dates.js",
+      "PackagePath": "staticwebassets/js/Dashboard/dates.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/Dashboard/dropdown.js",
+      "PackagePath": "staticwebassets/js/Dashboard/dropdown.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/Dashboard/get-clients.js",
+      "PackagePath": "staticwebassets/js/Dashboard/get-clients.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/Dashboard/something-else.js",
+      "PackagePath": "staticwebassets/js/Dashboard/something-else.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/Index/navigation-to-login.js",
+      "PackagePath": "staticwebassets/js/Index/navigation-to-login.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/ListProject/list-project.js",
+      "PackagePath": "staticwebassets/js/ListProject/list-project.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/LoginGet/login-server.js",
+      "PackagePath": "staticwebassets/js/LoginGet/login-server.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/LoginGet/login.js",
+      "PackagePath": "staticwebassets/js/LoginGet/login.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/LoginGet/registration-server.js",
+      "PackagePath": "staticwebassets/js/LoginGet/registration-server.js"
     },
     {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dashboard-edit_panel.js",
@@ -187,30 +223,6 @@
     {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dashboard1.js",
       "PackagePath": "staticwebassets/js/dashboard1.js"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dates.js",
-      "PackagePath": "staticwebassets/js/dates.js"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/login-server.js",
-      "PackagePath": "staticwebassets/js/login-server.js"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/login.js",
-      "PackagePath": "staticwebassets/js/login.js"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/navigation-to-login.js",
-      "PackagePath": "staticwebassets/js/navigation-to-login.js"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/project-list.js",
-      "PackagePath": "staticwebassets/js/project-list.js"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/registration-server.js",
-      "PackagePath": "staticwebassets/js/registration-server.js"
     },
     {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/site.js",

@@ -129,39 +129,7 @@
                     <div class="custom-card-header">New Audience</div>
                     <ul class="custom-audience-list">
                       <li>
-                        <img src="https://placehold.co/40x40" alt="Profile picture of Olivia Martin">
-                        <div>
-                          <div class="custom-name">Olivia Martin</div>
-                          <div class="custom-email">olivia.martin@email.com</div>
-                        </div>
-                      </li>
-                      <li>
-                        <img src="https://placehold.co/40x40" alt="Profile picture of Jackson Lee">
-                        <div>
-                          <div class="custom-name">Jackson Lee</div>
-                          <div class="custom-email">jackson.lee@email.com</div>
-                        </div>
-                      </li>
-                      <li>
-                        <img src="https://placehold.co/40x40" alt="Profile picture of Isabella Nguyen">
-                        <div>
-                          <div class="custom-name">Isabella Nguyen</div>
-                          <div class="custom-email">isabella.nguyen@email.com</div>
-                        </div>
-                      </li>
-                      <li>
-                        <img src="https://placehold.co/40x40" alt="Profile picture of William Kim">
-                        <div>
-                          <div class="custom-name">William Kim</div>
-                          <div class="custom-email">will@email.com</div>
-                        </div>
-                      </li>
-                      <li>
-                        <img src="https://placehold.co/40x40" alt="Profile picture of Sofia Davis">
-                        <div>
-                          <div class="custom-name">Sofia Davis</div>
-                          <div class="custom-email">sofia.davis@email.com</div>
-                        </div>
+                        
                       </li>
                     </ul>
                   </div>
@@ -353,59 +321,11 @@
             </div>
             </div>
           </main>
-    <script src="~/js/Dropdown.js"></script>
-    <script src="~/js/dates.js"></script>
-    <script src="~/js/buttons.js"></script>
-    <script>
-      // Get all the buttons
-
-// Get the current URL path (e.g., 'dashboard.html')
-const currentPath = window.location.pathname.split('/').pop();
-
-// Loop through the buttons and add 'active' class if it matches the current page
-buttons.forEach(button => {
-    if (button.getAttribute('href') === currentPath) {
-        button.classList.add('active');
-    }
-});
-
-
-document.getElementById('createWorkflowBtn').addEventListener('click', function() {
-  const section2 = document.getElementById('section2');
-  const workflowBuilder = document.getElementById('workflowBuilder');
-
-  section2.classList.remove('show');
-  setTimeout(() => {
-    section2.style.display = 'none'; 
-  }, 300); 
-
-  workflowBuilder.style.display = 'block'; 
-  setTimeout(() => {
-    workflowBuilder.classList.add('show'); 
-  }, 10); 
-});
-
-document.getElementById('on-date-btn').addEventListener('click', function() {
-            setActiveButton('on-date-btn');
-        });
-        document.getElementById('before-date-btn').addEventListener('click', function() {
-            setActiveButton('before-date-btn');
-        });
-        document.getElementById('after-date-btn').addEventListener('click', function() {
-            setActiveButton('after-date-btn');
-        });
-
-        function setActiveButton(buttonId) {
-            document.getElementById('on-date-btn').classList.remove('active');
-            document.getElementById('before-date-btn').classList.remove('active');
-            document.getElementById('after-date-btn').classList.remove('active');
-            document.getElementById(buttonId).classList.add('active');
-        }
-
-        flatpickr("#date-picker", {
-            enableTime: false,
-            dateFormat: "Y-m-d",
-        });
-      </script>
+    <script src="~/js/Dashboard/dropdown.js"></script>
+    <script src="~/js/Dashboard/dates.js"></script>
+    <script src="~/js/Dashboard/buttons.js"></script>
+    <script src="~/js/Dashboard/something-else.js"></script>
+    <script src="~/js/Dashboard/get-clients.js"></script>
+     <script src="~/js/Dashboard/add-client.js"></script>
   </body>
 </html>

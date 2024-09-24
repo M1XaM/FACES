@@ -74,28 +74,22 @@ public class ApiV1Controller : Controller
     [HttpPost("user/{userId}/create-project")]
     public async Task<IActionResult> CreateProject(int userId)
     {
-        _logger.LogInformation("HEREEEEEEEEEEE WE ARE");
-        // Check if user is authenticated
         var userIdString = HttpContext.Session.GetString("UserId");
         if (string.IsNullOrEmpty(userIdString))
         {
             return Unauthorized(new { message = "User not authenticated." });
         }
-
         if (!int.TryParse(userIdString, out var sessionUserId) || sessionUserId != userId)
         {
             HttpContext.Session.Clear();
             return Unauthorized(new { message = "Invalid user session." });
         }
-
         var user = _userRepo.GetById(userId);
         if (user == null)
         {
             HttpContext.Session.Clear();
             return NotFound(new { message = "User not found." });
         }
-
-        // Read the request body
         using var reader = new StreamReader(Request.Body);
         var body = await reader.ReadToEndAsync();
         var jsonData = JObject.Parse(body);
@@ -107,17 +101,14 @@ public class ApiV1Controller : Controller
             return BadRequest(new { message = "Project name and description are required." });
         }
 
-        // Create and save the new project
         var project = new Project
         {
             Name = name,
             Description = description,
         };
-
         try
         {
             _projectRepo.Add(project);
-            
             var userProject = new UserProject
             {
                 UserId = user.Id,
@@ -125,8 +116,7 @@ public class ApiV1Controller : Controller
             };
             
             _db.UserProjects.Add(userProject);
-            await _db.SaveChangesAsync(); // Use async version for better performance
-
+            await _db.SaveChangesAsync();
             return new JsonResult(new 
             { 
                 message = "Project created successfully.", 
@@ -138,9 +128,36 @@ public class ApiV1Controller : Controller
             }
         catch (Exception ex)
         {
-            // Log the exception (ex) if necessary
-            return StatusCode(500, new { message = "An error occurred while creating the project.", details = ex.Message });
+            return StatusCode(500, new { message = "An error occurred while creating the project.", 
+            details = ex.Message });
         }
+    }
+
+
+    [HttpGet("user/{userId}/project/{projectId}/get-clients")]
+    public IActionResult OpenProject(int userId, int projectId)
+    {
+        var project = _projectRepo.GetById(projectId);
+        if (project == null)
+        {
+            return NotFound();
+        }
+        var clients = _db.ProjectClients
+            .Where(pc => pc.ProjectId == projectId)
+            .Select(pc => pc.Client)
+            .ToList();
+        return Json(clients);
+    }
+
+    [HttpGet("user/{userId}/project/{projectId}/add-clients")]
+    public IActionResult AddClient(int userId, int projectId)
+    {
+        var obj = new AddClientViewModel
+        {
+            Project = _projectRepo.GetById(projectId),
+            Client = new Client()
+        };
+        return View(obj);
     }
 
 }
