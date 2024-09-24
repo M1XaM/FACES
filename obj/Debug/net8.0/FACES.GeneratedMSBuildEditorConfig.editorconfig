@@ -26,20 +26,24 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /home/maxim/MyFolder/FACES
 build_property._RazorSourceGeneratorDebug = 
 
+[/home/maxim/MyFolder/FACES/Views/Home/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9EYXNoYm9hcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/maxim/MyFolder/FACES/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/maxim/MyFolder/FACES/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
+[/home/maxim/MyFolder/FACES/Views/Home/ListProject.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9MaXN0UHJvamVjdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/maxim/MyFolder/FACES/Views/Home/LoginGet.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Mb2dpbkdldC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/maxim/MyFolder/FACES/Views/Project/AddClient.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUHJvamVjdC9BZGRDbGllbnQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/maxim/MyFolder/FACES/Views/Project/Dashboard.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUHJvamVjdC9EYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/maxim/MyFolder/FACES/Views/Project/GetCreateProject.cshtml]
@@ -68,10 +72,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/home/maxim/MyFolder/FACES/Views/User/List.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9MaXN0LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/maxim/MyFolder/FACES/Views/User/Login.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9Mb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/maxim/MyFolder/FACES/Views/User/Logout.cshtml]

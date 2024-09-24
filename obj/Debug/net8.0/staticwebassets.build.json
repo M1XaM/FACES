@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "gBTfFBwZQMXuMhG8pUOz5ypLKAVy0R9VP33tvF+QW74=",
+  "Hash": "1OY0pjMRNknH/9NbycpREuxZoox1zeMIZHadLE3YOyM=",
   "Source": "FACES",
   "BasePath": "_content/FACES",
   "Mode": "Default",
@@ -53,6 +53,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/home/maxim/MyFolder/FACES/obj/Debug/net8.0/scopedcss/projectbundle/FACES.bundle.scp.css"
+    },
+    {
+      "Identity": "/home/maxim/MyFolder/FACES/wwwroot/css/dashboard_alternative.css",
+      "SourceId": "FACES",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/maxim/MyFolder/FACES/wwwroot/",
+      "BasePath": "_content/FACES",
+      "RelativePath": "css/dashboard_alternative.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/dashboard_alternative.css"
     },
     {
       "Identity": "/home/maxim/MyFolder/FACES/wwwroot/css/dashboard-users.css",
@@ -984,6 +1003,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/js/navigation-to-login.js"
+    },
+    {
+      "Identity": "/home/maxim/MyFolder/FACES/wwwroot/js/project-list.js",
+      "SourceId": "FACES",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/maxim/MyFolder/FACES/wwwroot/",
+      "BasePath": "_content/FACES",
+      "RelativePath": "js/project-list.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/js/project-list.js"
     },
     {
       "Identity": "/home/maxim/MyFolder/FACES/wwwroot/js/registration-server.js",

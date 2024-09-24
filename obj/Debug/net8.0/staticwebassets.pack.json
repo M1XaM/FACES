@@ -17,6 +17,10 @@
       "PackagePath": "staticwebassets/css/dashboard.css"
     },
     {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/dashboard_alternative.css",
+      "PackagePath": "staticwebassets/css/dashboard_alternative.css"
+    },
+    {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
     },
@@ -199,6 +203,10 @@
     {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/navigation-to-login.js",
       "PackagePath": "staticwebassets/js/navigation-to-login.js"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/project-list.js",
+      "PackagePath": "staticwebassets/js/project-list.js"
     },
     {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/registration-server.js",

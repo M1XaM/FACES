@@ -10,7 +10,7 @@ document.getElementById('loginButton').addEventListener('click', function(event)
     };
     console.log("Data being sent:", JSON.stringify(data));
 
-    fetch('/user/login-post', {
+    fetch('/login-post', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
