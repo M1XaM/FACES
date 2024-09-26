@@ -1,12 +1,3 @@
-/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.csproj.AssemblyReference.cache
-/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.GeneratedMSBuildEditorConfig.editorconfig
-/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.AssemblyInfoInputs.cache
-/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.AssemblyInfo.cs
-/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.csproj.CoreCompileInputs.cache
-/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.MvcApplicationPartsAssemblyInfo.cache
-/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.RazorAssemblyInfo.cache
-/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.RazorAssemblyInfo.cs
-/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.sourcelink.json
 /home/maxim/MyFolder/FACES/bin/Debug/net8.0/appsettings.Development.json
 /home/maxim/MyFolder/FACES/bin/Debug/net8.0/appsettings.json
 /home/maxim/MyFolder/FACES/bin/Debug/net8.0/FACES.staticwebassets.runtime.json
@@ -66,6 +57,8 @@
 /home/maxim/MyFolder/FACES/bin/Debug/net8.0/NuGet.ProjectModel.dll
 /home/maxim/MyFolder/FACES/bin/Debug/net8.0/NuGet.Protocol.dll
 /home/maxim/MyFolder/FACES/bin/Debug/net8.0/NuGet.Versioning.dll
+/home/maxim/MyFolder/FACES/bin/Debug/net8.0/SendGrid.dll
+/home/maxim/MyFolder/FACES/bin/Debug/net8.0/StarkbankEcdsa.dll
 /home/maxim/MyFolder/FACES/bin/Debug/net8.0/System.CodeDom.dll
 /home/maxim/MyFolder/FACES/bin/Debug/net8.0/System.Composition.AttributedModel.dll
 /home/maxim/MyFolder/FACES/bin/Debug/net8.0/System.Composition.Convention.dll
@@ -221,6 +214,15 @@
 /home/maxim/MyFolder/FACES/bin/Debug/net8.0/runtimes/win/lib/net7.0/System.Drawing.Common.dll
 /home/maxim/MyFolder/FACES/bin/Debug/net8.0/runtimes/win/lib/net7.0/System.Security.Cryptography.ProtectedData.dll
 /home/maxim/MyFolder/FACES/bin/Debug/net8.0/runtimes/win/lib/net7.0/System.Windows.Extensions.dll
+/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.csproj.AssemblyReference.cache
+/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.GeneratedMSBuildEditorConfig.editorconfig
+/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.AssemblyInfoInputs.cache
+/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.AssemblyInfo.cs
+/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.csproj.CoreCompileInputs.cache
+/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.MvcApplicationPartsAssemblyInfo.cache
+/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.RazorAssemblyInfo.cache
+/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.RazorAssemblyInfo.cs
+/home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.sourcelink.json
 /home/maxim/MyFolder/FACES/obj/Debug/net8.0/staticwebassets.build.json
 /home/maxim/MyFolder/FACES/obj/Debug/net8.0/staticwebassets.development.json
 /home/maxim/MyFolder/FACES/obj/Debug/net8.0/staticwebassets/msbuild.FACES.Microsoft.AspNetCore.StaticWebAssets.props
@@ -237,5 +239,3 @@
 /home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.pdb
 /home/maxim/MyFolder/FACES/obj/Debug/net8.0/FACES.genruntimeconfig.cache
 /home/maxim/MyFolder/FACES/obj/Debug/net8.0/ref/FACES.dll
-/home/maxim/MyFolder/FACES/bin/Debug/net8.0/SendGrid.dll
-/home/maxim/MyFolder/FACES/bin/Debug/net8.0/StarkbankEcdsa.dll
