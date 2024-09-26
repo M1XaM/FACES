@@ -5,28 +5,24 @@
       "PackagePath": "staticwebassets/FACES.bundle.scp.css"
     },
     {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/FACES-1_2.css",
-      "PackagePath": "staticwebassets/css/FACES-1_2.css"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/dashboard-users.css",
-      "PackagePath": "staticwebassets/css/dashboard-users.css"
-    },
-    {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/dashboard.css",
       "PackagePath": "staticwebassets/css/dashboard.css"
     },
     {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/dashboard_alternative.css",
-      "PackagePath": "staticwebassets/css/dashboard_alternative.css"
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/index.css",
+      "PackagePath": "staticwebassets/css/index.css"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/list-project.css",
+      "PackagePath": "staticwebassets/css/list-project.css"
+    },
+    {
+      "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/login.css",
+      "PackagePath": "staticwebassets/css/login.css"
     },
     {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/css/styles.css",
-      "PackagePath": "staticwebassets/css/styles.css"
     },
     {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/favicon.ico",
@@ -203,30 +199,6 @@
     {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/LoginGet/registration-server.js",
       "PackagePath": "staticwebassets/js/LoginGet/registration-server.js"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dashboard-edit_panel.js",
-      "PackagePath": "staticwebassets/js/dashboard-edit_panel.js"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dashboard-users-panel.js",
-      "PackagePath": "staticwebassets/js/dashboard-users-panel.js"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dashboard-users-toggle.js",
-      "PackagePath": "staticwebassets/js/dashboard-users-toggle.js"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dashboard.js",
-      "PackagePath": "staticwebassets/js/dashboard.js"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/dashboard1.js",
-      "PackagePath": "staticwebassets/js/dashboard1.js"
-    },
-    {
-      "Id": "/home/maxim/MyFolder/FACES/wwwroot/js/site.js",
-      "PackagePath": "staticwebassets/js/site.js"
     },
     {
       "Id": "/home/maxim/MyFolder/FACES/wwwroot/lib/bootstrap/LICENSE",

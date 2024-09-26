@@ -22,13 +22,13 @@ namespace FACES.Controllers;
 public class HomeController : Controller
 {
     private readonly ApplicationDbContext _db;
-    private readonly ILogger<UserController> _logger;
+    private readonly ILogger<HomeController> _logger;
     private readonly IGenericRepository<User> _userRepo;
     private readonly IGenericRepository<Project> _projectRepo;
     private readonly IGenericRepository<Client> _clientRepo;
     private readonly IEmailService _emailService;
 
-    public HomeController(ApplicationDbContext db, IEmailService emailService, ILogger<UserController> logger, IGenericRepository<User> userRepo, IGenericRepository<Project> projectRepo, IGenericRepository<Client> clientRepo)
+    public HomeController(ApplicationDbContext db, IEmailService emailService, ILogger<HomeController> logger, IGenericRepository<User> userRepo, IGenericRepository<Project> projectRepo, IGenericRepository<Client> clientRepo)
     {
         _db = db;
         _emailService = emailService;

@@ -42,56 +42,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Mb2dpbkdldC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/maxim/MyFolder/FACES/Views/Project/AddClient.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUHJvamVjdC9BZGRDbGllbnQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/maxim/MyFolder/FACES/Views/Project/GetCreateProject.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUHJvamVjdC9HZXRDcmVhdGVQcm9qZWN0LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/maxim/MyFolder/FACES/Views/Project/ImportClients.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUHJvamVjdC9JbXBvcnRDbGllbnRzLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/maxim/MyFolder/FACES/Views/Project/ProjectList.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUHJvamVjdC9Qcm9qZWN0TGlzdC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [/home/maxim/MyFolder/FACES/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/maxim/MyFolder/FACES/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/maxim/MyFolder/FACES/Views/User/ConfirmDeleteProfile.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9Db25maXJtRGVsZXRlUHJvZmlsZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/maxim/MyFolder/FACES/Views/User/List.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9MaXN0LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/maxim/MyFolder/FACES/Views/User/Logout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9Mb2dvdXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/maxim/MyFolder/FACES/Views/User/ModifyProfile.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9Nb2RpZnlQcm9maWxlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/maxim/MyFolder/FACES/Views/User/OldLogin.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9PbGRMb2dpbi5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/maxim/MyFolder/FACES/Views/User/Profile.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9Qcm9maWxlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/maxim/MyFolder/FACES/Views/User/Registration.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlci9SZWdpc3RyYXRpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/maxim/MyFolder/FACES/Views/_ViewImports.cshtml]
