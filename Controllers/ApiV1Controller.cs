@@ -149,16 +149,16 @@ public class ApiV1Controller : Controller
         return Json(clients);
     }
 
-    [HttpGet("user/{userId}/project/{projectId}/add-clients")]
-    public IActionResult AddClient(int userId, int projectId)
-    {
-        var obj = new AddClientViewModel
-        {
-            Project = _projectRepo.GetById(projectId),
-            Client = new Client()
-        };
-        return View(obj);
-    }
+    // [HttpGet("user/{userId}/project/{projectId}/add-clients")]
+    // public IActionResult AddClient(int userId, int projectId)
+    // {
+    //     var obj = new AddClientViewModel
+    //     {
+    //         Project = _projectRepo.GetById(projectId),
+    //         Client = new Client()
+    //     };
+    //     return View(obj);
+    // }
 
     // For future implementation
     // [HttpGet("profile")]
