@@ -4,6 +4,7 @@
 #custom add
 obj/
 bin/
+.vscode/
 
 # User-specific files
 *.suo
