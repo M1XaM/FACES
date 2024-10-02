@@ -13,7 +13,7 @@ document.getElementById('registrationButton').addEventListener('click', function
         Password: password
     };
 
-    fetch('/registration-post', {
+    fetch('api/v1/registration-post', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -24,7 +24,8 @@ document.getElementById('registrationButton').addEventListener('click', function
     .then(response => response.json())
     .then(result => {
         if (result.success) {
-            window.location.href = result.redirectUrl;
+            localStorage.setItem('token', data.token);
+            window.location.href = '/list-project';
         } else {
             alert(result.message);
         }

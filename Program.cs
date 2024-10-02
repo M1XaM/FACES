@@ -4,18 +4,24 @@ using FACES.Repositories;
 using FACES.Data;
 using FACES.Models;
 
+// For JWT auth
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
+// For authorization
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddControllersWithViews();
 
-// for logging
+// For logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-// Adding db configuration,
-// also dont forget to add credentials in launchSettings.js,
-// also dont forget to migrate all of this 
+// DB configuration
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -25,13 +31,31 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
 builder.Services.AddTransient<IEmailService, SendGridEmailService>();
 
-builder.Services.AddSession(options =>
+// For JWT authorization
+builder.Services.AddAuthentication(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(5);
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = "FACES",
+        ValidAudience = "FACES",
+        RequireExpirationTime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+    };
 });
 
-var app = builder.Build();
+builder.Services.AddAuthorization();
+builder.Services.AddScoped<CustomAuthorizeAttribute>();
 
+var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -39,7 +63,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseSession();
 app.UseHttpsRedirection();
 
 app.Use(async (context, next) =>

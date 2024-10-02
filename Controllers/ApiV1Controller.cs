@@ -20,6 +20,13 @@ using CsvHelper;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.Configuration; // For _config
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text;
+
+
 namespace FACES.Controllers;
 
 [Route("api/v1")]
@@ -31,8 +38,9 @@ public class ApiV1Controller : Controller
     private readonly IGenericRepository<Project> _projectRepo;
     private readonly IGenericRepository<Client> _clientRepo;
     private readonly IEmailService _emailService;
+    private readonly IJwtService _jwtService;
 
-    public ApiV1Controller(ApplicationDbContext db, IEmailService emailService, ILogger<ApiV1Controller> logger, IGenericRepository<User> userRepo, IGenericRepository<Project> projectRepo, IGenericRepository<Client> clientRepo)
+    public ApiV1Controller(ApplicationDbContext db, IEmailService emailService, ILogger<ApiV1Controller> logger, IGenericRepository<User> userRepo, IGenericRepository<Project> projectRepo, IGenericRepository<Client> clientRepo, IJwtService jwtService)
     {
         _db = db;
         _emailService = emailService;
@@ -40,12 +48,91 @@ public class ApiV1Controller : Controller
         _userRepo = userRepo;
         _projectRepo = projectRepo;
         _clientRepo = clientRepo;
+        _jwtService = jwtService;
     }
 
-    [HttpGet("user/{userId}/get-list-project")]
-    public async Task<IActionResult> GetUserProjects(int userId)
+    [HttpPost("login-post")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> LoginPost()
     {
-        // Fetch the user
+        using var reader = new StreamReader(Request.Body);
+        var body = await reader.ReadToEndAsync();
+        var jsonData = JObject.Parse(body);
+        var email = jsonData["Email"].ToString();
+        var password = jsonData["Password"].ToString();
+        
+
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        {
+            return Json(new { success = false, message = "Email and password are required.", redirectUrl = Url.Action("login") });
+        }
+
+        var obj = await _db.Users.SingleOrDefaultAsync(u => u.Email == email);
+        if (obj == null || obj.Password != password)
+        {
+            return Json(new { success = false, message = "Invalid email or password." });
+        }
+        
+        var token = _jwtService.GenerateJwtToken(obj.Id.ToString());
+        _logger.LogInformation(token);
+        return Json(new { success = true, token = token, message = "Login successful.", redirectUrl = Url.Action("ListProject", "Home", new { userId = obj.Id.ToString()})});
+    }
+
+
+    [HttpPost("registration-post")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RegistrationPost()
+    {
+        using var reader = new StreamReader(Request.Body);
+        var json = await reader.ReadToEndAsync();
+
+        _logger.LogInformation($"Received JSON: {json}");
+
+        // Deserialize the JSON into a dynamic object or a specific model
+        var jsonData = JObject.Parse(json);
+
+        var firstName = jsonData["FirstName"]?.ToString();
+        var lastName = jsonData["LastName"]?.ToString();
+        var email = jsonData["Email"]?.ToString();
+        var password = jsonData["Password"]?.ToString();
+
+        if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName) ||
+            string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        {
+            return Json(new { success = false, message = "All fields are required." });
+        }
+
+        // Check if the email already exists
+        var existingUser = await _db.Users.SingleOrDefaultAsync(u => u.Email == email);
+        if (existingUser != null)
+        {
+            return Json(new { success = false, message = "Email is already in use." });
+        }
+
+        // Create a new user object
+        var newUser = new User
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            Email = email,
+            Password = password // Consider hashing this before saving
+        };
+
+        _userRepo.Add(newUser);
+        await _db.SaveChangesAsync(); // Ensure changes are saved
+        var newUserId = newUser.Id;
+
+        var token = _jwtService.GenerateJwtToken(newUserId.ToString());
+        return Json(new { success = true, token = token, message = "Registration successful.", redirectUrl = Url.Action("ListProject", "Home", new { userId = newUserId})});
+    }
+
+    [HttpGet("get-list-project")]
+    // [ServiceFilter(typeof(CustomAuthorizeAttribute))] use[d] for debuging, no need for now
+    [Authorize]
+    public async Task<IActionResult> GetUserProjects()
+    {
+        _logger.LogInformation("NOOOOOOOO PASSSSSSSSSSSSSSS");
+        int userId = _jwtService.ExtractUserIdFromToken();
         var user = await _db.Users.SingleOrDefaultAsync(u => u.Id == userId);
         if (user == null)
         {
@@ -63,7 +150,6 @@ public class ApiV1Controller : Controller
                                 })
                                 .ToListAsync();
 
-        // Return the list of projects as JSON
         return Json(new 
         { 
             success = true, 
@@ -71,23 +157,15 @@ public class ApiV1Controller : Controller
         });
     }   
 
-    [HttpPost("user/{userId}/create-project")]
-    public async Task<IActionResult> CreateProject(int userId)
+    [HttpPost("create-project")]
+    // [ServiceFilter(typeof(CustomAuthorizeAttribute))] use[d] for debuging, no need for now
+    [Authorize]
+    public async Task<IActionResult> CreateProject()
     {
-        var userIdString = HttpContext.Session.GetString("UserId");
-        if (string.IsNullOrEmpty(userIdString))
-        {
-            return Unauthorized(new { message = "User not authenticated." });
-        }
-        if (!int.TryParse(userIdString, out var sessionUserId) || sessionUserId != userId)
-        {
-            HttpContext.Session.Clear();
-            return Unauthorized(new { message = "Invalid user session." });
-        }
+        int userId = _jwtService.ExtractUserIdFromToken();
         var user = _userRepo.GetById(userId);
         if (user == null)
         {
-            HttpContext.Session.Clear();
             return NotFound(new { message = "User not found." });
         }
         using var reader = new StreamReader(Request.Body);
@@ -134,9 +212,12 @@ public class ApiV1Controller : Controller
     }
 
 
-    [HttpGet("user/{userId}/project/{projectId}/get-clients")]
-    public IActionResult OpenProject(int userId, int projectId)
+    [HttpGet("project/{projectId}/get-clients")]
+    // [ServiceFilter(typeof(CustomAuthorizeAttribute))] use[d] for debuging, no need for now
+    [Authorize]
+    public IActionResult OpenProject(int projectId)
     {
+        int userId = _jwtService.ExtractUserIdFromToken();
         var project = _projectRepo.GetById(projectId);
         if (project == null)
         {
@@ -356,5 +437,6 @@ public class ApiV1Controller : Controller
     //     await Task.WhenAll(emailTasks);
     //     return RedirectToAction("OpenProject", new { id = id});
     // }
+
 
 }

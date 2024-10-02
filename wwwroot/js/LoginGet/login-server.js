@@ -10,7 +10,7 @@ document.getElementById('loginButton').addEventListener('click', function(event)
     };
     console.log("Data being sent:", JSON.stringify(data));
 
-    fetch('/login-post', {
+    fetch('api/v1/login-post', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -22,6 +22,7 @@ document.getElementById('loginButton').addEventListener('click', function(event)
         console.log("Response Status:", response.status);  // Logs the status (e.g., 200, 400, 500)
         console.log("Response OK:", response.ok);  // Logs whether the response was successful (response.ok)
         console.log("Full Response:", response);  // Logs the entire response object
+        console.log("THE RESPONSE: ", response);
 
         if (!response.ok) {
             // Print the full response text (e.g., for a server error or bad request)
@@ -43,7 +44,8 @@ document.getElementById('loginButton').addEventListener('click', function(event)
     })
     .then(result => {
         if (result.success) {
-            window.location.href = result.redirectUrl;
+            localStorage.setItem('token', result.token);
+            window.location.href = '/list-project';
         } else {
             alert(result.message);
         }

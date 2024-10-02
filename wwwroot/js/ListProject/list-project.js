@@ -4,15 +4,16 @@ async function generateProjectBlocks() {
     // Clear existing content (if any)
     container.innerHTML = '';
 
-    const currentUrl = window.location.href; 
-    const match = currentUrl.match(/\/user\/(\d+)\/list-project/);
-    if (match && match[1]) {
-        var userId = match[1]; // Return the extracted ID
-    }
-
     try {
-        // Fetch the project data from the API
-        const response = await fetch(`/api/v1/user/${userId}/get-list-project`);
+        const token = localStorage.getItem('token');
+        console.log(token);
+        const response = await fetch(`/api/v1/get-list-project`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -23,7 +24,7 @@ async function generateProjectBlocks() {
         projectsData.projects.forEach(project => {
             const projectBlock = document.createElement('a');
             projectBlock.classList.add('custom4-project');
-            projectBlock.href = `/user/${userId}/project/${project.id}`;
+            projectBlock.href = `/project/${project.id}`;
             
             const projectHeader = document.createElement('div');
             projectHeader.classList.add('custom4-project-header');
@@ -79,17 +80,13 @@ async function setupAddNewProjectListener() {
 
             if (projectName && projectDescription) {
                 try {
-                    // Send the new project data to your API to save it
-                    const currentUrl = window.location.href; 
-                    const match = currentUrl.match(/\/user\/(\d+)\/list-project/);
-                    if (match && match[1]) {
-                        var userId = match[1]; // Return the extracted ID
-                    }
-                    console.log(userId);
-                    const response = await fetch(`/api/v1/user/${userId}/create-project`, {
+                    const token = localStorage.getItem('token')
+                    const response = await fetch(`/api/v1/create-project`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+
                         },
                         body: JSON.stringify({ name: projectName, description: projectDescription })
                     });
@@ -105,7 +102,7 @@ async function setupAddNewProjectListener() {
                     // Create the new project block with a link to the project details page
                     let newProject = document.createElement('a');
                     newProject.classList.add('custom4-project');
-                    newProject.href = `/user/${userId}/project/${newProjectId}`; // Set the URL for the new project
+                    newProject.href = `/project/${newProjectId}`; // Set the URL for the new project
                     newProject.innerHTML = `
                         <div class="custom4-project-header">${projectName}</div>
                         <div class="custom4-divider"></div>
