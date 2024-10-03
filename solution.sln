@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FACES", "FACES.Source\FACES.csproj", "{802DF2E3-86B8-4590-905D-4DA2CE7F79DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FACES.Tests", "FACES.Tests\FACES.Tests.csproj", "{400B35E6-65FF-431D-A6DE-85AD0663C6BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{802DF2E3-86B8-4590-905D-4DA2CE7F79DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{802DF2E3-86B8-4590-905D-4DA2CE7F79DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{802DF2E3-86B8-4590-905D-4DA2CE7F79DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{802DF2E3-86B8-4590-905D-4DA2CE7F79DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{400B35E6-65FF-431D-A6DE-85AD0663C6BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{400B35E6-65FF-431D-A6DE-85AD0663C6BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{400B35E6-65FF-431D-A6DE-85AD0663C6BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{400B35E6-65FF-431D-A6DE-85AD0663C6BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

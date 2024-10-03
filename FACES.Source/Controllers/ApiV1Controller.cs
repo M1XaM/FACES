@@ -66,13 +66,13 @@ public class ApiV1Controller : ControllerBase
 
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
-            return BadRequest(new { success = false, message = "Email and password are required.", redirectUrl = Url.Action("login") });
+            return Unauthorized(new { success = false, message = "Email and password are required.", redirectUrl = Url.Action("login") });
         }
 
         var obj = await _db.Users.SingleOrDefaultAsync(u => u.Email == email);
         if (obj == null || !BCrypt.Net.BCrypt.Verify(password, obj.Password))
         {
-            return BadRequest(new { success = false, message = "Invalid email or password." });
+            return Unauthorized(new { success = false, message = "Invalid email or password." });
         }
         
         var token = _jwtService.GenerateJwtToken(obj.Id.ToString());

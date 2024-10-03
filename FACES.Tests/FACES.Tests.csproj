@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework> <!-- Specify the target framework -->
+    <IsTestProject>true</IsTestProject>       <!-- Marks this project as a test project -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
+    <PackageReference Include="xunit" Version="2.4.2" />              <!-- xUnit framework -->
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" /> <!-- xUnit test runner for Visual Studio -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />    <!-- Test SDK for .NET -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FACES.Source\FACES.csproj" />
+  </ItemGroup>
+
+</Project>
