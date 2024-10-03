@@ -10,6 +10,7 @@ using System.Diagnostics;
 using FACES.Repositories;
 using FACES.Models;
 using FACES.Data;
+using FACES.RequestModels;
 
 using Microsoft.Extensions.Logging;
 
@@ -55,22 +56,15 @@ public class ApiV1Controller : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login()
+    public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
-        using var reader = new StreamReader(Request.Body);
-        var body = await reader.ReadToEndAsync();
-        var jsonData = JObject.Parse(body);
-        var email = jsonData["Email"].ToString();
-        var password = jsonData["Password"].ToString();
-        
-
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        if (string.IsNullOrEmpty(loginRequest.Email) || string.IsNullOrEmpty(loginRequest.Password))
         {
             return Unauthorized(new { success = false, message = "Email and password are required.", redirectUrl = Url.Action("login") });
         }
 
-        var obj = await _db.Users.SingleOrDefaultAsync(u => u.Email == email);
-        if (obj == null || !BCrypt.Net.BCrypt.Verify(password, obj.Password))
+        var obj = await _db.Users.SingleOrDefaultAsync(u => u.Email == loginRequest.Email);
+        if (obj == null || !BCrypt.Net.BCrypt.Verify(loginRequest.Password, obj.Password))
         {
             return Unauthorized(new { success = false, message = "Invalid email or password." });
         }
@@ -81,52 +75,35 @@ public class ApiV1Controller : ControllerBase
 
 
     [HttpPost("registration")]
-    public async Task<IActionResult> Registration()
+    public async Task<IActionResult> Registration([FromBody] RegistrationRequest registrationRequest)
     {
-        using var reader = new StreamReader(Request.Body);
-        var json = await reader.ReadToEndAsync();
-
-        // Deserialize the JSON into a dynamic object or a specific model
-        var jsonData = JObject.Parse(json);
-
-        var firstName = jsonData["FirstName"]?.ToString();
-        var lastName = jsonData["LastName"]?.ToString();
-        var email = jsonData["Email"]?.ToString();
-        var password = jsonData["Password"]?.ToString();
-
-        if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName) ||
-            string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        if (string.IsNullOrEmpty(registrationRequest.FirstName) || string.IsNullOrEmpty(registrationRequest.LastName) ||
+            string.IsNullOrEmpty(registrationRequest.Email) || string.IsNullOrEmpty(registrationRequest.Password))
         {
             return BadRequest(new { success = false, message = "All fields are required." });
         }
 
         // Check if the email already exists
-        var existingUser = await _db.Users.SingleOrDefaultAsync(u => u.Email == email);
+        var existingUser = await _db.Users.SingleOrDefaultAsync(u => u.Email == registrationRequest.Email);
         if (existingUser != null)
         {
-            return Ok(new { success = false, message = "Email is already in use." });
+            return BadRequest(new { success = false, message = "Email is already in use." });
         }
 
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
-
-        // Create a new user object
         var newUser = new User
         {
-            FirstName = firstName,
-            LastName = lastName,
-            Email = email,
-            Password = hashedPassword // Consider hashing this before saving
+            FirstName = registrationRequest.FirstName,
+            LastName = registrationRequest.LastName,
+            Email = registrationRequest.Email,
+            Password = BCrypt.Net.BCrypt.HashPassword(registrationRequest.Password)
         };
 
         _userRepo.Add(newUser);
-        await _db.SaveChangesAsync(); // Ensure changes are saved
-        var newUserId = newUser.Id;
-
-        var token = _jwtService.GenerateJwtToken(newUserId.ToString());
-        return Ok(new { success = true, token = token, message = "Registration successful.", redirectUrl = Url.Action("ListProject", "Home", new { userId = newUserId})});
+        var token = _jwtService.GenerateJwtToken(newUser.Id.ToString());
+        return Ok(new { success = true, token = token, message = "Registration successful.", redirectUrl = Url.Action("ListProject", "Home", new { userId = newUser.Id})});
     }
 
-    [HttpGet("get-list-project")]
+    [HttpGet("get-user-projects")]
     [Authorize]
     public async Task<IActionResult> GetUserProjects()
     {
@@ -153,7 +130,7 @@ public class ApiV1Controller : ControllerBase
 
     [HttpPost("create-project")]
     [Authorize]
-    public async Task<IActionResult> CreateProject()
+    public async Task<IActionResult> CreateProject([FromBody] ProjectRequest projectRequest)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
         var user = _userRepo.GetById(userId);
@@ -161,21 +138,15 @@ public class ApiV1Controller : ControllerBase
         {
             return NotFound(new { message = "User not found." });
         }
-        using var reader = new StreamReader(Request.Body);
-        var body = await reader.ReadToEndAsync();
-        var jsonData = JObject.Parse(body);
-        var name = jsonData["name"]?.ToString();
-        var description = jsonData["description"]?.ToString();
-
-        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(description))
+        if (string.IsNullOrEmpty(projectRequest.Name) || string.IsNullOrEmpty( projectRequest.Description))
         {
             return BadRequest(new { message = "Project name and description are required." });
         }
 
         var project = new Project
         {
-            Name = name,
-            Description = description,
+            Name = projectRequest.Name,
+            Description =  projectRequest.Description,
         };
         try
         {
@@ -188,19 +159,15 @@ public class ApiV1Controller : ControllerBase
             
             _db.UserProjects.Add(userProject);
             await _db.SaveChangesAsync();
-            return new JsonResult(new 
+            return Ok(new 
             { 
                 message = "Project created successfully.", 
                 projectId = project.Id 
-            })
-            {
-                StatusCode = 200
-            };
+            });
             }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "An error occurred while creating the project.", 
-            details = ex.Message });
+            return StatusCode(500, new { message = "An error occurred while creating the project.", details = ex.Message });
         }
     }
 
@@ -224,24 +191,21 @@ public class ApiV1Controller : ControllerBase
 
     [HttpPost("project/{projectId}/add-client")]
     [Authorize]
-    public async Task<IActionResult> AddClient(int projectId, [FromBody] JObject jsonData)
+    public async Task<IActionResult> AddClient(int projectId, [FromBody] AddClientRequest addClientRequest)
     {
-        var firstName = jsonData["FirstName"].ToString();
-        var lastName = jsonData["LastName"].ToString();
-
-        if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName))
+        if (string.IsNullOrEmpty(addClientRequest.FirstName) || string.IsNullOrEmpty(addClientRequest.LastName))
         {
             return BadRequest(new { success = false, message = "First name and last name are required." });
         }
 
         var newClient = new Client
         {
-            FirstName = firstName,
-            LastName = lastName,
+            FirstName = addClientRequest.FirstName,
+            LastName = addClientRequest.LastName,
         };
 
         _clientRepo.Add(newClient);
-        return Ok(new { success = true, message = "Client added successfully.", redirectUrl = Url.Action("ProjectDetails", new { projectId }) });
+        return Ok();
     }
 
 
@@ -267,16 +231,17 @@ public class ApiV1Controller : ControllerBase
 
     [HttpPost("modify-profile")]
     [Authorize]
-    public IActionResult ModifyProfile(User updatedUser)
+    public IActionResult ModifyProfile([FromBody] UserRequest updatedUser)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
         var user = _userRepo.GetById(userId);
+
         user.FirstName = updatedUser.FirstName;
         user.LastName = updatedUser.LastName;
         user.Email = updatedUser.Email;
         user.Password = updatedUser.Password;
-
         _userRepo.Update(user);
+
         return Ok();
     }
 
@@ -361,18 +326,16 @@ public class ApiV1Controller : ControllerBase
 
     [HttpPost("send-email")]
     [Authorize]
-    public async Task<IActionResult> SendEmail(int id)
+    public async Task<IActionResult> SendEmail([FromBody] EmailRequest emailRequest)
     {
         IEnumerable<Client> clients = _clientRepo.GetAll();
         var emailTasks = new List<Task>();
         foreach (Client client in clients)
         {
-            emailTasks.Add(_emailService.SendEmailAsync(client.Email, "Welcome!", "Hello, this is a test email."));
+            emailTasks.Add(_emailService.SendEmailAsync(client.Email, emailRequest.Title, emailRequest.Message));
         }
 
         await Task.WhenAll(emailTasks);
         return Ok();
     }
-
-
 }

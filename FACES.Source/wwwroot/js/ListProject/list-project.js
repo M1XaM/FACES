@@ -7,7 +7,7 @@ async function generateProjectBlocks() {
     try {
         const token = localStorage.getItem('token');
         console.log(token);
-        const response = await fetch(`/api/v1/get-list-project`, {
+        const response = await fetch(`/api/v1/get-user-projects`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ async function setupAddNewProjectListener() {
                             'Authorization': `Bearer ${token}`
 
                         },
-                        body: JSON.stringify({ name: projectName, description: projectDescription })
+                        body: JSON.stringify({ Name: projectName, Description: projectDescription })
                     });
                     
                     console.log(response);
