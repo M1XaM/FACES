@@ -12,13 +12,14 @@ using FACES.Models;
 using FACES.Data;
 
 using Microsoft.Extensions.Logging;
+
 using CsvHelper.Configuration;
 using System.Globalization;
 using System.IO;
 using CsvHelper;
 
-using System.Text.Json;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 using Microsoft.Extensions.Configuration; // For _config
 using System.IdentityModel.Tokens.Jwt;
@@ -54,7 +55,6 @@ public class ApiV1Controller : ControllerBase
     }
 
     [HttpPost("login")]
-    // public async Task<IActionResult> Login([FromBody] JObject jsonData)
     public async Task<IActionResult> Login()
     {
         using var reader = new StreamReader(Request.Body);
@@ -81,7 +81,6 @@ public class ApiV1Controller : ControllerBase
 
 
     [HttpPost("registration")]
-    // public async Task<IActionResult> Registration([FromBody] JObject jsonData)
     public async Task<IActionResult> Registration()
     {
         using var reader = new StreamReader(Request.Body);
@@ -246,202 +245,134 @@ public class ApiV1Controller : ControllerBase
     }
 
 
-    // For future implementation
-    // [HttpGet("profile")]
-    // public IActionResult Profile()
-    // {
-    //     var userIdString = HttpContext.Session.GetString("UserId");
-    //     if (string.IsNullOrEmpty(userIdString))
-    //     {
-    //         return RedirectToAction("Login");
-    //     }
+    [HttpGet("profile")]
+    [Authorize]
+    public IActionResult Profile()
+    {
+        int userId = _jwtService.ExtractUserIdFromToken();
+        var user = _userRepo.GetById(userId);
+        if (user == null)
+        {
+            return NotFound(new { message = "User not found." });
+        }
 
-    //     if (!int.TryParse(userIdString, out var userId))
-    //     {
-    //         HttpContext.Session.Clear();
-    //         return RedirectToAction("Login");
-    //     }
+        var projects = _db.UserProjects
+                        .Where(up => up.UserId == userId)
+                        .Select(up => up.Project)
+                        .ToList();
 
-    //     // var user = _db.Users.SingleOrDefault(u => u.Id == userId);
-    //     var user = _userRepo.GetById(userId);
-    //     if (user == null)
-    //     {
-    //         HttpContext.Session.Clear();
-    //         return RedirectToAction("Login");
-    //     }
+        return Ok(new { user, projects });
+    }
 
-    //     // Retrieve the session start time and check duration
-    //     var sessionStartTimeString = HttpContext.Session.GetString("SessionStartTime");
-    //     if (DateTime.TryParse(sessionStartTimeString, null, System.Globalization.DateTimeStyles.RoundtripKind, out var sessionStartTime))
-    //     {
-    //         var sessionDuration = DateTime.UtcNow - sessionStartTime;
-    //         var timeoutDuration = TimeSpan.FromMinutes(5); // Set timeout duration
 
-    //         if (sessionDuration > timeoutDuration)  // Session has expired
-    //         {
-    //             HttpContext.Session.Clear();
-    //             return RedirectToAction("Login");
-    //         }
+    [HttpPost("modify-profile")]
+    [Authorize]
+    public IActionResult ModifyProfile(User updatedUser)
+    {
+        int userId = _jwtService.ExtractUserIdFromToken();
+        var user = _userRepo.GetById(userId);
+        user.FirstName = updatedUser.FirstName;
+        user.LastName = updatedUser.LastName;
+        user.Email = updatedUser.Email;
+        user.Password = updatedUser.Password;
 
-    //         HttpContext.Session.SetString("SessionStartTime", DateTime.UtcNow.ToString("o")); // Update session start time
-    //     }
-    //     else
-    //     {
-    //         // If session start time is missing or invalid, consider session expired
-    //         HttpContext.Session.Clear();
-    //         return RedirectToAction("Login");
-    //     }
+        _userRepo.Update(user);
+        return Ok();
+    }
 
-    //     var projects = _db.UserProjects
-    //                     .Where(up => up.UserId == user.Id)
-    //                     .Select(up => up.Project)
-    //                     .ToList();
+    [HttpPost("confirm-delete-profile")]
+    [Authorize]
+    public IActionResult DeleteProfile()
+    {
+        int userId = _jwtService.ExtractUserIdFromToken();
+        var user = _db.Users
+            .Include(u => u.UserProjects)
+            .ThenInclude(up => up.Project)
+            .ThenInclude(p => p.ProjectClients)
+            .ThenInclude(pc => pc.Client)  // Include clients in projects
+            .SingleOrDefault(u => u.Id == userId);
 
-    //     // Pass the user and projects to the view
-    //     var viewModel = new ProfileViewModel
-    //     {
-    //         User = user,
-    //         Projects = projects
-    //     };
+        if (user == null)
+        {
+            return BadRequest(new { success = false, message = "User invalid."});
+        }
 
-    //     return View(viewModel);
-    // }
+        _userRepo.Delete(user);
+        return Ok();
+    }
 
-    // [HttpPost("modify-profile")]
-    // [ValidateAntiForgeryToken]
-    // public IActionResult ModifyProfile(User updatedUser)
-    // {
-    //     var userIdString = HttpContext.Session.GetString("UserId");
-    //     if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
-    //     {
-    //         HttpContext.Session.Clear();
-    //         return RedirectToAction("Login");
-    //     }
-    //     if (!ModelState.IsValid)
-    //     {
-    //         return View(updatedUser);
-    //     }
-
-    //     var user = _userRepo.GetById(userId);
-    //     if (user == null)
-    //     {
-    //         HttpContext.Session.Clear();
-    //         return RedirectToAction("Login");
-    //     }
-
-    //     user.FirstName = updatedUser.FirstName;
-    //     user.LastName = updatedUser.LastName;
-    //     user.Email = updatedUser.Email;
-    //     user.Password = updatedUser.Password;
-
-    //     _userRepo.Update(user);
-    //     return RedirectToAction("Profile");
-    // }
-
-    // [HttpPost("confirm-delete-profile")]
-    // [ValidateAntiForgeryToken]
-    // public IActionResult DeleteProfile()
-    // {
-    //     var userIdString = HttpContext.Session.GetString("UserId");
-    //     if (string.IsNullOrEmpty(userIdString))
-    //     {
-    //         return RedirectToAction("Login");
-    //     }
-
-    //     if (!int.TryParse(userIdString, out var userId))
-    //     {
-    //         HttpContext.Session.Clear();
-    //         return RedirectToAction("Login");
-    //     }
-
-    //     var user = _db.Users
-    //         .Include(u => u.UserProjects)
-    //         .ThenInclude(up => up.Project)
-    //         .ThenInclude(p => p.ProjectClients)
-    //         .ThenInclude(pc => pc.Client)  // Include clients in projects
-    //         .SingleOrDefault(u => u.Id == userId);
-
-    //     if (user == null)
-    //     {
-    //         HttpContext.Session.Clear();
-    //         return RedirectToAction("Login");
-    //     }
-
-    //     _userRepo.Delete(user);
-    //     HttpContext.Session.Clear(); 
-    //     return RedirectToAction("List");
-    // }
-
-    // [HttpPost("import-clients")]
-    // [ValidateAntiForgeryToken]
-    // public async Task<IActionResult> ImportClients(IFormFile file)
-    // {
-    //     if (file != null && file.Length > 0)
-    //     {
-    //         _logger.LogInformation("File is good!");
-    //         using (var reader = new StreamReader(file.OpenReadStream()))
-    //         using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)))
-    //         {
-    //             var records = csv.GetRecords<ClientImportModel>().ToList();
-    //             _logger.LogInformation($"Records read from CSV: {records.Count}");
+    [HttpPost("import-clients")]
+    [Authorize]
+    public async Task<IActionResult> ImportClients(IFormFile file)
+    {
+        if (file != null && file.Length > 0)
+        {
+            _logger.LogInformation("File is good!");
+            using (var reader = new StreamReader(file.OpenReadStream()))
+            using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)))
+            {
+                var records = csv.GetRecords<Client>().ToList();
+                _logger.LogInformation($"Records read from CSV: {records.Count}");
                 
-    //             foreach (var record in records)
-    //             {
-    //                 _logger.LogInformation($"Adding client: {record.FirstName} {record.LastName}");
-    //                 var client = new Client
-    //                 {
-    //                     FirstName = record.FirstName,
-    //                     LastName = record.LastName,
-    //                     DateOfBirth = record.DateOfBirth,
-    //                     Gender = record.Gender,
-    //                 };
+                foreach (var record in records)
+                {
+                    _logger.LogInformation($"Adding client: {record.FirstName} {record.LastName}");
+                    var client = new Client
+                    {
+                        FirstName = record.FirstName,
+                        LastName = record.LastName,
+                        DateOfBirth = record.DateOfBirth,
+                        Gender = record.Gender,
+                    };
 
-    //                 var validationContext = new ValidationContext(client);
-    //                 var validationResults = new List<ValidationResult>();
+                    var validationContext = new ValidationContext(client);
+                    var validationResults = new List<ValidationResult>();
 
-    //                 if (!Validator.TryValidateObject(client, validationContext, validationResults, true))
-    //                 {
-    //                     foreach (var validationResult in validationResults)
-    //                     {
-    //                         _logger.LogWarning($"Validation failed for client {client.FirstName} {client.LastName}: {validationResult.ErrorMessage}");
-    //                     }
-    //                 }
-    //                 else
-    //                 {
-    //                     _db.Clients.Add(client);
-    //                 }
-    //             }
+                    if (!Validator.TryValidateObject(client, validationContext, validationResults, true))
+                    {
+                        foreach (var validationResult in validationResults)
+                        {
+                            _logger.LogWarning($"Validation failed for client {client.FirstName} {client.LastName}: {validationResult.ErrorMessage}");
+                        }
+                    }
+                    else
+                    {
+                        _db.Clients.Add(client);
+                    }
+                }
                 
-    //             try
-    //             {
-    //                 await _db.SaveChangesAsync();
-    //                 _logger.LogInformation("Is saved for user");
-    //             }
-    //             catch (Exception ex)
-    //             {
-    //                 _logger.LogError($"Error saving changes to database: {ex.Message}");
-    //             }
-    //             return RedirectToAction("Profile");
-    //         }
-    //     }
+                try
+                {
+                    await _db.SaveChangesAsync();
+                    _logger.LogInformation("Is saved for user");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error saving changes to database: {ex.Message}");
+                }
+                return Ok();
+            }
+        }
 
-    //     // Handle cases where no file was provided or other errors
-    //     ModelState.AddModelError("", "No file was uploaded or file is invalid.");
-    //     return View("ImportClients");
-    // }
+        // Handle cases where no file was provided or other errors
+        ModelState.AddModelError("", "No file was uploaded or file is invalid.");
+        return BadRequest();
+    }
 
-    // public async Task<IActionResult> SendEmail(int id)
-    // {
-    //     IEnumerable<Client> clients = _clientRepo.GetAll();
-    //     var emailTasks = new List<Task>();
-    //     foreach (Client client in clients)
-    //     {
-    //         emailTasks.Add(_emailService.SendEmailAsync(client.Email, "Welcome!", "Hello, this is a test email."));
-    //     }
+    [HttpPost("send-email")]
+    [Authorize]
+    public async Task<IActionResult> SendEmail(int id)
+    {
+        IEnumerable<Client> clients = _clientRepo.GetAll();
+        var emailTasks = new List<Task>();
+        foreach (Client client in clients)
+        {
+            emailTasks.Add(_emailService.SendEmailAsync(client.Email, "Welcome!", "Hello, this is a test email."));
+        }
 
-    //     await Task.WhenAll(emailTasks);
-    //     return RedirectToAction("OpenProject", new { id = id});
-    // }
+        await Task.WhenAll(emailTasks);
+        return Ok();
+    }
 
 
 }
