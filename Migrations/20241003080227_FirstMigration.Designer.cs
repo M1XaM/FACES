@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FACES.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240914154014_CreateModels")]
-    partial class CreateModels
+    [Migration("20241003080227_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

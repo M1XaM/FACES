@@ -26,6 +26,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 
+using BCrypt.Net;
 
 namespace FACES.Controllers;
 
@@ -68,7 +69,7 @@ public class ApiV1Controller : Controller
         }
 
         var obj = await _db.Users.SingleOrDefaultAsync(u => u.Email == email);
-        if (obj == null || obj.Password != password)
+        if (obj == null || !BCrypt.Net.BCrypt.Verify(password, obj.Password))
         {
             return Json(new { success = false, message = "Invalid email or password." });
         }
@@ -106,13 +107,15 @@ public class ApiV1Controller : Controller
             return Json(new { success = false, message = "Email is already in use." });
         }
 
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+
         // Create a new user object
         var newUser = new User
         {
             FirstName = firstName,
             LastName = lastName,
             Email = email,
-            Password = password // Consider hashing this before saving
+            Password = hashedPassword // Consider hashing this before saving
         };
 
         _userRepo.Add(newUser);

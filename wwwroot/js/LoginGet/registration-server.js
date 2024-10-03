@@ -24,7 +24,7 @@ document.getElementById('registrationButton').addEventListener('click', function
     .then(response => response.json())
     .then(result => {
         if (result.success) {
-            localStorage.setItem('token', data.token);
+            localStorage.setItem('token', result.token);
             window.location.href = '/list-project';
         } else {
             alert(result.message);
