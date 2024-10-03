@@ -13,7 +13,7 @@ document.getElementById('registrationButton').addEventListener('click', function
         Password: password
     };
 
-    fetch('api/v1/registration-post', {
+    fetch('api/v1/registration', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

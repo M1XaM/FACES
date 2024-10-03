@@ -31,7 +31,8 @@ using BCrypt.Net;
 namespace FACES.Controllers;
 
 [Route("api/v1")]
-public class ApiV1Controller : Controller
+[ApiController]
+public class ApiV1Controller : ControllerBase
 {
     private readonly ApplicationDbContext _db;
     private readonly ILogger<ApiV1Controller> _logger;
@@ -52,9 +53,9 @@ public class ApiV1Controller : Controller
         _jwtService = jwtService;
     }
 
-    [HttpPost("login-post")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> LoginPost()
+    [HttpPost("login")]
+    // public async Task<IActionResult> Login([FromBody] JObject jsonData)
+    public async Task<IActionResult> Login()
     {
         using var reader = new StreamReader(Request.Body);
         var body = await reader.ReadToEndAsync();
@@ -65,23 +66,23 @@ public class ApiV1Controller : Controller
 
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
-            return Json(new { success = false, message = "Email and password are required.", redirectUrl = Url.Action("login") });
+            return BadRequest(new { success = false, message = "Email and password are required.", redirectUrl = Url.Action("login") });
         }
 
         var obj = await _db.Users.SingleOrDefaultAsync(u => u.Email == email);
         if (obj == null || !BCrypt.Net.BCrypt.Verify(password, obj.Password))
         {
-            return Json(new { success = false, message = "Invalid email or password." });
+            return BadRequest(new { success = false, message = "Invalid email or password." });
         }
         
         var token = _jwtService.GenerateJwtToken(obj.Id.ToString());
-        return Json(new { success = true, token = token, message = "Login successful.", redirectUrl = Url.Action("ListProject", "Home", new { userId = obj.Id.ToString()})});
+        return Ok(new { success = true, token = token, message = "Login successful.", redirectUrl = Url.Action("ListProject", "Home", new { userId = obj.Id.ToString()})});
     }
 
 
-    [HttpPost("registration-post")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> RegistrationPost()
+    [HttpPost("registration")]
+    // public async Task<IActionResult> Registration([FromBody] JObject jsonData)
+    public async Task<IActionResult> Registration()
     {
         using var reader = new StreamReader(Request.Body);
         var json = await reader.ReadToEndAsync();
@@ -97,14 +98,14 @@ public class ApiV1Controller : Controller
         if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName) ||
             string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
-            return Json(new { success = false, message = "All fields are required." });
+            return BadRequest(new { success = false, message = "All fields are required." });
         }
 
         // Check if the email already exists
         var existingUser = await _db.Users.SingleOrDefaultAsync(u => u.Email == email);
         if (existingUser != null)
         {
-            return Json(new { success = false, message = "Email is already in use." });
+            return Ok(new { success = false, message = "Email is already in use." });
         }
 
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
@@ -123,7 +124,7 @@ public class ApiV1Controller : Controller
         var newUserId = newUser.Id;
 
         var token = _jwtService.GenerateJwtToken(newUserId.ToString());
-        return Json(new { success = true, token = token, message = "Registration successful.", redirectUrl = Url.Action("ListProject", "Home", new { userId = newUserId})});
+        return Ok(new { success = true, token = token, message = "Registration successful.", redirectUrl = Url.Action("ListProject", "Home", new { userId = newUserId})});
     }
 
     [HttpGet("get-list-project")]
@@ -134,7 +135,7 @@ public class ApiV1Controller : Controller
         var user = await _db.Users.SingleOrDefaultAsync(u => u.Id == userId);
         if (user == null)
         {
-            return Json(new { success = false, message = "User not found." });
+            return BadRequest(new { success = false, message = "User not found." });
         }
 
         // Fetch the projects related to the user
@@ -148,11 +149,7 @@ public class ApiV1Controller : Controller
                                 })
                                 .ToListAsync();
 
-        return Json(new 
-        { 
-            success = true, 
-            projects = projects 
-        });
+        return Ok(new { success = true, projects = projects });
     }   
 
     [HttpPost("create-project")]
@@ -223,19 +220,31 @@ public class ApiV1Controller : Controller
             .Where(pc => pc.ProjectId == projectId)
             .Select(pc => pc.Client)
             .ToList();
-        return Json(clients);
+        return Ok(clients);
     }
 
-    // [HttpGet("user/{userId}/project/{projectId}/add-clients")]
-    // public IActionResult AddClient(int userId, int projectId)
-    // {
-    //     var obj = new AddClientViewModel
-    //     {
-    //         Project = _projectRepo.GetById(projectId),
-    //         Client = new Client()
-    //     };
-    //     return View(obj);
-    // }
+    [HttpPost("project/{projectId}/add-client")]
+    [Authorize]
+    public async Task<IActionResult> AddClient(int projectId, [FromBody] JObject jsonData)
+    {
+        var firstName = jsonData["FirstName"].ToString();
+        var lastName = jsonData["LastName"].ToString();
+
+        if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName))
+        {
+            return BadRequest(new { success = false, message = "First name and last name are required." });
+        }
+
+        var newClient = new Client
+        {
+            FirstName = firstName,
+            LastName = lastName,
+        };
+
+        _clientRepo.Add(newClient);
+        return Ok(new { success = true, message = "Client added successfully.", redirectUrl = Url.Action("ProjectDetails", new { projectId }) });
+    }
+
 
     // For future implementation
     // [HttpGet("profile")]

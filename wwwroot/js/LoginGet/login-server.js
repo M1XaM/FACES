@@ -10,11 +10,10 @@ document.getElementById('loginButton').addEventListener('click', function(event)
     };
     console.log("Data being sent:", JSON.stringify(data));
 
-    fetch('api/v1/login-post', {
+    fetch('api/v1/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
         },
         body: JSON.stringify(data)
     })
