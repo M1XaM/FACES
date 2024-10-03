@@ -74,7 +74,6 @@ public class ApiV1Controller : Controller
         }
         
         var token = _jwtService.GenerateJwtToken(obj.Id.ToString());
-        _logger.LogInformation(token);
         return Json(new { success = true, token = token, message = "Login successful.", redirectUrl = Url.Action("ListProject", "Home", new { userId = obj.Id.ToString()})});
     }
 
@@ -85,8 +84,6 @@ public class ApiV1Controller : Controller
     {
         using var reader = new StreamReader(Request.Body);
         var json = await reader.ReadToEndAsync();
-
-        _logger.LogInformation($"Received JSON: {json}");
 
         // Deserialize the JSON into a dynamic object or a specific model
         var jsonData = JObject.Parse(json);
@@ -127,11 +124,9 @@ public class ApiV1Controller : Controller
     }
 
     [HttpGet("get-list-project")]
-    // [ServiceFilter(typeof(CustomAuthorizeAttribute))] use[d] for debuging, no need for now
     [Authorize]
     public async Task<IActionResult> GetUserProjects()
     {
-        _logger.LogInformation("NOOOOOOOO PASSSSSSSSSSSSSSS");
         int userId = _jwtService.ExtractUserIdFromToken();
         var user = await _db.Users.SingleOrDefaultAsync(u => u.Id == userId);
         if (user == null)
@@ -158,7 +153,6 @@ public class ApiV1Controller : Controller
     }   
 
     [HttpPost("create-project")]
-    // [ServiceFilter(typeof(CustomAuthorizeAttribute))] use[d] for debuging, no need for now
     [Authorize]
     public async Task<IActionResult> CreateProject()
     {
@@ -213,7 +207,6 @@ public class ApiV1Controller : Controller
 
 
     [HttpGet("project/{projectId}/get-clients")]
-    // [ServiceFilter(typeof(CustomAuthorizeAttribute))] use[d] for debuging, no need for now
     [Authorize]
     public IActionResult OpenProject(int projectId)
     {

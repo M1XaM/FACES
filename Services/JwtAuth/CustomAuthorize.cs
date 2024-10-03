@@ -1,3 +1,7 @@
+// Personal implementation of simple authorization
+// Used in debugging, now no need
+// To use it add builder.Services.AddScoped<CustomAuthorizeAttribute>(); and [ServiceFilter(typeof(CustomAuthorizeAttribute))]
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
