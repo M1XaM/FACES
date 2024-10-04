@@ -58,7 +58,7 @@ public class ApiV1Controller : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
-        if (string.IsNullOrEmpty(loginRequest.Email) || string.IsNullOrEmpty(loginRequest.Password))
+        if (AreFilled(loginRequest.Email, loginRequest.Password))
         {
             return Unauthorized(new { success = false, message = "Email and password are required.", redirectUrl = Url.Action("login") });
         }
@@ -77,8 +77,7 @@ public class ApiV1Controller : ControllerBase
     [HttpPost("registration")]
     public async Task<IActionResult> Registration([FromBody] RegistrationRequest registrationRequest)
     {
-        if (string.IsNullOrEmpty(registrationRequest.FirstName) || string.IsNullOrEmpty(registrationRequest.LastName) ||
-            string.IsNullOrEmpty(registrationRequest.Email) || string.IsNullOrEmpty(registrationRequest.Password))
+        if (AreFilled(registrationRequest.FirstName, registrationRequest.LastName, registrationRequest.Email, registrationRequest.Password))
         {
             return BadRequest(new { success = false, message = "All fields are required." });
         }
@@ -98,7 +97,7 @@ public class ApiV1Controller : ControllerBase
             Password = BCrypt.Net.BCrypt.HashPassword(registrationRequest.Password)
         };
 
-        _userRepo.Add(newUser);
+        await _userRepo.AddAsync(newUser);
         var token = _jwtService.GenerateJwtToken(newUser.Id.ToString());
         return Ok(new { success = true, token = token, message = "Registration successful.", redirectUrl = Url.Action("ListProject", "Home", new { userId = newUser.Id})});
     }
@@ -133,12 +132,12 @@ public class ApiV1Controller : ControllerBase
     public async Task<IActionResult> CreateProject([FromBody] ProjectRequest projectRequest)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
-        var user = _userRepo.GetById(userId);
+        var user = await _userRepo.GetByIdAsync(userId);
         if (user == null)
         {
             return NotFound(new { message = "User not found." });
         }
-        if (string.IsNullOrEmpty(projectRequest.Name) || string.IsNullOrEmpty( projectRequest.Description))
+        if (AreFilled(projectRequest.Name, projectRequest.Description))
         {
             return BadRequest(new { message = "Project name and description are required." });
         }
@@ -150,14 +149,14 @@ public class ApiV1Controller : ControllerBase
         };
         try
         {
-            _projectRepo.Add(project);
+            await _projectRepo.AddAsync(project);
             var userProject = new UserProject
             {
                 UserId = user.Id,
                 ProjectId = project.Id
             };
             
-            _db.UserProjects.Add(userProject);
+            await _db.UserProjects.AddAsync(userProject);
             await _db.SaveChangesAsync();
             return Ok(new 
             { 
@@ -174,18 +173,18 @@ public class ApiV1Controller : ControllerBase
 
     [HttpGet("project/{projectId}/get-clients")]
     [Authorize]
-    public IActionResult OpenProject(int projectId)
+    public async Task<IActionResult> OpenProject(int projectId)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
-        var project = _projectRepo.GetById(projectId);
+        var project = await _projectRepo.GetByIdAsync(projectId);
         if (project == null)
         {
             return NotFound();
         }
-        var clients = _db.ProjectClients
+        var clients = await _db.ProjectClients
             .Where(pc => pc.ProjectId == projectId)
             .Select(pc => pc.Client)
-            .ToList();
+            .ToListAsync();
         return Ok(clients);
     }
 
@@ -193,7 +192,7 @@ public class ApiV1Controller : ControllerBase
     [Authorize]
     public async Task<IActionResult> AddClient(int projectId, [FromBody] AddClientRequest addClientRequest)
     {
-        if (string.IsNullOrEmpty(addClientRequest.FirstName) || string.IsNullOrEmpty(addClientRequest.LastName))
+        if (AreFilled(addClientRequest.FirstName, addClientRequest.LastName))
         {
             return BadRequest(new { success = false, message = "First name and last name are required." });
         }
@@ -204,26 +203,26 @@ public class ApiV1Controller : ControllerBase
             LastName = addClientRequest.LastName,
         };
 
-        _clientRepo.Add(newClient);
+        await _clientRepo.AddAsync(newClient);
         return Ok();
     }
 
 
     [HttpGet("profile")]
     [Authorize]
-    public IActionResult Profile()
+    public async Task<IActionResult> Profile()
     {
         int userId = _jwtService.ExtractUserIdFromToken();
-        var user = _userRepo.GetById(userId);
+        var user = await _userRepo.GetByIdAsync(userId);
         if (user == null)
         {
             return NotFound(new { message = "User not found." });
         }
 
-        var projects = _db.UserProjects
+        var projects = await _db.UserProjects
                         .Where(up => up.UserId == userId)
                         .Select(up => up.Project)
-                        .ToList();
+                        .ToListAsync();
 
         return Ok(new { user, projects });
     }
@@ -231,38 +230,37 @@ public class ApiV1Controller : ControllerBase
 
     [HttpPost("modify-profile")]
     [Authorize]
-    public IActionResult ModifyProfile([FromBody] UserRequest updatedUser)
+    public async Task<IActionResult> ModifyProfile([FromBody] UserRequest updatedUser)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
-        var user = _userRepo.GetById(userId);
+        var user = await _userRepo.GetByIdAsync(userId);
 
         user.FirstName = updatedUser.FirstName;
         user.LastName = updatedUser.LastName;
         user.Email = updatedUser.Email;
         user.Password = updatedUser.Password;
-        _userRepo.Update(user);
-
+        await _userRepo.UpdateAsync(user);
         return Ok();
     }
 
     [HttpPost("confirm-delete-profile")]
     [Authorize]
-    public IActionResult DeleteProfile()
+    public async Task<IActionResult> DeleteProfile()
     {
         int userId = _jwtService.ExtractUserIdFromToken();
-        var user = _db.Users
+        var user = await _db.Users
             .Include(u => u.UserProjects)
             .ThenInclude(up => up.Project)
             .ThenInclude(p => p.ProjectClients)
             .ThenInclude(pc => pc.Client)  // Include clients in projects
-            .SingleOrDefault(u => u.Id == userId);
+            .SingleOrDefaultAsync(u => u.Id == userId);
 
         if (user == null)
         {
             return BadRequest(new { success = false, message = "User invalid."});
         }
 
-        _userRepo.Delete(user);
+        await _userRepo.DeleteAsync(user);
         return Ok();
     }
 
@@ -302,7 +300,7 @@ public class ApiV1Controller : ControllerBase
                     }
                     else
                     {
-                        _db.Clients.Add(client);
+                        await _db.Clients.AddAsync(client);
                     }
                 }
                 
@@ -328,7 +326,7 @@ public class ApiV1Controller : ControllerBase
     [Authorize]
     public async Task<IActionResult> SendEmail([FromBody] EmailRequest emailRequest)
     {
-        IEnumerable<Client> clients = _clientRepo.GetAll();
+        IEnumerable<Client> clients = await _clientRepo.GetAllAsync();
         var emailTasks = new List<Task>();
         foreach (Client client in clients)
         {
@@ -337,5 +335,10 @@ public class ApiV1Controller : ControllerBase
 
         await Task.WhenAll(emailTasks);
         return Ok();
+    }
+
+    private bool AreFilled(params string[] objects){
+        foreach (string obj in objects) if(!string.IsNullOrEmpty(obj)) return false;
+        return true;    
     }
 }

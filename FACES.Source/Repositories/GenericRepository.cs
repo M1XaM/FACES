@@ -1,14 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using FACES.Models;
 using FACES.Data;
-
 
 namespace FACES.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class, IEntity
     {
-        private ApplicationDbContext _db;
-        DbSet<T> _entity = null;
+        private readonly ApplicationDbContext _db;
+        private readonly DbSet<T> _entity;
 
         public GenericRepository(ApplicationDbContext db)
         {
@@ -16,58 +17,58 @@ namespace FACES.Repositories
             _entity = _db.Set<T>();
         }
 
-        public bool Add(T model)
+        public async Task<bool> AddAsync(T model)
         {
             try
             {
-                _entity.Add(model);
-                _db.SaveChanges();
+                await _entity.AddAsync(model);
+                await _db.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
         }
 
-        public bool Update(T model)
+        public async Task<bool> UpdateAsync(T model)
         {
             try
             {
                 _entity.Update(model);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
         }
 
-        public bool Delete(T model)
+        public async Task<bool> DeleteAsync(T model)
         {
             try
             {
-                var obj = _entity.Find(model.Id);
+                var obj = await _entity.FindAsync(model.Id);
                 if (obj != null)
                 {
                     _entity.Remove(obj);
-                    _db.SaveChanges();
+                    await _db.SaveChangesAsync();
                     return true;
                 }
                 return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
         }
 
-        public T GetById(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
             try
             {
-                return _entity.Find(id);
+                return await _entity.FindAsync(id);
             }
             catch
             {
@@ -75,11 +76,11 @@ namespace FACES.Repositories
             }
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             try
             {
-                return _entity.ToList();
+                return await _entity.ToListAsync();
             }
             catch
             {
