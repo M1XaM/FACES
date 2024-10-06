@@ -60,7 +60,7 @@ public class ApiV1Controller : ControllerBase
     {
         if (AreFilled(loginRequest.Email, loginRequest.Password))
         {
-            return Unauthorized(new { success = false, message = "Email and password are required.", redirectUrl = Url.Action("login") });
+            return BadRequest(new { success = false, message = "Email and password are required.", redirectUrl = Url.Action("login") });
         }
 
         var obj = await _db.Users.SingleOrDefaultAsync(u => u.Email == loginRequest.Email);

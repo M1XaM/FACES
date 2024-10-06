@@ -1,0 +1,27 @@
+services:
+  faces:
+    build:
+      context: ./FACES.Source
+      dockerfile: Dockerfile
+    ports:
+      - "80:8080"
+    volumes:
+      - ./.dataprotection-keys:/root/.aspnet/DataProtection-Keys
+    depends_on:
+      - postgres
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=mydatabase;Username=myuser;Password=mypassword
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

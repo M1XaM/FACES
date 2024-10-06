@@ -1,0 +1,252 @@
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial;
+  font-weight: bold;
+}
+
+body {
+  background-color: #fdfcfc;
+}
+
+nav {
+  display: flex;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
+  padding: 10px 30px;
+  border-bottom: 2px solid #ccc;
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo img {
+  height: 40px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.form {
+  background: #ffffff;
+  padding: 40px;
+  max-width: 600px;
+  margin: 100px 40px 40px 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box; /* Учитывать padding и border в расчете ширины */
+  
+}
+
+.tab-group {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 40px 0;
+  
+}
+
+.tab-group:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.tab-group li a {
+  display: block;
+  text-decoration: none;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.1);
+  color: #000;
+  font-size: 20px;
+  float: left;
+  width: 50%;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.5s ease;
+  
+}
+
+.tab-group li a:hover {
+  background: #769bf3;
+  color: #ffffff;
+}
+
+.tab-group .active a {
+  background: #003BC6;
+  color: #ffffff;
+}
+
+.tab-content > div:last-child {
+  display: none;
+}
+
+.tab-content > div {
+  display: none; /* Скрыть все блоки контента по умолчанию */
+}
+
+.tab-content > div#signup {
+  display: block; /* Показать блок Sign Up по умолчанию */
+}
+
+
+h1 {
+  text-align: center;
+  color: #003BC6;
+  font-weight: 700;
+  margin: 0 0 40px;
+}
+
+label {
+  position: absolute;
+  transform: translateY(6px);
+  left: 13px;
+  color: rgba(0, 0, 0, 0.5);
+  transition: all 0.25s ease;
+  -webkit-backface-visibility: hidden;
+  pointer-events: none;
+  font-size: 18px;
+  
+}
+
+label .req {
+  margin: 2px;
+  color: #003BC6;
+}
+
+label.active {
+  transform: translateY(50px);
+  left: 2px;
+  font-size: 14px;
+}
+
+label.active .req {
+  opacity: 0;
+}
+
+label.highlight {
+  color: #003BC6;
+}
+
+input,
+textarea {
+  font-size: 16px;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: 1px solid #ccc;
+  color: #000;
+  border-radius: 10px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+input:focus,
+textarea:focus {
+  outline: 0;
+  border-color: #003BC6;
+}
+
+.field-wrap {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.text {
+  padding: 5px 0 5px 0;
+}
+
+.top-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.top-row > div {
+  float: left;
+  width: 48%;
+  margin-right: 4%;
+}
+
+.top-row > div:last-child {
+  margin: 0;
+}
+
+.button {
+  border: 0;
+  outline: none;
+  border-radius: 8px;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.5s ease;
+  -webkit-appearance: none;
+  margin-left: 33%;
+  margin-top: 25px;
+}
+
+.black-button {
+  background: #000;
+  color: #fff;
+}
+
+.white-button {
+  background: #000000;
+  color: #ffffff;
+}
+
+.black-button:hover,
+.white-button:hover {
+  background: #003BC6;
+  color: #fff;
+}
+
+.forgot {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.forgot a {
+  color: #003BC6;
+  text-decoration: none;
+}
+
+.forgot a:hover {
+  text-decoration: underline;
+}
+
+#forgot-password {
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#forgot-password h1 {
+  color: #003BC6;
+}
+
+#forgot-password .field-wrap label {
+  font-size: 18px;
+}
+
+#forgot-password .button {
+  margin-left: 0; /* Сбросить отступ для кнопки */
+}

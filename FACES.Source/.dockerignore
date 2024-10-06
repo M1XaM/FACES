@@ -1,0 +1,8 @@
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore .vs folder and other editor folders
+.vs/
+.idea/
+

@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
+// For key management (CSRF for docker)
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.DataProtection;
+
 namespace FACES;
 public class Program
 {
@@ -27,9 +31,12 @@ public class Program
         builder.Logging.ClearProviders();
         builder.Logging.AddConsole();
 
+        // Load connection string from environment variable if available
+        var connectionString = Environment.GetEnvironmentVariable("DefaultConnection") 
+            ?? builder.Configuration.GetConnectionString("DefaultConnection");
         // DB configuration
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(connectionString));
 
         // For generic repositories pattern
         builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -60,7 +67,32 @@ public class Program
 
         builder.Services.AddAuthorization();
 
+        // Docker is a bitch
+        // Check if the application is running in a Docker container
+        if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+        {
+            // Docker-specific configuration
+            builder.Services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(@"/root/.aspnet/DataProtection-Keys"))
+                .SetApplicationName("faces");
+        }
+
         var app = builder.Build();
+
+        // For automatic creation and migration of the db (for Docker)
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            try
+            {
+                var context = services.GetRequiredService<ApplicationDbContext>();
+                context.Database.Migrate();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
 
         if (!app.Environment.IsDevelopment())
         {

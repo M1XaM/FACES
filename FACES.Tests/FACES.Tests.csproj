@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FACES.Source\FACES.csproj" />
+    <ProjectReference Include="..\FACES.Source\FACES.Source.csproj" />
   </ItemGroup>
 
 </Project>
