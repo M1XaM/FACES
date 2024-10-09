@@ -7,6 +7,7 @@
     <title>F.A.C.E.S.</title>
     <link rel="stylesheet" href="~/css/dashboard.css">
     <script src="https://kit.fontawesome.com/da3cee17bc.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
@@ -24,7 +25,6 @@
         </div>
           
         <div class="grid item2">
-          <img src="https://placehold.co/40x40">
         </div>
         
         <div class="grid item3">
@@ -34,7 +34,6 @@
               <div class="topbuttons">
               <li><button id="btn1" class="toggle-btn topnav menu-btn"><img src="~/images/dashboard.png">&nbsp; Dashboard</button></li>
               <li><button id="btn2" class="toggle-btn topnav menu-btn"><img src="~/images//workflow.png">&nbsp; Workflow</button></li>
-              <li><button id="btn3" class="toggle-btn topnav menu-btn"><img src="~/images/contacts.png">&nbsp; Contacts</button></li>
             </div>
             <div class="botbuttons">
               <li><button id="btn4" class="toggle-btn topnav menu-btn"><img src="~/images/settings.png"></i>&nbsp; Settings</button></li>
@@ -129,9 +128,28 @@
                     <div class="custom-card-header">New Audience</div>
                     <ul class="custom-audience-list">
                       <li>
-                        
+                        <img src="avatar1.png" alt="Olivia Martin">
+                        <div>
+                          <span class="custom-name">Olivia Martin</span><br>
+                          <span class="custom-email">olivia.martin@email.com</span>
+                        </div>
+                      </li>
+                      <li>
+                        <img src="avatar2.png" alt="Jackson Lee">
+                        <div>
+                          <span class="custom-name">Jackson Lee</span><br>
+                          <span class="custom-email">jackson.lee@email.com</span>
+                        </div>
+                      </li>
+                      <li>
+                        <button id="plusButton" class="plus-button" alt="Add">+</button>
                       </li>
                     </ul>
+                    <!-- Add this after the audience list in your HTML -->
+<div id="seeMoreLink" class="custom-see-more" style="display: none;">
+  <a href="#" id="seeMoreAudienceLink">See more <i class="fas fa-arrow-right"></i></a>
+</div>
+
                   </div>
                 </div>
               </div>
@@ -265,7 +283,7 @@
                       </div>
                     </div>
                   </div>
-            
+                           
                   <!-- Audience Section -->
                   <div class="custom3-section custom3-audience">
                     <h2>Audience</h2>
@@ -321,6 +339,35 @@
             </div>
             </div>
           </main>
+          <div id="addOptionsPanel" class="new-user-panel" style="display: none;">
+            <h2>Select Data Entry Method</h2>
+            <button id="uploadCSVBtn" class="custom5-button">Upload CSV</button>
+            <button id="manualEntryBtn" class="custom5-button">Enter Data Manually</button>
+            <button id="cancelAddOptionsBtn" class="cancel-button">Cancel</button>
+        </div>
+        <div id="uploadCSVPanel" class="new-user-panel" style="display: none;">
+          <h2>Upload CSV File</h2>
+          <input type="file" id="csvFileInput" accept=".csv" class="custom2-input">
+          <button id="uploadCSVSubmitBtn" class="custom5-button">Upload</button>
+          <button id="cancelUploadCSVBtn" class="cancel-button">Cancel</button>
+      </div>
+      
+        <div id="manualDataEntryPanel" class="new-user-panel" style="display: none;">
+          <h2>Enter User Data</h2>
+          <label for="avatar">Avatar (Image URL):</label>
+          <input type="text" id="avatar" class="custom2-input" placeholder="URL of avatar image">
+          <label for="firstName">First Name:</label>
+          <input type="text" id="firstName" class="custom2-input" placeholder="Enter first name">
+          <label for="lastName">Last Name:</label>
+          <input type="text" id="lastName" class="custom2-input" placeholder="Enter last name">
+          <label for="email">Email:</label>
+          <input type="email" id="email" class="custom2-input" placeholder="Enter email">
+          <button id="saveUserBtn" class="custom5-button">Save User</button>
+          <button id="cancelManualEntryBtn" class="cancel-button">Cancel</button>
+      </div>
+      <div id="overlay" style="display: none;"></div>
+      
+
     <script src="~/js/Dashboard/dropdown.js"></script>
     <script src="~/js/Dashboard/dates.js"></script>
     <script src="~/js/Dashboard/buttons.js"></script>
@@ -328,5 +375,15 @@
     <script src="~/js/Dashboard/get-clients.js"></script>
     <script src="~/js/Dashboard/add-client.js"></script>
     <script src="~/js/Dashboard/logout.js"></script>
+    <script src="~/js/Dashboard/plus-button.js"></script>
+    <script src="~/js/Dashboard_audience/dashdashboard_audience_overlay(edit).js"></script>
+    <script src="~/js/Dashboard_audience/dashboard_audience_overlay(dots).js"></script>
+    <script src="~/js/Dashboard_audience/dashboard_audience_overlay(add).js"></script>
+    <script src="~/js/Dashboard_audience/dashboard_audience_overlay(new-user).js"></script>
+    <script src="~/js/Dashboard_audience/dashboard_audience_rows.js"></script>
+    <script src="~/js/Dashboard_audience/dashboard_audience_panel_buttons.js"></script>
+    <script src="~/js/Dashboard_audience/dashboard1.js"></script>
+    <script src="~/js/Dashboard_audience/dashboard-users-panel.js"></script>
+    <script src="~/js/Dashboard_audience/dashboard-users-toggle.js"></script>
   </body>
 </html>
