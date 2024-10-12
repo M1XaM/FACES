@@ -13,6 +13,9 @@ using System.Text;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection;
 
+// For HTTPS
+using Microsoft.AspNetCore.HttpOverrides;
+
 namespace FACES;
 public class Program
 {
@@ -94,6 +97,12 @@ public class Program
             }
         }
 
+        // Configure forwarded headers for reverse proxy
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
+        
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
