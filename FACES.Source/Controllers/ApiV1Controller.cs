@@ -134,7 +134,11 @@ public class ApiV1Controller : ControllerBase
         int userId = _jwtService.ExtractUserIdFromToken();
         var user = await _userRepo.GetByIdAsync(userId);
         if (user == null) return NotFound(new { message = "User not found." });
-        if (AreFilled(projectRequest.Name, projectRequest.Description)) return BadRequest(new { message = "Project name and description are required." });
+        if (AreFilled(projectRequest.Name)) return BadRequest(new { message = "Project name is required." });
+
+        // Checking for existing project with the same name
+        var existingProject = await _db.Projects.FirstOrDefaultAsync(p => p.Name == projectRequest.Name); 
+        if (existingProject != null) return BadRequest(new { message = "A project with this name already exists." });
 
         var project = new Project
         {
@@ -158,7 +162,7 @@ public class ApiV1Controller : ControllerBase
             return Ok(new 
             { 
                 message = "Project created successfully.", 
-                projectId = project.Id 
+                projectName = project.Name 
             });
         }
         catch (Exception ex)
@@ -168,18 +172,20 @@ public class ApiV1Controller : ControllerBase
     }
 
 
-    [HttpGet("project/{projectId}/get-clients")]
+    [HttpGet("project/{projectName}/get-clients")]
     [Authorize]
-    public async Task<IActionResult> OpenProject(int projectId)
+    public async Task<IActionResult> OpenProject(string projectName)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
-        var project = await _projectRepo.GetByIdAsync(projectId);
-        if (project == null)
-        {
-            return NotFound();
-        }
+        var project = await _db.Projects.FirstOrDefaultAsync(p => p.Name == projectName);
+        if (project == null) return NotFound( new { message = "Project with such name does not exist."});
+        var userProject = await _db.UserProjects.FirstOrDefaultAsync(up => up.UserId == userId && up.ProjectId == project.Id);
+
+        if (userProject == null) return NotFound(new { message = "You do not have project with such name." });
+        if (project == null) return NotFound( new { message = "Project with such name does not exist."});
+        
         var clients = await _db.ProjectClients
-            .Where(pc => pc.ProjectId == projectId)
+            .Where(pc => pc.ProjectId == project.Id)
             .Select(pc => pc.Client)
             .ToListAsync();
         return Ok(clients);
@@ -189,10 +195,8 @@ public class ApiV1Controller : ControllerBase
     [Authorize]
     public async Task<IActionResult> AddClient(int projectId, [FromBody] AddClientRequest addClientRequest)
     {
-        if (AreFilled(addClientRequest.FirstName, addClientRequest.LastName, addClientRequest.Email))
-        {
-            return BadRequest(new { success = false, message = "First name, last name and email are required." });
-        }
+        if (AreFilled(addClientRequest.FirstName, addClientRequest.LastName, addClientRequest.Email)) 
+            return BadRequest(new { success = false, message = "First name, last name or email are not valid." });
 
         var newClient = new Client
         {
