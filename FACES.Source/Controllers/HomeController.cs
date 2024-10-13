@@ -45,7 +45,7 @@ public class HomeController : Controller
     public IActionResult Index() => View();
 
     [HttpGet("login")]
-    public IActionResult LoginGet() => View();
+    public IActionResult Login() => View();
     
 
     [HttpGet("list-project")]

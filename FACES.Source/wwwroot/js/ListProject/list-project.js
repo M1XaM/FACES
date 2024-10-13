@@ -24,7 +24,7 @@ async function generateProjectBlocks() {
         projectsData.projects.forEach(project => {
             const projectBlock = document.createElement('a');
             projectBlock.classList.add('custom4-project');
-            projectBlock.href = `/project/${project.id}`;
+            projectBlock.href = `/project/${project.name}`;
             
             const projectHeader = document.createElement('div');
             projectHeader.classList.add('custom4-project-header');
@@ -97,14 +97,14 @@ async function setupAddNewProjectListener() {
                     }
 
                     const data = await response.json(); // Get the newly created project data (including ID)
-                    const newProjectId = data.projectId; // Assuming the server responds with the new project ID
+                    const newProjectName = data.projectName; // Assuming the server responds with the new project ID
 
                     // Create the new project block with a link to the project details page
                     let newProject = document.createElement('a');
                     newProject.classList.add('custom4-project');
-                    newProject.href = `/project/${newProjectId}`; // Set the URL for the new project
+                    newProject.href = `/project/${newProjectName}`; // Set the URL for the new project
                     newProject.innerHTML = `
-                        <div class="custom4-project-header">${projectName}</div>
+                        <div class="custom4-project-header">${newProjectName}</div>
                         <div class="custom4-divider"></div>
                         <div class="custom4-project-text">${projectDescription}</div>
                     `;
