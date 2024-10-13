@@ -19,12 +19,14 @@ using System.Text;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class CustomAuthorizeAttribute : Microsoft.AspNetCore.Authorization.AuthorizeAttribute, IAuthorizationFilter
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IConfiguration _config;
+    private readonly string _jwtKey;
     private readonly ILogger<CustomAuthorizeAttribute> _logger;
 
-    public CustomAuthorizeAttribute(IHttpContextAccessor httpContextAccessor, ILogger<CustomAuthorizeAttribute> logger)
+    public CustomAuthorizeAttribute(IConfiguration config, ILogger<CustomAuthorizeAttribute> logger)
     {
-        _httpContextAccessor = httpContextAccessor;
+        _config = config;
+        _jwtKey = _config["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured. Please set the 'Jwt:Key' in the configuration.");
         _logger = logger;
     }
     
@@ -33,8 +35,7 @@ public class CustomAuthorizeAttribute : Microsoft.AspNetCore.Authorization.Autho
         
         // Check for token in the Authorization header
         var token = context.HttpContext.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "");
-        var config = _httpContextAccessor.HttpContext.RequestServices.GetService<IConfiguration>();
-        var key = Encoding.ASCII.GetBytes(config["Jwt:Key"]);
+        var key = Encoding.ASCII.GetBytes(_jwtKey);
         
         if (string.IsNullOrEmpty(token) || !ValidateToken(token, key))
         {

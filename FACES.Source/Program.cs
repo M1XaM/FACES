@@ -64,7 +64,7 @@ public class Program
                 ValidIssuer = "FACES",
                 ValidAudience = "FACES",
                 RequireExpirationTime = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "backup_key")),
             };
         });
 

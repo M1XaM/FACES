@@ -68,11 +68,16 @@ namespace FACES.Repositories
         {
             try
             {
-                return await _entity.FindAsync(id);
+                var entity = await _entity.FindAsync(id);
+                if (entity == null)
+                {
+                    throw new KeyNotFoundException($"Entity with id {id} not found.");
+                }
+                return entity;
             }
-            catch
+            catch(Exception ex)
             {
-                return null;
+                throw new InvalidOperationException($"This operation is not allowed in the current state: {ex}");
             }
         }
 
@@ -82,9 +87,9 @@ namespace FACES.Repositories
             {
                 return await _entity.ToListAsync();
             }
-            catch
+            catch(Exception ex)
             {
-                return null;
+                throw new InvalidOperationException($"This operation is not allowed in the current state: {ex}");
             }
         }
     }

@@ -75,7 +75,7 @@ public class ApiV1Controller : ControllerBase
 
 
     [HttpPost("registration")]
-    public async Task<IActionResult> Registration([FromBody] RegistrationRequest registrationRequest)
+    public async Task<IActionResult> Registration([FromBody] FullUserRequest registrationRequest)
     {
         if (AreFilled(registrationRequest.FirstName, registrationRequest.LastName, registrationRequest.Email, registrationRequest.Password))
         {
@@ -133,27 +133,24 @@ public class ApiV1Controller : ControllerBase
     {
         int userId = _jwtService.ExtractUserIdFromToken();
         var user = await _userRepo.GetByIdAsync(userId);
-        if (user == null)
-        {
-            return NotFound(new { message = "User not found." });
-        }
-        if (AreFilled(projectRequest.Name, projectRequest.Description))
-        {
-            return BadRequest(new { message = "Project name and description are required." });
-        }
+        if (user == null) return NotFound(new { message = "User not found." });
+        if (AreFilled(projectRequest.Name, projectRequest.Description)) return BadRequest(new { message = "Project name and description are required." });
 
         var project = new Project
         {
             Name = projectRequest.Name,
             Description =  projectRequest.Description,
         };
+
         try
         {
             await _projectRepo.AddAsync(project);
             var userProject = new UserProject
             {
                 UserId = user.Id,
-                ProjectId = project.Id
+                User = await _userRepo.GetByIdAsync(user.Id),
+                ProjectId = project.Id,
+                Project = await _projectRepo.GetByIdAsync(project.Id)
             };
             
             await _db.UserProjects.AddAsync(userProject);
@@ -163,7 +160,7 @@ public class ApiV1Controller : ControllerBase
                 message = "Project created successfully.", 
                 projectId = project.Id 
             });
-            }
+        }
         catch (Exception ex)
         {
             return StatusCode(500, new { message = "An error occurred while creating the project.", details = ex.Message });
@@ -192,15 +189,16 @@ public class ApiV1Controller : ControllerBase
     [Authorize]
     public async Task<IActionResult> AddClient(int projectId, [FromBody] AddClientRequest addClientRequest)
     {
-        if (AreFilled(addClientRequest.FirstName, addClientRequest.LastName))
+        if (AreFilled(addClientRequest.FirstName, addClientRequest.LastName, addClientRequest.Email))
         {
-            return BadRequest(new { success = false, message = "First name and last name are required." });
+            return BadRequest(new { success = false, message = "First name, last name and email are required." });
         }
 
         var newClient = new Client
         {
             FirstName = addClientRequest.FirstName,
             LastName = addClientRequest.LastName,
+            Email = addClientRequest.Email
         };
 
         await _clientRepo.AddAsync(newClient);
@@ -230,7 +228,7 @@ public class ApiV1Controller : ControllerBase
 
     [HttpPost("modify-profile")]
     [Authorize]
-    public async Task<IActionResult> ModifyProfile([FromBody] UserRequest updatedUser)
+    public async Task<IActionResult> ModifyProfile([FromBody] FullUserRequest updatedUser)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
         var user = await _userRepo.GetByIdAsync(userId);
@@ -284,8 +282,7 @@ public class ApiV1Controller : ControllerBase
                     {
                         FirstName = record.FirstName,
                         LastName = record.LastName,
-                        DateOfBirth = record.DateOfBirth,
-                        Gender = record.Gender,
+                        Email = record.Email                                                                                                                                       
                     };
 
                     var validationContext = new ValidationContext(client);
@@ -337,8 +334,9 @@ public class ApiV1Controller : ControllerBase
         return Ok();
     }
 
-    private bool AreFilled(params string[] objects){
-        foreach (string obj in objects) if(!string.IsNullOrEmpty(obj)) return false;
+    private bool AreFilled(params string?[] objects){
+        if (objects == null || objects.Length == 0) return true;
+        foreach (string? obj in objects) if(!string.IsNullOrEmpty(obj)) return false;
         return true;    
     }
 }
