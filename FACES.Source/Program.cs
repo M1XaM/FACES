@@ -24,9 +24,11 @@ public class Program
 
         var builder = WebApplication.CreateBuilder(args);
 
-        // For authorization
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<IJwtService, JwtService>();
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IProjectService, ProjectService>();
+         builder.Services.AddScoped<IClientService, ClientService>();
 
         builder.Services.AddControllersWithViews();
 
@@ -45,7 +47,7 @@ public class Program
         builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         // For email notification
         builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
-        builder.Services.AddTransient<IEmailService, SendGridEmailService>();
+        builder.Services.AddTransient<IEmailService, EmailService>();
 
         // For JWT authorization
         builder.Services.AddAuthentication(options =>
@@ -64,7 +66,8 @@ public class Program
                 ValidIssuer = "FACES",
                 ValidAudience = "FACES",
                 RequireExpirationTime = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "backup_key")),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] 
+                ?? throw new InvalidOperationException("JWT Key is not configured. Please set the 'Jwt:Key' in the configuration."))),
             };
         });
 
@@ -89,7 +92,16 @@ public class Program
             try
             {
                 var context = services.GetRequiredService<ApplicationDbContext>();
-                context.Database.Migrate();
+                // var entities = context.Model.GetEntityTypes();
+                // foreach (var entity in entities)
+                // {
+                //     var tableName = entity.GetTableName();
+                //     if (!string.IsNullOrEmpty(tableName))
+                //     {
+                //         context.Database.ExecuteSqlRaw($"TRUNCATE TABLE \"{tableName}\" RESTART IDENTITY CASCADE");
+                //     }
+                // }
+                // context.Database.Migrate();
             }
             catch (Exception ex)
             {

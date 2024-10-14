@@ -4,6 +4,7 @@
 # Custom add
 .vscode/
 .dataprotection-keys/
+out/
 
 # User-specific files
 *.suo
