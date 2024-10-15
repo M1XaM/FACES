@@ -1,8 +1,10 @@
-using Npgsql.EntityFrameworkCore.PostgreSQL;
-using Microsoft.EntityFrameworkCore;
 using FACES.Repositories;
 using FACES.Data;
 using FACES.Models;
+
+// For db
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.EntityFrameworkCore;
 
 // For JWT auth
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,12 +25,23 @@ public class Program
     {
 
         var builder = WebApplication.CreateBuilder(args);
+        builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
 
+        // For bussines logic layer
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<IJwtService, JwtService>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IProjectService, ProjectService>();
-         builder.Services.AddScoped<IClientService, ClientService>();
+        builder.Services.AddScoped<IClientService, ClientService>();
+        builder.Services.AddTransient<IEmailService, EmailService>();
+
+        // For data access layer
+        builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+        builder.Services.AddScoped<IClientRepository, ClientRepository>();
+        builder.Services.AddScoped<IUserProjectRepository, UserProjectRepository>();
+        builder.Services.AddScoped<IProjectClientRepository, ProjectClientRepository>();
 
         builder.Services.AddControllersWithViews();
 
@@ -39,15 +52,8 @@ public class Program
         // Load connection string from environment variable if available
         var connectionString = Environment.GetEnvironmentVariable("DefaultConnection") 
             ?? builder.Configuration.GetConnectionString("DefaultConnection");
-        // DB configuration
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString));
-
-        // For generic repositories pattern
-        builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-        // For email notification
-        builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
-        builder.Services.AddTransient<IEmailService, EmailService>();
 
         // For JWT authorization
         builder.Services.AddAuthentication(options =>

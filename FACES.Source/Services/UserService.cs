@@ -9,20 +9,18 @@ using FACES.Models;
 
 public class UserService : IUserService
 {
-    private readonly ApplicationDbContext _db;
-    private readonly IGenericRepository<User> _userRepo;
+    private readonly IUserRepository _userRepo;
     private readonly IJwtService _jwtService;
 
-    public UserService(ApplicationDbContext db, IGenericRepository<User> userRepo, IJwtService jwtService)
+    public UserService(IUserRepository userRepo, IJwtService jwtService)
     {
-        _db = db;
         _userRepo = userRepo;
         _jwtService = jwtService;
     }
 
     public async Task<AuthResponse> Login(LoginRequest loginRequest)
     {
-        var user = await _db.Users.SingleOrDefaultAsync(u => u.Email == loginRequest.Email);
+        var user = await _userRepo.GetUserByEmail(loginRequest.Email);
         if (user == null || !BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
         {
             return new AuthResponse { Success = false, Message = "Invalid email or password." };
@@ -35,7 +33,7 @@ public class UserService : IUserService
     public async Task<AuthResponse> Registration(FullUserRequest registrationRequest)
     {
         // Check if the email already exists
-        var existingUser = await _db.Users.SingleOrDefaultAsync(u => u.Email == registrationRequest.Email);
+        var existingUser = await _userRepo.GetUserByEmail(registrationRequest.Email);
         if (existingUser != null)
         {
             return new AuthResponse { Success = false, Message = "Email is already in use." };
@@ -86,16 +84,11 @@ public class UserService : IUserService
     public async Task<UserActionResponse> DeleteProfile()
     {
         int userId = _jwtService.ExtractUserIdFromToken();
-        var user = await _db.Users
-            .Include(u => u.UserProjects)
-            .ThenInclude(up => up.Project)
-            .ThenInclude(p => p.ProjectClients)
-            .ThenInclude(pc => pc.Client)  // Include clients in projects
-            .SingleOrDefaultAsync(u => u.Id == userId);
+        var user = await _userRepo.GetByIdAsync(userId);
 
         if (user == null) return new UserActionResponse { Success = false, Message = "User invalid."};
 
-        await _userRepo.DeleteAsync(user);
+        await _userRepo.DeleteAsync(user.Id);
         return new UserActionResponse { Success = true };
     }
 }

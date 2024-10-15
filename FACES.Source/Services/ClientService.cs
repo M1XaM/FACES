@@ -20,20 +20,22 @@ using FACES.Models;
 
 public class ClientService : IClientService
 {
-    private readonly ApplicationDbContext _db;
-    private readonly IGenericRepository<User> _userRepo;
-    private readonly IGenericRepository<Project> _projectRepo;
-    private readonly IGenericRepository<Client> _clientRepo;
-    private readonly ILogger<ClientService> _logger;
+    private readonly IUserRepository _userRepo;
+    private readonly IProjectRepository _projectRepo;
+    private readonly IClientRepository _clientRepo;
+    private readonly IUserProjectRepository _userProjectRepo;
+    private readonly IProjectClientRepository _projectClientRepo;
     private readonly IJwtService _jwtService;
+    private readonly ILogger<ClientService> _logger;
 
-    public ClientService(IGenericRepository<Client> clientRepo, ILogger<ClientService> logger, ApplicationDbContext db, IGenericRepository<User> userRepo, IJwtService jwtService, IGenericRepository<Project> projectRepo)
+    public ClientService(IUserRepository userRepo, IProjectRepository projectRepo, IClientRepository clientRepo, IUserProjectRepository userProjectRepo, IProjectClientRepository projectClientRepo, IJwtService jwtService, ILogger<ClientService> logger)
     {
-        _db = db;
         _userRepo = userRepo;
-        _jwtService = jwtService;
         _projectRepo = projectRepo;
         _clientRepo  = clientRepo;
+        _userProjectRepo = userProjectRepo;
+        _projectClientRepo = projectClientRepo;
+        _jwtService = jwtService;
         _logger = logger;
     }
 
@@ -41,20 +43,16 @@ public class ClientService : IClientService
     public async Task<ClientResponse> GetClients(string projectName)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
-        var user = await _db.Users.SingleOrDefaultAsync(u => u.Id == userId);
+        var user = await _userRepo.GetByIdAsync(userId);
         if (user == null) return new ClientResponse { Success = false, Message = "User not found." };
 
-        var project = await _db.Projects.FirstOrDefaultAsync(p => p.Name == projectName);
+        var project = await _projectRepo.GetProjectByName(projectName);
         if (project == null) return new ClientResponse { Success = false,  Message = "Project with such name does not exist."};
 
-        var userProject = await _db.UserProjects.FirstOrDefaultAsync(up => up.UserId == userId && up.ProjectId == project.Id);
+        var userProject = await _userProjectRepo.GetProjectByUserIdAndProjectId(userId, project.Id);
         if (userProject == null) return new ClientResponse { Success = false, Message = "You do not have project with such name." };
-        if (project == null) return new ClientResponse { Success = false, Message = "Project with such name does not exist."};
         
-        var clients = await _db.ProjectClients
-            .Where(pc => pc.ProjectId == project.Id)
-            .Select(pc => pc.Client)
-            .ToListAsync();
+        var clients = await _projectClientRepo.GetClientsByProjectId(userProject.Id);
         return new ClientResponse { Success = true, Clients = clients };
     }
 
@@ -102,19 +100,10 @@ public class ClientService : IClientService
                 }
                 else
                 {
-                    await _db.Clients.AddAsync(client);
+                    await _clientRepo.AddAsync(client);
                 }
             }
             
-            try
-            {
-                await _db.SaveChangesAsync();
-                _logger.LogInformation("Is saved for user");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error saving changes to database: {ex.Message}");
-            }
             return new ClientResponse { Success = true };
         }
     }

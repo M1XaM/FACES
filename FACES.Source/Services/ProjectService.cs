@@ -9,32 +9,27 @@ using FACES.Models;
 
 public class ProjectService : IProjectService
 {
-    private readonly ApplicationDbContext _db;
-    private readonly IGenericRepository<User> _userRepo;
-    private readonly IGenericRepository<Project> _projectRepo;
+    private readonly IUserRepository _userRepo;
+    private readonly IProjectRepository _projectRepo;
+    private readonly IUserProjectRepository _userProjectRepo;
     private readonly IJwtService _jwtService;
 
-    public ProjectService(ApplicationDbContext db, IGenericRepository<User> userRepo, IJwtService jwtService, IGenericRepository<Project> projectRepo)
+    public ProjectService(IUserRepository userRepo, IProjectRepository projectRepo, IUserProjectRepository userProjectRepo, IJwtService jwtService)
     {
-        _db = db;
         _userRepo = userRepo;
-        _jwtService = jwtService;
         _projectRepo = projectRepo;
+        _userProjectRepo = userProjectRepo;
+        _jwtService = jwtService;
     }
 
     [Authorize]
     public async Task<ProjectResponse> GetUserProjects()
     {
         int userId = _jwtService.ExtractUserIdFromToken();
-        var user = await _db.Users.SingleOrDefaultAsync(u => u.Id == userId);
+        var user = await _userRepo.GetByIdAsync(userId);
         if (user == null) return new ProjectResponse { Success = false, Message = "User not found." };
         
-        // Fetch the projects related to the user
-        var projects = await _db.UserProjects
-                                .Where(up => up.UserId == user.Id)
-                                .Select(up => up.Project)
-                                .ToListAsync();
-
+        var projects = await _userProjectRepo.GetProjectsByUserId(user.Id);
         return new ProjectResponse { Success = true, Projects = projects };
     }
 
@@ -46,7 +41,7 @@ public class ProjectService : IProjectService
         if (user == null) return new ProjectResponse { Success = false, Message = "User not found." };
 
         // Checking for existing project with the same name
-        var existingProject = await _db.Projects.FirstOrDefaultAsync(p => p.Name == projectRequest.Name); 
+        var existingProject = await _projectRepo.GetProjectByName(projectRequest.Name); 
         if (existingProject != null) return new ProjectResponse  { Success = false, Message = "A project with this name already exists." };
 
         var project = new Project
@@ -66,8 +61,7 @@ public class ProjectService : IProjectService
                 Project = await _projectRepo.GetByIdAsync(project.Id)
             };
             
-            await _db.UserProjects.AddAsync(userProject);
-            await _db.SaveChangesAsync();
+            await _userProjectRepo.AddAsync(userProject);
             return new ProjectResponse { Success = true, Message = "Project created successfully." };
         }
         catch (Exception ex)
