@@ -18,6 +18,13 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Restart VM to kill containers
+        run: |
+          ssh -o StrictHostKeyChecking=no maxim@20.199.79.22 "sudo restart"
+          
+      - name: Waiting for VM to get up
+        run: sleep 60
+  
       - name: Deploy to Azure VM
         run: |
-          ssh -o StrictHostKeyChecking=no maxim@20.199.79.22 "cd /home/maxim/FACES/ && git pull origin production && sudo docker-compose up --build"
+          ssh -o StrictHostKeyChecking=no maxim@20.199.79.22 "cd /home/maxim/FACES/ && git pull origin production && sudo docker-compose up --build -d"
