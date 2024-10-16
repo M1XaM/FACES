@@ -23,8 +23,9 @@ public class Program
 {
     public static void Main(string[] args)
     {
-
         var builder = WebApplication.CreateBuilder(args);
+
+        // Configure SendGrid settings from appsettings
         builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
 
         // For bussines logic layer
@@ -43,19 +44,24 @@ public class Program
         builder.Services.AddScoped<IUserProjectRepository, UserProjectRepository>();
         builder.Services.AddScoped<IProjectClientRepository, ProjectClientRepository>();
 
+        // Add Controllers
         builder.Services.AddControllersWithViews();
+        builder.Services.AddControllers();
 
-        // For logging
+        // Register Swagger
+        builder.Services.AddSwaggerGen();
+
+        // Clear existing logging providers and add Console logging
         builder.Logging.ClearProviders();
         builder.Logging.AddConsole();
 
-        // Load connection string from environment variable if available
+        // Set up database connection (use environment variable if available)
         var connectionString = Environment.GetEnvironmentVariable("DefaultConnection") 
             ?? builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString));
 
-        // For JWT authorization
+        // Configure JWT authentication
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -79,11 +85,9 @@ public class Program
 
         builder.Services.AddAuthorization();
 
-        // Docker is a bitch
-        // Check if the application is running in a Docker container
+        // Docker-specific configuration for CSRF protection (key persistence)
         if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
         {
-            // Docker-specific configuration
             builder.Services.AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo(@"/root/.aspnet/DataProtection-Keys"))
                 .SetApplicationName("faces");
@@ -91,7 +95,7 @@ public class Program
 
         var app = builder.Build();
 
-        // For automatic creation and migration of the db (for Docker)
+        // Automatically apply migrations (for Docker deployment)
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
@@ -115,20 +119,32 @@ public class Program
             }
         }
 
-        // Configure forwarded headers for reverse proxy
-        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        // Configure middleware
+        if (app.Environment.IsDevelopment())
         {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-        });
-        
-        if (!app.Environment.IsDevelopment())
+            // Enable Swagger for API documentation in development
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+        }
+        else 
         {
+            // Use exception handler and security settings in production
             app.UseExceptionHandler("/Home/Error");
             app.UseHsts();
         }
 
+        // Configure HTTPS and reverse proxy headers
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
+
         app.UseHttpsRedirection();
 
+        // Disable caching
         app.Use(async (context, next) =>
         {
             context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
@@ -137,13 +153,15 @@ public class Program
             await next();
         });
 
-
+        // Static files and routing
         app.UseStaticFiles();
         app.UseRouting();
+
+        // Authentication and Authorization middleware
         app.UseAuthentication();
         app.UseAuthorization();
-        app.MapControllers();
 
+        app.MapControllers();
         app.Run();
     }
 }
