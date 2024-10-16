@@ -20,7 +20,7 @@ jobs:
 
       - name: Restart VM to kill containers
         run: |
-          ssh -o StrictHostKeyChecking=no maxim@20.199.79.22 "sudo restart"
+          ssh -o StrictHostKeyChecking=no maxim@20.199.79.22 "sudo reboot"
           
       - name: Waiting for VM to get up
         run: sleep 60
