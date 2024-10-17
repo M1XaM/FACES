@@ -15,24 +15,19 @@ public enum CustomerType
 	Premium
 }
 
-public class Client : IEntity
+public class Client
 {
     [Key]
     public int Id { get; set; }
-    [Required]
-    public string FirstName { get; set; }
-    [Required]
-    public string LastName { get; set; }
-    [Required]
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
     public Gender Gender { get; set; }
-    [Required]
     public DateTime DateOfBirth { get; set; }
 
     [EmailAddress]
-    public string Email { get; set; }
-    public string Number { get; set; }
+    public required string Email { get; set; }
+    public string? Number { get; set; }
 
-    [Required]
 	public CustomerType CustomerType { get; set; }
     
     // Navigation property

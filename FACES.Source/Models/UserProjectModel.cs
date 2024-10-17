@@ -7,9 +7,9 @@ public class UserProject
 {
     [ForeignKey("User")]
     public int UserId { get; set; }
-    public User User { get; set; }
+    public required User User { get; set; }
     
     [ForeignKey("Project")]
     public int ProjectId { get; set; }
-    public Project Project { get; set; }
+    public required Project Project { get; set; }
 }

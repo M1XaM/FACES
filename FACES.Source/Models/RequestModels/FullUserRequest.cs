@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace FACES.RequestModels;
-public class AddClientRequest
+public class FullUserRequest
 {
     [Required]
     public required string FirstName { get; set; }
@@ -9,4 +9,6 @@ public class AddClientRequest
     public required string LastName { get; set; }
     [Required]
     public required string Email { get; set; }
+    [Required]
+    public required string Password { get; set; }
 }

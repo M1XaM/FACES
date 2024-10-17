@@ -1,8 +1,10 @@
-using Npgsql.EntityFrameworkCore.PostgreSQL;
-using Microsoft.EntityFrameworkCore;
 using FACES.Repositories;
 using FACES.Data;
 using FACES.Models;
+
+// For db
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.EntityFrameworkCore;
 
 // For JWT auth
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,38 +15,53 @@ using System.Text;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection;
 
+// For HTTPS
+using Microsoft.AspNetCore.HttpOverrides;
+
 namespace FACES;
 public class Program
 {
     public static void Main(string[] args)
     {
-
         var builder = WebApplication.CreateBuilder(args);
 
-        // For authorization
+        // Configure SendGrid settings from appsettings
+        builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
+
+        // For bussines logic layer
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<IJwtService, JwtService>();
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IProjectService, ProjectService>();
+        builder.Services.AddScoped<IClientService, ClientService>();
+        builder.Services.AddTransient<IEmailService, EmailService>();
 
+        // For data access layer
+        builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+        builder.Services.AddScoped<IClientRepository, ClientRepository>();
+        builder.Services.AddScoped<IUserProjectRepository, UserProjectRepository>();
+        builder.Services.AddScoped<IProjectClientRepository, ProjectClientRepository>();
+
+        // Add Controllers
         builder.Services.AddControllersWithViews();
+        builder.Services.AddControllers();
 
-        // For logging
+        // Register Swagger
+        builder.Services.AddSwaggerGen();
+
+        // Clear existing logging providers and add Console logging
         builder.Logging.ClearProviders();
         builder.Logging.AddConsole();
 
-        // Load connection string from environment variable if available
+        // Set up database connection (use environment variable if available)
         var connectionString = Environment.GetEnvironmentVariable("DefaultConnection") 
             ?? builder.Configuration.GetConnectionString("DefaultConnection");
-        // DB configuration
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString));
 
-        // For generic repositories pattern
-        builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-        // For email notification
-        builder.Services.Configure<SendGridSettings>(builder.Configuration.GetSection("SendGrid"));
-        builder.Services.AddTransient<IEmailService, SendGridEmailService>();
-
-        // For JWT authorization
+        // Configure JWT authentication
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -61,17 +78,16 @@ public class Program
                 ValidIssuer = "FACES",
                 ValidAudience = "FACES",
                 RequireExpirationTime = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] 
+                ?? throw new InvalidOperationException("JWT Key is not configured. Please set the 'Jwt:Key' in the configuration."))),
             };
         });
 
         builder.Services.AddAuthorization();
 
-        // Docker is a bitch
-        // Check if the application is running in a Docker container
+        // Docker-specific configuration for CSRF protection (key persistence)
         if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
         {
-            // Docker-specific configuration
             builder.Services.AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo(@"/root/.aspnet/DataProtection-Keys"))
                 .SetApplicationName("faces");
@@ -79,14 +95,23 @@ public class Program
 
         var app = builder.Build();
 
-        // For automatic creation and migration of the db (for Docker)
+        // Automatically apply migrations (for Docker deployment)
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
             try
             {
                 var context = services.GetRequiredService<ApplicationDbContext>();
-                context.Database.Migrate();
+                // var entities = context.Model.GetEntityTypes();
+                // foreach (var entity in entities)
+                // {
+                //     var tableName = entity.GetTableName();
+                //     if (!string.IsNullOrEmpty(tableName))
+                //     {
+                //         context.Database.ExecuteSqlRaw($"TRUNCATE TABLE \"{tableName}\" RESTART IDENTITY CASCADE");
+                //     }
+                // }
+                // context.Database.Migrate();
             }
             catch (Exception ex)
             {
@@ -94,14 +119,32 @@ public class Program
             }
         }
 
-        if (!app.Environment.IsDevelopment())
+        // Configure middleware
+        if (app.Environment.IsDevelopment())
         {
+            // Enable Swagger for API documentation in development
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+        }
+        else 
+        {
+            // Use exception handler and security settings in production
             app.UseExceptionHandler("/Home/Error");
             app.UseHsts();
         }
 
+        // Configure HTTPS and reverse proxy headers
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
+
         app.UseHttpsRedirection();
 
+        // Disable caching
         app.Use(async (context, next) =>
         {
             context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
@@ -110,13 +153,15 @@ public class Program
             await next();
         });
 
-
+        // Static files and routing
         app.UseStaticFiles();
         app.UseRouting();
+
+        // Authentication and Authorization middleware
         app.UseAuthentication();
         app.UseAuthorization();
-        app.MapControllers();
 
+        app.MapControllers();
         app.Run();
     }
 }

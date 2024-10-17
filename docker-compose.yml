@@ -3,14 +3,14 @@ services:
     build:
       context: ./FACES.Source
       dockerfile: Dockerfile
-    ports:
-      - "80:8080"
     volumes:
-      - ./.dataprotection-keys:/root/.aspnet/DataProtection-Keys
+      - ./config/.dataprotection-keys:/root/.aspnet/DataProtection-Keys
     depends_on:
       - postgres
     environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=mydatabase;Username=myuser;Password=mypassword
+
 
   postgres:
     image: postgres:latest
@@ -22,6 +22,18 @@ services:
       POSTGRES_PASSWORD: mypassword
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  nginx:
+    build:
+      context: ./config/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/certs:/etc/letsencrypt
+    depends_on:
+      - faces
 
 volumes:
   postgres_data:
