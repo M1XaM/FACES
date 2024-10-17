@@ -102,9 +102,9 @@ async function setupAddNewProjectListener() {
                     // Create the new project block with a link to the project details page
                     let newProject = document.createElement('a');
                     newProject.classList.add('custom4-project');
-                    newProject.href = `/project/${newProjectName}`; // Set the URL for the new project
+                    newProject.href = `/project/${projectName}`; // Set the URL for the new project
                     newProject.innerHTML = `
-                        <div class="custom4-project-header">${newProjectName}</div>
+                        <div class="custom4-project-header">${projectName}</div>
                         <div class="custom4-divider"></div>
                         <div class="custom4-project-text">${projectDescription}</div>
                     `;
