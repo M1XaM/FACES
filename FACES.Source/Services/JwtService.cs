@@ -4,17 +4,21 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Text;
 
+using FACES.Repositories;
+
 public class JwtService : IJwtService
 {
     private readonly IConfiguration _config;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly string _jwtKey;
+    private readonly IUserRepository _userRepo;
 
-    public JwtService(IConfiguration config, IHttpContextAccessor httpContextAccessor)
+    public JwtService(IConfiguration config, IHttpContextAccessor httpContextAccessor, IUserRepository userRepo)
     {
         _config = config;
         _httpContextAccessor = httpContextAccessor;
         _jwtKey = _config["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured. Please set the 'Jwt:Key' in the configuration.");
+        _userRepo = userRepo;
     }
 
     public string GenerateJwtToken(string userId)
@@ -41,7 +45,7 @@ public class JwtService : IJwtService
     public int ExtractUserIdFromToken()
     {
         var token = ExtractTokenFromHeader();
-        return int.Parse(ValidateAndExtractUserId(token));
+        return ValidateAndExtractUserId(token);
     }
 
     public string ExtractTokenFromHeader()
@@ -56,9 +60,9 @@ public class JwtService : IJwtService
         throw new InvalidOperationException($"Jwt Service Error: token extraction error)");
     }
 
-    public string ValidateAndExtractUserId(string token)
+    public int ValidateAndExtractUserId(string token)
     {
-        if (string.IsNullOrEmpty(token)) throw new InvalidOperationException($"Jwt Service Error: token is null or empty)");;
+        if (string.IsNullOrEmpty(token)) return -1;
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_jwtKey);
@@ -78,12 +82,20 @@ public class JwtService : IJwtService
             var jwtToken = (JwtSecurityToken)validatedToken;
             var userIdClaim = jwtToken.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
 
-            if (userIdClaim == null) throw new InvalidOperationException($"Jwt Service Error: id from token is null");
-            return userIdClaim.Value;
+            return userIdClaim != null ? int.Parse(userIdClaim.Value) : -1;
         }
         catch
         {
-            throw new InvalidOperationException($"Jwt Service Error: token validation error");
+            return -1;
         }
+    }
+
+    public bool TokenVerification()
+    {
+        int userId = ExtractUserIdFromToken();
+        if (userId == -1) return false;
+
+        var user = _userRepo.GetByIdAsync(userId);
+        return user != null;
     }
 }

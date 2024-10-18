@@ -26,6 +26,8 @@ public class ProjectService : IProjectService
     public async Task<ProjectServiceResponse> GetUserProjectsAsync()
     {
         int userId = _jwtService.ExtractUserIdFromToken();
+        if (userId == -1) return new ProjectServiceResponse { Success = false, Message = "Error while token extraction"};
+
         var user = await _userRepo.GetByIdAsync(userId);
         if (user == null) return new ProjectServiceResponse { Success = false, Message = "User not found." };
         
@@ -37,6 +39,8 @@ public class ProjectService : IProjectService
     public async Task<ProjectServiceResponse> CreateProjectAsync(ProjectViewRequest projectRequest)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
+        if (userId == -1) return new ProjectServiceResponse { Success = false, Message = "Error while token extraction"};
+
         var user = await _userRepo.GetByIdAsync(userId);
         if (user == null) return new ProjectServiceResponse { Success = false, Message = "User not found." };
 

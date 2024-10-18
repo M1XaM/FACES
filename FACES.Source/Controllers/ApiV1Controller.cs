@@ -17,18 +17,20 @@ namespace FACES.Controllers;
 [ApiController]
 public class ApiV1Controller : ControllerBase
 {
-    private readonly ILogger<ApiV1Controller> _logger;
     private readonly IUserService _userService;
     private readonly IProjectService _projectService;
     private readonly IClientService _clientService;
     private readonly IEmailService _emailService;
+    private readonly IJwtService _jwtService;
+    private readonly ILogger<ApiV1Controller> _logger;
 
-    public ApiV1Controller(IUserService userService,  IProjectService projectService, IClientService clientService, IEmailService emailService, ILogger<ApiV1Controller> logger)
+    public ApiV1Controller(IUserService userService,  IProjectService projectService, IClientService clientService, IEmailService emailService, IJwtService jwtService, ILogger<ApiV1Controller> logger)
     {
         _userService = userService;
         _projectService = projectService;
         _clientService = clientService;
         _emailService = emailService;
+        _jwtService = jwtService;
         _logger = logger;
     }
 
@@ -151,5 +153,13 @@ public class ApiV1Controller : ControllerBase
         var result = await _emailService.SendEmailAsync(emailRequest);
         if (!result.Success) return BadRequest(new { success = false, message = result.Message });
         return Ok();
+    }
+
+    [HttpPost("verify-token")]
+    public IActionResult TokenVerification()
+    {
+        bool result = _jwtService.TokenVerification();
+        if (!result) return BadRequest(new { valid = false, message = "Token verification failed." });
+        return Ok(new { valid = true });
     }
 }

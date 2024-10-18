@@ -34,10 +34,7 @@ public class UserService : IUserService
     {
         // Check if the email already exists
         var existingUser = await _userRepo.GetUserByEmailAsync(registrationRequest.Email);
-        if (existingUser != null)
-        {
-            return new AuthServiceResponse { Success = false, Message = "Email is already in use." };
-        }
+        if (existingUser != null) return new AuthServiceResponse { Success = false, Message = "Email is already in use." };
 
         var newUser = new User
         {
@@ -56,6 +53,7 @@ public class UserService : IUserService
     public async Task<UserActionServiceResponse> ProfileAsync()
     {
         int userId = _jwtService.ExtractUserIdFromToken();
+        if (userId == -1) return new UserActionServiceResponse { Success = false, Message = "Error while token extraction"};
         
         var user = await _userRepo.GetByIdAsync(userId);
         if (user == null) return new UserActionServiceResponse { Success = false, Message = "User not found." };
@@ -67,6 +65,7 @@ public class UserService : IUserService
     public async Task<UserActionServiceResponse> ModifyProfileAsync(FullUserViewRequest updatedUser)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
+        if (userId == -1) return new UserActionServiceResponse { Success = false, Message = "Error while token extraction"};
 
         var user = await _userRepo.GetByIdAsync(userId);
         if (user == null) return new UserActionServiceResponse { Success = false, Message = "User not found." };
@@ -84,8 +83,9 @@ public class UserService : IUserService
     public async Task<UserActionServiceResponse> DeleteProfileAsync()
     {
         int userId = _jwtService.ExtractUserIdFromToken();
-        var user = await _userRepo.GetByIdAsync(userId);
+        if (userId == -1) return new UserActionServiceResponse { Success = false, Message = "Error while token extraction"};
 
+        var user = await _userRepo.GetByIdAsync(userId);
         if (user == null) return new UserActionServiceResponse { Success = false, Message = "User invalid."};
 
         await _userRepo.DeleteAsync(user.Id);

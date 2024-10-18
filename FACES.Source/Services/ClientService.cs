@@ -43,6 +43,8 @@ public class ClientService : IClientService
     public async Task<ClientServiceResponse> GetClientsAsync(string projectName)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
+        if (userId == -1) return new ClientServiceResponse { Success = false, Message = "Error while token extraction"};
+
         var user = await _userRepo.GetByIdAsync(userId);
         if (user == null) return new ClientServiceResponse { Success = false, Message = "User not found." };
 
@@ -112,6 +114,8 @@ public class ClientService : IClientService
     public async Task<ClientServiceResponse> ModifyClientAsync(string projectName, ClientViewRequest updatedClient)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
+        if (userId == -1) return new ClientServiceResponse { Success = false, Message = "Error while token extraction"};
+
         var user = await _userRepo.GetByIdAsync(userId);
         if (user == null) return new ClientServiceResponse { Success = false, Message = "User not found." };
 
@@ -129,6 +133,8 @@ public class ClientService : IClientService
     public async Task<ClientServiceResponse> DeleteClientAsync(string email)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
+        if (userId == -1) return new ClientServiceResponse { Success = false, Message = "Error while token extraction"};
+
         var user = await _userRepo.GetByIdAsync(userId);
         if (user == null) return new ClientServiceResponse { Success = false, Message = "User not found." };
 
