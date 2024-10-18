@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace FACES.RequestModels;
-public class LoginRequest
+public class LoginViewRequest
 {
     [Required]
     public required string Email { get; set; }

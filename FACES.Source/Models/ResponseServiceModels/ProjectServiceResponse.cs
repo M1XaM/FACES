@@ -1,9 +1,9 @@
 using FACES.Models;
 
 namespace FACES.ResponseModels;
-public class UserActionResponse
+public class ProjectServiceResponse
 {
     public required bool Success { get; set; }
     public string? Message { get; set; } = null;
-    public User? User { get; set; } = null;
+    public List<Project>? Projects { get; set; } = null;
 }

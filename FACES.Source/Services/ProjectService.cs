@@ -23,26 +23,26 @@ public class ProjectService : IProjectService
     }
 
     [Authorize]
-    public async Task<ProjectResponse> GetUserProjects()
+    public async Task<ProjectServiceResponse> GetUserProjectsAsync()
     {
         int userId = _jwtService.ExtractUserIdFromToken();
         var user = await _userRepo.GetByIdAsync(userId);
-        if (user == null) return new ProjectResponse { Success = false, Message = "User not found." };
+        if (user == null) return new ProjectServiceResponse { Success = false, Message = "User not found." };
         
-        var projects = await _userProjectRepo.GetProjectsByUserId(user.Id);
-        return new ProjectResponse { Success = true, Projects = projects };
+        var projects = await _userProjectRepo.GetProjectsByUserIdAsync(user.Id);
+        return new ProjectServiceResponse { Success = true, Projects = projects };
     }
 
     [Authorize]
-    public async Task<ProjectResponse> CreateProject(ProjectRequest projectRequest)
+    public async Task<ProjectServiceResponse> CreateProjectAsync(ProjectViewRequest projectRequest)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
         var user = await _userRepo.GetByIdAsync(userId);
-        if (user == null) return new ProjectResponse { Success = false, Message = "User not found." };
+        if (user == null) return new ProjectServiceResponse { Success = false, Message = "User not found." };
 
         // Checking for existing project with the same name
-        var existingProject = await _projectRepo.GetProjectByName(projectRequest.Name); 
-        if (existingProject != null) return new ProjectResponse  { Success = false, Message = "A project with this name already exists." };
+        var existingProject = await _projectRepo.GetProjectByNameAsync(projectRequest.Name); 
+        if (existingProject != null) return new ProjectServiceResponse  { Success = false, Message = "A project with this name already exists." };
 
         var project = new Project
         {
@@ -62,11 +62,11 @@ public class ProjectService : IProjectService
             };
             
             await _userProjectRepo.AddAsync(userProject);
-            return new ProjectResponse { Success = true, Message = "Project created successfully." };
+            return new ProjectServiceResponse { Success = true, Message = "Project created successfully." };
         }
         catch (Exception ex)
         {
-            return new ProjectResponse{ Success = true, Message = $"An error occurred while creating the project: {ex.Message}"};
+            return new ProjectServiceResponse{ Success = true, Message = $"An error occurred while creating the project: {ex.Message}"};
         }
     }
 }

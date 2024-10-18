@@ -18,25 +18,25 @@ public class UserService : IUserService
         _jwtService = jwtService;
     }
 
-    public async Task<AuthResponse> Login(LoginRequest loginRequest)
+    public async Task<AuthServiceResponse> LoginAsync(LoginViewRequest loginRequest)
     {
-        var user = await _userRepo.GetUserByEmail(loginRequest.Email);
+        var user = await _userRepo.GetUserByEmailAsync(loginRequest.Email);
         if (user == null || !BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
         {
-            return new AuthResponse { Success = false, Message = "Invalid email or password." };
+            return new AuthServiceResponse { Success = false, Message = "Invalid email or password." };
         }
         
         var token = _jwtService.GenerateJwtToken(user.Id.ToString());
-        return new AuthResponse { Success = true, Token = token };
+        return new AuthServiceResponse { Success = true, Token = token };
     }
 
-    public async Task<AuthResponse> Registration(FullUserRequest registrationRequest)
+    public async Task<AuthServiceResponse> RegistrationAsync(FullUserViewRequest registrationRequest)
     {
         // Check if the email already exists
-        var existingUser = await _userRepo.GetUserByEmail(registrationRequest.Email);
+        var existingUser = await _userRepo.GetUserByEmailAsync(registrationRequest.Email);
         if (existingUser != null)
         {
-            return new AuthResponse { Success = false, Message = "Email is already in use." };
+            return new AuthServiceResponse { Success = false, Message = "Email is already in use." };
         }
 
         var newUser = new User
@@ -49,27 +49,27 @@ public class UserService : IUserService
 
         await _userRepo.AddAsync(newUser);
         var token = _jwtService.GenerateJwtToken(newUser.Id.ToString());
-        return new AuthResponse { Success = true, Token = token, Message = "Registration successful."};
+        return new AuthServiceResponse { Success = true, Token = token, Message = "Registration successful."};
     }
 
     [Authorize]
-    public async Task<UserActionResponse> Profile()
+    public async Task<UserActionServiceResponse> ProfileAsync()
     {
         int userId = _jwtService.ExtractUserIdFromToken();
         
         var user = await _userRepo.GetByIdAsync(userId);
-        if (user == null) return new UserActionResponse { Success = false, Message = "User not found." };
+        if (user == null) return new UserActionServiceResponse { Success = false, Message = "User not found." };
 
-        return new UserActionResponse { Success = true, User = user };
+        return new UserActionServiceResponse { Success = true, User = user };
     }
 
     [Authorize]
-    public async Task<UserActionResponse> ModifyProfile(FullUserRequest updatedUser)
+    public async Task<UserActionServiceResponse> ModifyProfileAsync(FullUserViewRequest updatedUser)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
 
         var user = await _userRepo.GetByIdAsync(userId);
-        if (user == null) return new UserActionResponse { Success = false, Message = "User not found." };
+        if (user == null) return new UserActionServiceResponse { Success = false, Message = "User not found." };
 
         user.FirstName = updatedUser.FirstName;
         user.LastName = updatedUser.LastName;
@@ -77,18 +77,18 @@ public class UserService : IUserService
         user.Password = updatedUser.Password;
         await _userRepo.UpdateAsync(user);
 
-        return new UserActionResponse { Success = true };
+        return new UserActionServiceResponse { Success = true };
     }
 
     [Authorize]
-    public async Task<UserActionResponse> DeleteProfile()
+    public async Task<UserActionServiceResponse> DeleteProfileAsync()
     {
         int userId = _jwtService.ExtractUserIdFromToken();
         var user = await _userRepo.GetByIdAsync(userId);
 
-        if (user == null) return new UserActionResponse { Success = false, Message = "User invalid."};
+        if (user == null) return new UserActionServiceResponse { Success = false, Message = "User invalid."};
 
         await _userRepo.DeleteAsync(user.Id);
-        return new UserActionResponse { Success = true };
+        return new UserActionServiceResponse { Success = true };
     }
 }

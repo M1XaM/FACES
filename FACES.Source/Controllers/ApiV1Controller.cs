@@ -33,20 +33,20 @@ public class ApiV1Controller : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+    public async Task<IActionResult> Login([FromBody] LoginViewRequest loginRequest)
     {
         if (!ModelState.IsValid) return BadRequest(new { success = false, message = "Email and password are required." });
-        var result = await _userService.Login(loginRequest);
+        var result = await _userService.LoginAsync(loginRequest);
         if (!result.Success) return Unauthorized(new { success = false, message = result.Message });
         return Ok(new { success = true, token = result.Token, message = "Login successful."});
     }
 
 
     [HttpPost("registration")]
-    public async Task<IActionResult> Registration([FromBody] FullUserRequest registrationRequest)
+    public async Task<IActionResult> Registration([FromBody] FullUserViewRequest registrationRequest)
     {
         if (!ModelState.IsValid) return BadRequest(new { success = false, message = "All fields are required." });
-        var result = await _userService.Registration(registrationRequest);
+        var result = await _userService.RegistrationAsync(registrationRequest);
         if (!result.Success) return BadRequest(new { success = false, message = result.Message});
         return Ok(new { success = true, token = result.Token, message = "Registration successful."});
     }
@@ -55,25 +55,25 @@ public class ApiV1Controller : ControllerBase
     [Authorize]
     public async Task<IActionResult> Profile()
     {
-        var result = await _userService.Profile();
+        var result = await _userService.ProfileAsync();
         if (!result.Success) return BadRequest( new { success = false, message = result.Message});
         return Ok(new { user = result.User });
     }
 
-    [HttpPost("modify-profile")]
+    [HttpPut("modify-profile")]
     [Authorize]
-    public async Task<IActionResult> ModifyProfile([FromBody] FullUserRequest updatedUser)
+    public async Task<IActionResult> ModifyProfile([FromBody] FullUserViewRequest updatedUser)
     {
-        var result = await _userService.ModifyProfile(updatedUser);
+        var result = await _userService.ModifyProfileAsync(updatedUser);
         if (!result.Success) return BadRequest( new { success = false, message = result.Message});
         return Ok();
     }
 
-    [HttpPost("delete-profile")]
+    [HttpDelete("delete-profile")]
     [Authorize]
     public async Task<IActionResult> DeleteProfile()
     {
-        var result = await _userService.DeleteProfile();
+        var result = await _userService.DeleteProfileAsync();
         if (!result.Success) return BadRequest( new { success = false, message = result.Message});
         return Ok();
     }
@@ -82,17 +82,17 @@ public class ApiV1Controller : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetUserProjects()
     {
-        var result = await _projectService.GetUserProjects();
+        var result = await _projectService.GetUserProjectsAsync();
         if (!result.Success) return BadRequest(new { success = false, message = result.Message });
         return Ok(new { success = true, projects = result.Projects });
     }   
 
     [HttpPost("create-project")]
     [Authorize]
-    public async Task<IActionResult> CreateProject([FromBody] ProjectRequest projectRequest)
+    public async Task<IActionResult> CreateProject([FromBody] ProjectViewRequest projectRequest)
     {
         if (!ModelState.IsValid) return BadRequest(new { message = "Project name is required." });
-        var result = await _projectService.CreateProject(projectRequest);
+        var result = await _projectService.CreateProjectAsync(projectRequest);
         if (!result.Success) return BadRequest(new { success = false, message = result.Message });
         return Ok(new { succes = true });
     }
@@ -103,17 +103,27 @@ public class ApiV1Controller : ControllerBase
     public async Task<IActionResult> GetClients(string projectName)
     {
         if (!ModelState.IsValid) return BadRequest(new { message = "Project name is required." });
-        var result = await _clientService.GetClients(projectName);
+        var result = await _clientService.GetClientsAsync(projectName);
         if (!result.Success) return BadRequest(new { success = false, message = result.Message });
         return Ok(new { succes = true, clients = result.Clients});
     }
 
     [HttpPost("project/{projectName}/add-client")]
     [Authorize]
-    public async Task<IActionResult> AddClient(string projectName, [FromBody] AddClientRequest addClientRequest)
+    public async Task<IActionResult> AddClient(string projectName, [FromBody] ClientViewRequest newClient)
     {
         if (!ModelState.IsValid) return BadRequest(new { success = false, message = "First name, last name or email are not valid." });
-        var result = await _clientService.AddClient(projectName, addClientRequest);
+        var result = await _clientService.AddClientAsync(projectName, newClient);
+        if (!result.Success) return BadRequest(new { success = false, message = result.Message });
+        return Ok();
+    }
+
+    [HttpPut("project/{projectName}/modify-client/{clientId}")]
+    [Authorize]
+    public async Task<IActionResult> ModifyClient(string projectName, [FromBody] ClientViewRequest updatedClient)
+    {
+        if (!ModelState.IsValid) return BadRequest(new { success = false, message = "First name, last name or email are not valid." });
+        var result = await _clientService.ModifyClientAsync(projectName, updatedClient);
         if (!result.Success) return BadRequest(new { success = false, message = result.Message });
         return Ok();
     }
@@ -124,7 +134,7 @@ public class ApiV1Controller : ControllerBase
     {
         if (file != null && file.Length > 0)
         {
-            var result = await _clientService.ImportClients(file);
+            var result = await _clientService.ImportClientsAsync(file);
             if (!result.Success) return BadRequest(new { success = false, message = result.Message });
             return Ok();
         }
@@ -135,10 +145,10 @@ public class ApiV1Controller : ControllerBase
 
     [HttpPost("send-email")]
     [Authorize]
-    public async Task<IActionResult> SendEmail([FromBody] EmailRequest emailRequest)
+    public async Task<IActionResult> SendEmail([FromBody] EmailViewRequest emailRequest)
     {
         if (!ModelState.IsValid) return BadRequest(new { success = false, message = "Title and the message are required." });
-        var result = await _emailService.SendEmail(emailRequest);
+        var result = await _emailService.SendEmailAsync(emailRequest);
         if (!result.Success) return BadRequest(new { success = false, message = result.Message });
         return Ok();
     }

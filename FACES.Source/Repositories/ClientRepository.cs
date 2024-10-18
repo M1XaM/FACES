@@ -12,4 +12,8 @@ public class ClientRepository : GenericRepository<Client>, IClientRepository
     {
     }
 
+    public async Task<Client?> GetClientByEmailAsync(string email)
+    {
+        return await _db.Set<Client>().SingleOrDefaultAsync(c => c.Email == email);
+    }
 }

@@ -12,7 +12,7 @@ public class ProjectClientRepository : GenericRepository<ProjectClient>, IProjec
     {
     }
 
-    public async Task<List<Client>> GetClientsByProjectId(int projectId)
+    public async Task<List<Client>> GetClientsByProjectIdAsync(int projectId)
     {
         return await _db.Set<ProjectClient>()
             .Where(pc => pc.ProjectId == projectId)

@@ -5,5 +5,5 @@ using FACES.Models;
 namespace FACES.Repositories;
 public interface IProjectRepository : IGenericRepository<Project>
 {
-    Task<Project?> GetProjectByName(string projectName);
+    Task<Project?> GetProjectByNameAsync(string projectName);
 }

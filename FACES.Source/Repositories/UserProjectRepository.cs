@@ -12,7 +12,7 @@ public class UserProjectRepository : GenericRepository<UserProject>, IUserProjec
     {
     }
 
-    public async Task<List<Project>?> GetProjectsByUserId(int userId)
+    public async Task<List<Project>?> GetProjectsByUserIdAsync(int userId)
     {
         return await _db.Set<UserProject>()
             .Where(up => up.UserId == userId)
@@ -20,7 +20,7 @@ public class UserProjectRepository : GenericRepository<UserProject>, IUserProjec
             .ToListAsync();
     }
 
-    public async Task<Project?> GetProjectByUserIdAndProjectId(int userId, int projectId)
+    public async Task<Project?> GetProjectByUserIdAndProjectIdAsync(int userId, int projectId)
     {
         var userProjectRelation = await _db.UserProjects.FirstOrDefaultAsync(up => up.UserId == userId && up.ProjectId == projectId);
         return userProjectRelation == null ? null : await _db.Set<Project>().FirstOrDefaultAsync(p => p.Id == userProjectRelation.ProjectId);

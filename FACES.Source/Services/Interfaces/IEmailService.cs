@@ -3,6 +3,6 @@ using FACES.ResponseModels;
 
 public interface IEmailService
 {
-    Task<EmailResponse> SendEmail(EmailRequest emailRequest);
-    Task SendEmailAsync(string to, string subject, string message);
+    Task<EmailServiceResponse> SendEmailAsync(EmailViewRequest emailRequest);
+    Task StartSendingAsync(string to, string subject, string message);
 }
