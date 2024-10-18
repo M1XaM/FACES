@@ -90,12 +90,12 @@ public class JwtService : IJwtService
         }
     }
 
-    public bool TokenVerification()
+    public async Task<bool> TokenVerificationAsync()
     {
         int userId = ExtractUserIdFromToken();
         if (userId == -1) return false;
 
-        var user = _userRepo.GetByIdAsync(userId);
+        var user = await _userRepo.GetByIdAsync(userId);
         return user != null;
     }
 }

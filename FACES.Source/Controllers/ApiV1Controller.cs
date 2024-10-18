@@ -156,9 +156,9 @@ public class ApiV1Controller : ControllerBase
     }
 
     [HttpPost("verify-token")]
-    public IActionResult TokenVerification()
+    public async Task<IActionResult> TokenVerification()
     {
-        bool result = _jwtService.TokenVerification();
+        var result = await _jwtService.TokenVerificationAsync();
         if (!result) return BadRequest(new { valid = false, message = "Token verification failed." });
         return Ok(new { valid = true });
     }

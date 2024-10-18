@@ -1,6 +1,4 @@
 namespace FACES.ResponseModels;
-public class EmailServiceResponse
+public class EmailServiceResponse : ServiceResponse
 {
-    public required bool Success { get; set; }
-    public string? Message { get; set; } = null;
 }
