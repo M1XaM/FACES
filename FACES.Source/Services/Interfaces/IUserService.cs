@@ -3,9 +3,9 @@ using FACES.ResponseModels;
 
 public interface IUserService
 {
-    Task<AuthServiceResponse> LoginAsync(LoginViewRequest loginRequest);
-    Task<AuthServiceResponse> RegistrationAsync(FullUserViewRequest registerRequest);
+    Task<AuthServiceResponse> LoginAsync(LoginViewModel loginRequest);
+    Task<AuthServiceResponse> RegistrationAsync(FullUserViewModel registerRequest);
     Task<UserActionServiceResponse> ProfileAsync();
-    Task<UserActionServiceResponse> ModifyProfileAsync(FullUserViewRequest updatedUser);
+    Task<UserActionServiceResponse> ModifyProfileAsync(FullUserViewModel updatedUser);
     Task<UserActionServiceResponse> DeleteProfileAsync();
 }

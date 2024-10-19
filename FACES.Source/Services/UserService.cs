@@ -12,13 +12,14 @@ public class UserService : IUserService
     private readonly IUserRepository _userRepo;
     private readonly IJwtService _jwtService;
 
-    public UserService(IUserRepository userRepo, IJwtService jwtService)
+    public UserService(IUserRepository userRepo,
+                    IJwtService jwtService)
     {
         _userRepo = userRepo;
         _jwtService = jwtService;
     }
 
-    public async Task<AuthServiceResponse> LoginAsync(LoginViewRequest loginRequest)
+    public async Task<AuthServiceResponse> LoginAsync(LoginViewModel loginRequest)
     {
         var user = await _userRepo.GetUserByEmailAsync(loginRequest.Email);
         if (user == null || !BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
@@ -30,7 +31,7 @@ public class UserService : IUserService
         return new AuthServiceResponse { Success = true, Token = token };
     }
 
-    public async Task<AuthServiceResponse> RegistrationAsync(FullUserViewRequest registrationRequest)
+    public async Task<AuthServiceResponse> RegistrationAsync(FullUserViewModel registrationRequest)
     {
         // Check if the email already exists
         var existingUser = await _userRepo.GetUserByEmailAsync(registrationRequest.Email);
@@ -62,7 +63,7 @@ public class UserService : IUserService
     }
 
     [Authorize]
-    public async Task<UserActionServiceResponse> ModifyProfileAsync(FullUserViewRequest updatedUser)
+    public async Task<UserActionServiceResponse> ModifyProfileAsync(FullUserViewModel updatedUser)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
         if (userId == -1) return new UserActionServiceResponse { Success = false, Message = "Error while token extraction"};

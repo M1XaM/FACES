@@ -24,7 +24,12 @@ public class ApiV1Controller : ControllerBase
     private readonly IJwtService _jwtService;
     private readonly ILogger<ApiV1Controller> _logger;
 
-    public ApiV1Controller(IUserService userService,  IProjectService projectService, IClientService clientService, IEmailService emailService, IJwtService jwtService, ILogger<ApiV1Controller> logger)
+    public ApiV1Controller(IUserService userService,
+                        IProjectService projectService,
+                        IClientService clientService,
+                        IEmailService emailService,
+                        IJwtService jwtService,
+                        ILogger<ApiV1Controller> logger)
     {
         _userService = userService;
         _projectService = projectService;
@@ -35,7 +40,7 @@ public class ApiV1Controller : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginViewRequest loginRequest)
+    public async Task<IActionResult> Login([FromBody] LoginViewModel loginRequest)
     {
         if (!ModelState.IsValid) return BadRequest(new { success = false, message = "Email and password are required." });
         var result = await _userService.LoginAsync(loginRequest);
@@ -45,7 +50,7 @@ public class ApiV1Controller : ControllerBase
 
 
     [HttpPost("registration")]
-    public async Task<IActionResult> Registration([FromBody] FullUserViewRequest registrationRequest)
+    public async Task<IActionResult> Registration([FromBody] FullUserViewModel registrationRequest)
     {
         if (!ModelState.IsValid) return BadRequest(new { success = false, message = "All fields are required." });
         var result = await _userService.RegistrationAsync(registrationRequest);
@@ -64,7 +69,7 @@ public class ApiV1Controller : ControllerBase
 
     [HttpPut("modify-profile")]
     [Authorize]
-    public async Task<IActionResult> ModifyProfile([FromBody] FullUserViewRequest updatedUser)
+    public async Task<IActionResult> ModifyProfile([FromBody] FullUserViewModel updatedUser)
     {
         var result = await _userService.ModifyProfileAsync(updatedUser);
         if (!result.Success) return BadRequest( new { success = false, message = result.Message});
@@ -91,7 +96,7 @@ public class ApiV1Controller : ControllerBase
 
     [HttpPost("create-project")]
     [Authorize]
-    public async Task<IActionResult> CreateProject([FromBody] ProjectViewRequest projectRequest)
+    public async Task<IActionResult> CreateProject([FromBody] ProjectViewModel projectRequest)
     {
         if (!ModelState.IsValid) return BadRequest(new { message = "Project name is required." });
         var result = await _projectService.CreateProjectAsync(projectRequest);
@@ -112,7 +117,7 @@ public class ApiV1Controller : ControllerBase
 
     [HttpPost("project/{projectName}/add-client")]
     [Authorize]
-    public async Task<IActionResult> AddClient(string projectName, [FromBody] ClientViewRequest newClient)
+    public async Task<IActionResult> AddClient(string projectName, [FromBody] ClientViewModel newClient)
     {
         if (!ModelState.IsValid) return BadRequest(new { success = false, message = "First name, last name or email are not valid." });
         var result = await _clientService.AddClientAsync(projectName, newClient);
@@ -122,7 +127,7 @@ public class ApiV1Controller : ControllerBase
 
     [HttpPut("project/{projectName}/modify-client/{clientId}")]
     [Authorize]
-    public async Task<IActionResult> ModifyClient(string projectName, [FromBody] ClientViewRequest updatedClient)
+    public async Task<IActionResult> ModifyClient(string projectName, [FromBody] ClientViewModel updatedClient)
     {
         if (!ModelState.IsValid) return BadRequest(new { success = false, message = "First name, last name or email are not valid." });
         var result = await _clientService.ModifyClientAsync(projectName, updatedClient);
@@ -147,7 +152,7 @@ public class ApiV1Controller : ControllerBase
 
     [HttpPost("send-email")]
     [Authorize]
-    public async Task<IActionResult> SendEmail([FromBody] EmailViewRequest emailRequest)
+    public async Task<IActionResult> SendEmail([FromBody] EmailViewModel emailRequest)
     {
         if (!ModelState.IsValid) return BadRequest(new { success = false, message = "Title and the message are required." });
         var result = await _emailService.SendEmailAsync(emailRequest);

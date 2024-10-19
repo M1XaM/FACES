@@ -28,7 +28,13 @@ public class ClientService : IClientService
     private readonly IJwtService _jwtService;
     private readonly ILogger<ClientService> _logger;
 
-    public ClientService(IUserRepository userRepo, IProjectRepository projectRepo, IClientRepository clientRepo, IUserProjectRepository userProjectRepo, IProjectClientRepository projectClientRepo, IJwtService jwtService, ILogger<ClientService> logger)
+    public ClientService(IUserRepository userRepo,
+                        IProjectRepository projectRepo,
+                        IClientRepository clientRepo,
+                        IUserProjectRepository userProjectRepo,
+                        IProjectClientRepository projectClientRepo,
+                        IJwtService jwtService,
+                        ILogger<ClientService> logger)
     {
         _userRepo = userRepo;
         _projectRepo = projectRepo;
@@ -59,7 +65,7 @@ public class ClientService : IClientService
     }
 
     [Authorize]
-    public async Task<ClientServiceResponse> AddClientAsync(string projectName, ClientViewRequest addClientRequest)
+    public async Task<ClientServiceResponse> AddClientAsync(string projectName, ClientViewModel addClientRequest)
     {
 
         var newClient = new Client
@@ -111,7 +117,7 @@ public class ClientService : IClientService
     }
 
     [Authorize]
-    public async Task<ClientServiceResponse> ModifyClientAsync(string projectName, ClientViewRequest updatedClient)
+    public async Task<ClientServiceResponse> ModifyClientAsync(string projectName, ClientViewModel updatedClient)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
         if (userId == -1) return new ClientServiceResponse { Success = false, Message = "Error while token extraction"};

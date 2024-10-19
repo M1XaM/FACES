@@ -13,7 +13,9 @@ public class JwtService : IJwtService
     private readonly string _jwtKey;
     private readonly IUserRepository _userRepo;
 
-    public JwtService(IConfiguration config, IHttpContextAccessor httpContextAccessor, IUserRepository userRepo)
+    public JwtService(IConfiguration config,
+                    IHttpContextAccessor httpContextAccessor,
+                    IUserRepository userRepo)
     {
         _config = config;
         _httpContextAccessor = httpContextAccessor;

@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Http;  // For file proccessing
 public interface IClientService
 {
     Task<ClientServiceResponse> GetClientsAsync(string projectName);
-    Task<ClientServiceResponse> AddClientAsync(string projectName, ClientViewRequest addClientRequest);
+    Task<ClientServiceResponse> AddClientAsync(string projectName, ClientViewModel addClientRequest);
     Task<ClientServiceResponse> ImportClientsAsync(IFormFile file);
-    Task<ClientServiceResponse> ModifyClientAsync(string projectName, ClientViewRequest updatedClient);
+    Task<ClientServiceResponse> ModifyClientAsync(string projectName, ClientViewModel updatedClient);
     Task<ClientServiceResponse> DeleteClientAsync(string email);
 }

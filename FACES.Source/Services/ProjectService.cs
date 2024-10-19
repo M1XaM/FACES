@@ -14,7 +14,10 @@ public class ProjectService : IProjectService
     private readonly IUserProjectRepository _userProjectRepo;
     private readonly IJwtService _jwtService;
 
-    public ProjectService(IUserRepository userRepo, IProjectRepository projectRepo, IUserProjectRepository userProjectRepo, IJwtService jwtService)
+    public ProjectService(IUserRepository userRepo,
+                        IProjectRepository projectRepo,
+                        IUserProjectRepository userProjectRepo,
+                        IJwtService jwtService)
     {
         _userRepo = userRepo;
         _projectRepo = projectRepo;
@@ -36,7 +39,7 @@ public class ProjectService : IProjectService
     }
 
     [Authorize]
-    public async Task<ProjectServiceResponse> CreateProjectAsync(ProjectViewRequest projectRequest)
+    public async Task<ProjectServiceResponse> CreateProjectAsync(ProjectViewModel projectRequest)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
         if (userId == -1) return new ProjectServiceResponse { Success = false, Message = "Error while token extraction"};

@@ -19,14 +19,15 @@ public class EmailService : IEmailService
     private readonly string _apiKey;
     private readonly IGenericRepository<Client> _clientRepo;
 
-    public EmailService(IOptions<SendGridSettings> options, IGenericRepository<Client> clientRepo)
+    public EmailService(IOptions<SendGridSettings> options,
+                        IGenericRepository<Client> clientRepo)
     {
         _apiKey = options.Value.ApiKey;
         _clientRepo = clientRepo;
     }
 
     [Authorize]
-    public async Task<EmailServiceResponse> SendEmailAsync(EmailViewRequest emailRequest)
+    public async Task<EmailServiceResponse> SendEmailAsync(EmailViewModel emailRequest)
     {
         IEnumerable<Client> clients = await _clientRepo.GetAllAsync();
         var emailTasks = new List<Task>();

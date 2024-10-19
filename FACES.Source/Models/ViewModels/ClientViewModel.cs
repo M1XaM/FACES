@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace FACES.RequestModels;
-public class ClientViewRequest
+public class ClientViewModel
 {
     [Required]
     public required string FirstName { get; set; }
