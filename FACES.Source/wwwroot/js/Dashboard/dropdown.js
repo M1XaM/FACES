@@ -1,16 +1,33 @@
 // Add event listeners for all the toggle buttons (Dashboard, Workflow, etc.)
 const buttons = document.querySelectorAll('.toggle-btn');
 
-// Function to hide all sections except the .content section
 function hideAllSections() {
   document.querySelectorAll('.content-section').forEach(section => {
-    // Check if the section does not have the 'content' class to prevent hiding it
     if (!section.classList.contains('content')) {
       section.classList.remove('show');
-      section.style.display = 'none'; // Hide all sections except the .content section
+      section.style.display = 'none';
     }
   });
+
+  // Hide customWorkflowSteps if it's visible
+  const customWorkflowSteps = document.getElementById('customWorkflowSteps');
+  if (customWorkflowSteps.classList.contains('show')) {
+    customWorkflowSteps.classList.remove('show');
+    setTimeout(() => {
+      customWorkflowSteps.style.display = 'none';
+    }, 300);
+  }
+
+  // Hide custom3-container if it's visible
+  const custom3Container = document.getElementById('custom3-body');
+  if (custom3Container.classList.contains('show')) {
+    custom3Container.classList.remove('show');
+    setTimeout(() => {
+      custom3Container.style.display = 'none';
+    }, 300);
+  }
 }
+
 
 
 // Loop through all buttons to add the click event
