@@ -5,5 +5,5 @@ using FACES.Models;
 namespace FACES.Repositories;
 public interface IProjectClientRepository :  IGenericRepository<ProjectClient>
 {
-    Task<List<Client>> GetClientsByProjectId(int projectId);
+    Task<List<Client>> GetClientsByProjectIdAsync(int projectId);
 }

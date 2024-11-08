@@ -28,7 +28,13 @@ public class ClientService : IClientService
     private readonly IJwtService _jwtService;
     private readonly ILogger<ClientService> _logger;
 
-    public ClientService(IUserRepository userRepo, IProjectRepository projectRepo, IClientRepository clientRepo, IUserProjectRepository userProjectRepo, IProjectClientRepository projectClientRepo, IJwtService jwtService, ILogger<ClientService> logger)
+    public ClientService(IUserRepository userRepo,
+                        IProjectRepository projectRepo,
+                        IClientRepository clientRepo,
+                        IUserProjectRepository userProjectRepo,
+                        IProjectClientRepository projectClientRepo,
+                        IJwtService jwtService,
+                        ILogger<ClientService> logger)
     {
         _userRepo = userRepo;
         _projectRepo = projectRepo;
@@ -40,24 +46,26 @@ public class ClientService : IClientService
     }
 
     [Authorize]
-    public async Task<ClientResponse> GetClients(string projectName)
+    public async Task<ClientServiceResponse> GetClientsAsync(string projectName)
     {
         int userId = _jwtService.ExtractUserIdFromToken();
+        if (userId == -1) return new ClientServiceResponse { Success = false, Message = "Error while token extraction"};
+
         var user = await _userRepo.GetByIdAsync(userId);
-        if (user == null) return new ClientResponse { Success = false, Message = "User not found." };
+        if (user == null) return new ClientServiceResponse { Success = false, Message = "User not found." };
 
-        var project = await _projectRepo.GetProjectByName(projectName);
-        if (project == null) return new ClientResponse { Success = false,  Message = "Project with such name does not exist."};
+        var project = await _projectRepo.GetProjectByNameAsync(projectName);
+        if (project == null) return new ClientServiceResponse { Success = false,  Message = "Project with such name does not exist."};
 
-        var userProject = await _userProjectRepo.GetProjectByUserIdAndProjectId(userId, project.Id);
-        if (userProject == null) return new ClientResponse { Success = false, Message = "You do not have project with such name." };
+        var userProject = await _userProjectRepo.GetProjectByUserIdAndProjectIdAsync(userId, project.Id);
+        if (userProject == null) return new ClientServiceResponse { Success = false, Message = "You do not have project with such name." };
         
-        var clients = await _projectClientRepo.GetClientsByProjectId(userProject.Id);
-        return new ClientResponse { Success = true, Clients = clients };
+        var clients = await _projectClientRepo.GetClientsByProjectIdAsync(userProject.Id);
+        return new ClientServiceResponse { Success = true, Clients = clients };
     }
 
     [Authorize]
-    public async Task<ClientResponse> AddClient(string projectName, AddClientRequest addClientRequest)
+    public async Task<ClientServiceResponse> AddClientAsync(string projectName, ClientViewModel addClientRequest)
     {
 
         var newClient = new Client
@@ -68,11 +76,11 @@ public class ClientService : IClientService
         };
 
         await _clientRepo.AddAsync(newClient);
-        return new ClientResponse { Success = true };
+        return new ClientServiceResponse { Success = true };
     }
 
     [Authorize]
-    public async Task<ClientResponse> ImportClients(IFormFile file)
+    public async Task<ClientServiceResponse> ImportClientsAsync(IFormFile file)
     {
         using (var reader = new StreamReader(file.OpenReadStream()))
         using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)))
@@ -104,7 +112,43 @@ public class ClientService : IClientService
                 }
             }
             
-            return new ClientResponse { Success = true };
+            return new ClientServiceResponse { Success = true };
         }
     }
+
+    [Authorize]
+    public async Task<ClientServiceResponse> ModifyClientAsync(string projectName, ClientViewModel updatedClient)
+    {
+        int userId = _jwtService.ExtractUserIdFromToken();
+        if (userId == -1) return new ClientServiceResponse { Success = false, Message = "Error while token extraction"};
+
+        var user = await _userRepo.GetByIdAsync(userId);
+        if (user == null) return new ClientServiceResponse { Success = false, Message = "User not found." };
+
+        var oldClient = await _clientRepo.GetClientByEmailAsync(updatedClient.Email);
+        if (oldClient == null) return new ClientServiceResponse { Success = false, Message = "Client not found." };
+
+        oldClient.FirstName = updatedClient.FirstName;
+        oldClient.LastName = updatedClient.LastName;
+        oldClient.Email = updatedClient.Email;
+        bool successUpdating = await _clientRepo.UpdateAsync(oldClient);
+        return new ClientServiceResponse { Success = successUpdating };
+    }
+
+    [Authorize]
+    public async Task<ClientServiceResponse> DeleteClientAsync(string email)
+    {
+        int userId = _jwtService.ExtractUserIdFromToken();
+        if (userId == -1) return new ClientServiceResponse { Success = false, Message = "Error while token extraction"};
+
+        var user = await _userRepo.GetByIdAsync(userId);
+        if (user == null) return new ClientServiceResponse { Success = false, Message = "User not found." };
+
+        var oldClient = _clientRepo.GetClientByEmailAsync(email);
+        if (oldClient == null) return new ClientServiceResponse { Success = false, Message = "Client not found." };
+
+        bool successDeleting = await _clientRepo.DeleteAsync(oldClient.Id);
+        return new ClientServiceResponse { Success = successDeleting };
+    }
+
 }

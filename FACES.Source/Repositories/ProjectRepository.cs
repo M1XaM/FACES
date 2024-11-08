@@ -13,7 +13,7 @@ public class ProjectRepository : GenericRepository<Project>, IProjectRepository
     {
     }
 
-    public async Task<Project?> GetProjectByName(string projectName)
+    public async Task<Project?> GetProjectByNameAsync(string projectName)
     {
         return await _db.Set<Project>().SingleOrDefaultAsync(p => p.Name == projectName);
     }

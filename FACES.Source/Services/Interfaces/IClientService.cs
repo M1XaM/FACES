@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Http;  // For file proccessing
 
 public interface IClientService
 {
-    Task<ClientResponse> GetClients(string projectName);
-    Task<ClientResponse> AddClient(string projectName, AddClientRequest addClientRequest);
-    Task<ClientResponse> ImportClients(IFormFile file);
-    // Task<ClientResponse> ModifyClient();
-    // Task<ClientResponse> DeleteClient();
+    Task<ClientServiceResponse> GetClientsAsync(string projectName);
+    Task<ClientServiceResponse> AddClientAsync(string projectName, ClientViewModel addClientRequest);
+    Task<ClientServiceResponse> ImportClientsAsync(IFormFile file);
+    Task<ClientServiceResponse> ModifyClientAsync(string projectName, ClientViewModel updatedClient);
+    Task<ClientServiceResponse> DeleteClientAsync(string email);
 }

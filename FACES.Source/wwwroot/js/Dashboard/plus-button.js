@@ -1,12 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
     const maxVisibleUsers = 4;
 
+    // Function to update the visibility of Add Button and See More link
     function updateAudienceUI() {
         const audienceList = document.querySelector('.custom-audience-list');
         const audienceItems = audienceList.querySelectorAll('li');
         const plusButton = document.getElementById("plusButton").parentNode;
         const seeMoreLink = document.getElementById("seeMoreLink");
 
+
+        // If the audience has more than maxVisibleUsers, show "See More" and hide "Add Client" button
         if (audienceItems.length > maxVisibleUsers) {
             plusButton.style.display = "none";
             seeMoreLink.style.display = "block";
@@ -16,16 +19,22 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+
+    // Add Event Listener for plus button to show options panel
     document.getElementById("plusButton").addEventListener("click", function () {
         document.getElementById("addOptionsPanel").style.display = "block";
         document.getElementById("overlay").style.display = "block";
     });
 
+
+    // Event listener for entering data manually
     document.getElementById("manualEntryBtn").addEventListener("click", function () {
         document.getElementById("addOptionsPanel").style.display = "none";
         document.getElementById("manualDataEntryPanel").style.display = "block";
     });
 
+
+    // Event listener for saving new user data manually
     document.getElementById("saveUserBtn").addEventListener("click", function () {
         const avatar = document.getElementById("avatar").value;
         const firstName = document.getElementById("firstName").value;
@@ -37,6 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+
+        // Create a new list item for the added user
         const audienceList = document.querySelector('.custom-audience-list');
         const newUser = document.createElement('li');
         newUser.innerHTML = `
@@ -47,9 +58,11 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         `;
 
+        // Insert the new user before the "Add Client" button (plusButton)
         const plusButton = document.getElementById("plusButton");
         audienceList.insertBefore(newUser, plusButton.parentNode);
 
+        // Reset the form fields and hide the manual data entry panel
         document.getElementById("avatar").value = '';
         document.getElementById("firstName").value = '';
         document.getElementById("lastName").value = '';
@@ -57,9 +70,12 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("manualDataEntryPanel").style.display = "none";
         document.getElementById("overlay").style.display = "none";
 
+
+        // Update UI to check whether to show "See More" or "Add Client" button
         updateAudienceUI();
     });
 
+    // Event listener for CSV Upload Submission
     document.getElementById("uploadCSVSubmitBtn").addEventListener("click", function () {
         const csvFileInput = document.getElementById("csvFileInput").files[0];
         if (!csvFileInput) {
@@ -79,12 +95,16 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("uploadCSVPanel").style.display = "none";
                     document.getElementById("overlay").style.display = "none";
 
+
+                    // Update UI to check whether to show "See More" or "Add Client" button
                     updateAudienceUI();
                 }
             }
         });
     });
 
+
+    // Function to add users from CSV data
     function addUsersFromCSV(data) {
         const audienceList = document.querySelector('.custom-audience-list');
         data.forEach(user => {
@@ -98,6 +118,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+
+            // Create a new list item for the added user
             const newUser = document.createElement('li');
             newUser.innerHTML = `
                 <img src="${avatar}" alt="Profile picture of ${firstName} ${lastName}">
@@ -107,11 +129,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
             `;
 
+
+            // Insert the new user before the "Add Client" button (plusButton)
             const plusButton = document.getElementById("plusButton");
             audienceList.insertBefore(newUser, plusButton.parentNode);
         });
     }
 
+
+    // Cancel button listeners for CSV Upload and Manual Data Panels
     document.getElementById("cancelUploadCSVBtn").addEventListener("click", function () {
         document.getElementById("uploadCSVPanel").style.display = "none";
         document.getElementById("overlay").style.display = "none";
@@ -127,5 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("overlay").style.display = "none";
     });
 
+
+    // Initial UI Update to check if "See More" or "Add Client" button should be shown
     updateAudienceUI();
 });

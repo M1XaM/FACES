@@ -21,8 +21,8 @@ public class Client
     public int Id { get; set; }
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
-    public Gender Gender { get; set; }
-    public DateTime DateOfBirth { get; set; }
+    public Gender? Gender { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 
     [EmailAddress]
     public required string Email { get; set; }

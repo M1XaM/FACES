@@ -12,7 +12,7 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     {
     }
 
-    public async Task<User?> GetUserByEmail(string email)
+    public async Task<User?> GetUserByEmailAsync(string email)
     {
         return await _db.Set<User>().SingleOrDefaultAsync(u => u.Email == email);
     }

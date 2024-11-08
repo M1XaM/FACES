@@ -3,8 +3,8 @@ using FACES.ResponseModels;
 
 public interface IProjectService
 {
-    Task<ProjectResponse> GetUserProjects();
-    Task<ProjectResponse> CreateProject(ProjectRequest projectRequest);
+    Task<ProjectServiceResponse> GetUserProjectsAsync();
+    Task<ProjectServiceResponse> CreateProjectAsync(ProjectViewModel projectRequest);
     // Task<ProjectResponse> ModifyProject();
     // Task<ProjectResponse> DeleteProejct();
 }
