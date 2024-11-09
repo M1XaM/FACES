@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Function to fetch client data from the API
     async function fetchClients() {
         try {
             const url = window.location.href;
@@ -10,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 const userId = match[1];
                 const projectId = match[2];
 
-                // Sample clients for demonstration
                 clients = [
                     { name: 'Olivia Martin', email: 'olivia.martin@email.com' },
                     { name: 'Jackson Lee', email: 'jackson.lee@email.com' },
@@ -28,12 +26,11 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Function to display the client data in the dashboard
     function displayClients(clients) {
-        const totalAudienceElement = document.querySelector('.custom-value'); // Update Total Audience element
-        totalAudienceElement.textContent = clients.length; // Update the total audience count
+        const totalAudienceElement = document.querySelector('.custom-value');
+        totalAudienceElement.textContent = clients.length;
         const audienceList = document.querySelector('.custom-audience-list');
-        audienceList.innerHTML = ''; // Clear existing items
+        audienceList.innerHTML = '';
 
         clients.forEach(client => {
             const listItem = document.createElement('li');
@@ -56,16 +53,15 @@ document.addEventListener("DOMContentLoaded", function() {
         // audienceList.appendChild(addClientButton); // Append button to the list
     }
 
-    // Function to set up the add client button visibility
     function setupAddClientButton(clientCount, userId, projectId) {
         const addClientSection = document.getElementById("add-client-section");
-        if (clientCount < 5) { // Change this number as needed
-            document.getElementById("add-client-btn").style.display = "inline-block"; // Show button
-            document.getElementById("view-all-clients").style.display = "none"; // Hide link
-            addClientSection.style.display = "block"; // Show the add client section
+        if (clientCount < 5) { 
+            document.getElementById("add-client-btn").style.display = "inline-block"; 
+            document.getElementById("view-all-clients").style.display = "none"; 
+            addClientSection.style.display = "block"; 
         } else {
-            document.getElementById("add-client-btn").style.display = "none"; // Hide button
-            document.getElementById("view-all-clients").style.display = "inline"; // Show link
+            document.getElementById("add-client-btn").style.display = "none"; 
+            document.getElementById("view-all-clients").style.display = "inline"; 
         }
     }
 

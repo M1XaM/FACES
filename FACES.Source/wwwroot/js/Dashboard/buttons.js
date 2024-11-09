@@ -2,23 +2,8 @@
 document.getElementById('createWorkflowBtn').addEventListener('click', function() {
     const section2 = document.getElementById('section2');
     const workflowBuilder = document.getElementById('workflowBuilder');
-
-    // Debugging: Log elements
-    console.log('Create Workflow button clicked');
-    console.log('Section 2:', section2);
-    console.log('Workflow Builder:', workflowBuilder);
-
-    // Hide section2
     section2.classList.remove('show');
-    setTimeout(() => {
-        section2.style.display = 'none';
-    }, 300);
-
-    // Show workflowBuilder
-    workflowBuilder.style.display = 'block';
-    setTimeout(() => {
-        workflowBuilder.classList.add('show');
-    }, 10);
+    workflowBuilder.classList.add('show');
 });
 
 // Step 2: Handle form submission (Proceed to the next step)

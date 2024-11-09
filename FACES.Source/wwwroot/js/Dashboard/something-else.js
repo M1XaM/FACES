@@ -1,8 +1,14 @@
-// Get all the buttons
-// Get the current URL path (e.g., 'dashboard.html')
-const currentPath = window.location.pathname.split('/').pop();
 
-// Loop through the buttons and add 'active' class if it matches the current page
+const currentPath = window.location.pathname.split('/').pop();
+const datePickerElement = document.querySelector("#date-picker");
+if (datePickerElement) {
+    flatpickr(datePickerElement, {
+        enableTime: false,
+        dateFormat: "Y-m-d",
+    });
+} else {
+    console.error("Date picker element not found in the DOM.");
+}
 buttons.forEach(button => {
     if (button.getAttribute('href') === currentPath) {
         button.classList.add('active');
