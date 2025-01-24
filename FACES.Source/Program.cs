@@ -85,13 +85,13 @@ public class Program
 
         builder.Services.AddAuthorization();
 
-        // Docker-specific configuration for CSRF protection (key persistence)
-        if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
-        {
-            builder.Services.AddDataProtection()
-                .PersistKeysToFileSystem(new DirectoryInfo(@"/root/.aspnet/DataProtection-Keys"))
-                .SetApplicationName("faces");
-        }
+        // // Docker-specific configuration for CSRF protection (key persistence)
+        // if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+        // {
+        //     builder.Services.AddDataProtection()
+        //         .PersistKeysToFileSystem(new DirectoryInfo(@"/root/.aspnet/DataProtection-Keys"))
+        //         .SetApplicationName("faces");
+        // }
 
         var app = builder.Build();
 
@@ -102,16 +102,16 @@ public class Program
             try
             {
                 var context = services.GetRequiredService<ApplicationDbContext>();
-                // var entities = context.Model.GetEntityTypes();
-                // foreach (var entity in entities)
-                // {
-                //     var tableName = entity.GetTableName();
-                //     if (!string.IsNullOrEmpty(tableName))
-                //     {
-                //         context.Database.ExecuteSqlRaw($"TRUNCATE TABLE \"{tableName}\" RESTART IDENTITY CASCADE");
-                //     }
-                // }
-                // context.Database.Migrate();
+                var entities = context.Model.GetEntityTypes();
+                foreach (var entity in entities)
+                {
+                    var tableName = entity.GetTableName();
+                    if (!string.IsNullOrEmpty(tableName))
+                    {
+                        // context.Database.ExecuteSqlRaw($"TRUNCATE TABLE \"{tableName}\" RESTART IDENTITY CASCADE");
+                    }
+                }
+                context.Database.Migrate();
             }
             catch (Exception ex)
             {
