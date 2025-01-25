@@ -2,22 +2,38 @@ document.addEventListener("DOMContentLoaded", function() {
     async function fetchClients() {
         try {
             const url = window.location.href;
-            const regex = /\/user\/(\d+)\/project\/(\d+)/;
+            const regex = /\/project\/([^/]+)\/?/;
             const match = url.match(regex);
 
             if (match) {
-                const userId = match[1];
-                const projectId = match[2];
+                // const projectName = match[1]; // Extract the project name
+                // const token = localStorage.getItem('token')
+                // const response = await fetch(`/api/v1/project/${projectName}/get-clients`, {
+                //     method: 'GET',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //         'Authorization': `Bearer ${token}`
+                //     }
+                // });
+                // if (!response.ok) {
+                //     throw new Error(`HTTP error! Status: ${response.status}`);
+                // }
+
+                // var { clients } = await response.json();  // Getting an array of clients
+                // if (!Array.isArray(clients)) {
+                //     throw new Error('Invalid clients format received');
+                // }
 
                 clients = [
                     { name: 'Olivia Martin', email: 'olivia.martin@email.com' },
                     { name: 'Jackson Lee', email: 'jackson.lee@email.com' },
-                    { name: 'Isabella Nguyen Lee', email: 'isabella.nguyen@email.com' },
-                    { name: 'William Kim', email: 'will@email.com' },
-                    { name: 'Sofia Davis', email: 'sofia.davis@email.com' },
+                    // { name: 'Isabella Nguyen Lee', email: 'isabella.nguyen@email.com' },
+                    // { name: 'William Kim', email: 'will@email.com' },
+                    // { name: 'Sofia Davis', email: 'sofia.davis@email.com' },
                 ];
+
                 displayClients(clients);
-                setupAddClientButton(clients.length, userId, projectId); // Set up button based on client count
+                setupAddClientButton(clients.length);
             } else {
                 console.error("Invalid URL");
             }
@@ -53,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // audienceList.appendChild(addClientButton); // Append button to the list
     }
 
-    function setupAddClientButton(clientCount, userId, projectId) {
+    function setupAddClientButton(clientCount) {
         const addClientSection = document.getElementById("add-client-section");
         if (clientCount < 5) { 
             document.getElementById("add-client-btn").style.display = "inline-block"; 
