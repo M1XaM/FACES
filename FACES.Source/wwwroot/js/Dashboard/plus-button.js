@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const audienceItems = audienceList.querySelectorAll('li');
         const plusButton = document.getElementById("plusButton").parentNode;
         const seeMoreLink = document.getElementById("seeMoreLink");
-
+    
         if (audienceItems.length > maxVisibleUsers) {
             plusButton.style.display = "none";
             seeMoreLink.style.display = "block";
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
             seeMoreLink.style.display = "none";
         }
     }
-
+    
     // Show the Add Options Panel
     function showAddOptionsPanel() {
         document.getElementById("addOptionsPanel").style.display = "block";
