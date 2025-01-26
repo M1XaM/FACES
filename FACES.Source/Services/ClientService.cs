@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
@@ -60,7 +61,7 @@ public class ClientService : IClientService
         var userProject = await _userProjectRepo.GetProjectByUserIdAndProjectIdAsync(userId, project.Id);
         if (userProject == null) return new ClientServiceResponse { Success = false, Message = "You do not have project with such name." };
         
-        var clients = await _projectClientRepo.GetClientsByProjectIdAsync(userProject.Id);
+        var clients = await _projectClientRepo.GetClientsByProjectIdAsync(project.Id);
         return new ClientServiceResponse { Success = true, Clients = clients };
     }
 
@@ -72,10 +73,27 @@ public class ClientService : IClientService
         {
             FirstName = addClientRequest.FirstName,
             LastName = addClientRequest.LastName,
-            Email = addClientRequest.Email
+            Email = addClientRequest.Email,
+            Gender = Gender.Male,
+            DateOfBirth = DateTime.Today,
+            Number = "26523425",
+            CustomerType = CustomerType.Regular
         };
 
         await _clientRepo.AddAsync(newClient);
+
+        var existingProject = await _projectRepo.GetProjectByNameAsync(projectName);
+        if (existingProject == null) return new ClientServiceResponse { Success = false };
+        var projectClient = new ProjectClient
+        {
+            ProjectId = existingProject.Id,
+            Project = existingProject,
+            ClientId = newClient.Id,
+            Client = newClient
+        };
+        await _projectClientRepo.AddAsync(projectClient);
+
+        _logger.LogInformation("ProjectClient was added");
         return new ClientServiceResponse { Success = true };
     }
 
