@@ -1,3 +1,4 @@
+// Updated get-clients.js
 document.addEventListener("DOMContentLoaded", function() {
     async function fetchClients() {
         try {
@@ -23,17 +24,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 // if (!Array.isArray(clients)) {
                 //     throw new Error('Invalid clients format received');
                 // }
-
-                clients = [
-                    { name: 'Olivia Martin', email: 'olivia.martin@email.com' },
-                    { name: 'Jackson Lee', email: 'jackson.lee@email.com' },
-                    // { name: 'Isabella Nguyen Lee', email: 'isabella.nguyen@email.com' },
-                    // { name: 'William Kim', email: 'will@email.com' },
-                    // { name: 'Sofia Davis', email: 'sofia.davis@email.com' },
-                ];
+                // Empty the hardcoded list
+                const clients = []; // No predefined data
 
                 displayClients(clients);
-                setupAddClientButton(clients.length);
+                syncAudienceLists(clients);
+                setupAddClientButton(clients.length, userId, projectId);
+
             } else {
                 console.error("Invalid URL");
             }
@@ -59,14 +56,23 @@ document.addEventListener("DOMContentLoaded", function() {
             `;
             audienceList.appendChild(listItem);
         });
+    }
 
-        // Create and append the "Add Client" button
-        // const addClientButton = document.createElement('button');
-        // addClientButton.id = 'createAudienceBtn';
-        // addClientButton.className = 'custom4-project add-new';
-        // addClientButton.textContent = 'Add Client';
-        // addClientButton.addEventListener('click', addClient); // Attach click event
-        // audienceList.appendChild(addClientButton); // Append button to the list
+    function syncAudienceLists(clients) {
+        const custom3AudienceList = document.querySelector('.custom3-select-audience');
+        custom3AudienceList.innerHTML = '<h3>Select Audience</h3><hr />';
+
+        clients.forEach((client, index) => {
+            const audienceDiv = document.createElement('div');
+            audienceDiv.innerHTML = `
+                <input id="audience-${index}" name="audience" type="radio" />
+                <label for="audience-${index}">
+                    <img alt="Profile picture of ${client.name}" src="${client.profilePicture || 'https://placehold.co/40x40'}" width="30" height="30" />
+                    ${client.name} (${client.email})
+                </label>
+            `;
+            custom3AudienceList.appendChild(audienceDiv);
+        });
     }
 
     function setupAddClientButton(clientCount) {
