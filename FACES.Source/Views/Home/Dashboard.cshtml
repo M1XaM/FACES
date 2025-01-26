@@ -36,10 +36,7 @@
               <li><button id="btn1" class="toggle-btn topnav menu-btn"><img src="~/images/dashboard.png">&nbsp; Dashboard</button></li>
               <li><button id="btn2" class="toggle-btn topnav menu-btn"><img src="~/images//workflow.png">&nbsp; Workflow</button></li>
             </div>
-            <div class="botbuttons">
-              <li><button id="btn4" class="toggle-btn topnav menu-btn"><img src="~/images/settings.png"></i>&nbsp; Settings</button></li>
-              <li><button id="btn5" class="toggle-btn topnav menu-btn"><img src="~/images/help.png">&nbsp; Help & Center</button></li>
-            </div>
+
           </div>
             </ul>
           </div>
@@ -147,7 +144,7 @@
                       </li>
                     </ul>
                       <div id="seeMoreLink" class="custom-see-more" style="display: none;">
-                        <a href="dashboard_audience.cshtml" id="seeMoreAudienceLink">See more <i class="fas fa-arrow-right"></i></a>
+                        <a href="dashboard_audience.html" id="seeMoreAudienceLink">See more <i class="fas fa-arrow-right"></i></a>
                       </div>
                   </div>
                 </div>
@@ -157,7 +154,7 @@
         </div>
         <div id="section2" class="content-section show">
           <div class="grid item4">
-            <div class="content" style="display: block; opacity: 1;">
+            <div class="content">
               <h3>Automate customer experience</h3>
               <p>Build unique customer interactions across mobile and web through channels<br>
                 like email, push, in-app, and SMS using our visual workflow builder</p>
@@ -165,7 +162,33 @@
                 <button id="createWorkflowBtn" class="primary">Create Workflow</button>
                 <button class="secondary">Learn More</button>
               </div>
+              <div class="extra">
+              <button class="WriteEmail">Send Email</button>
             </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Email Modal -->
+        <div id="emailModal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Compose Email</h3>
+            <form id="emailForm">
+              <label for="emailTo">To:</label>
+              <input type="email" id="emailTo" name="emailTo" placeholder="Recipient's email" required>
+              
+              <label for="emailSubject">Subject:</label>
+              <input type="text" id="emailSubject" name="emailSubject" placeholder="Subject" required>
+              
+              <label for="emailDescription">Message:</label>
+              <textarea id="emailDescription" name="emailDescription" placeholder="Write your message here..." rows="6" required></textarea>
+              
+              <div class="modal-buttons">
+                <button type="submit" class="primary">Send</button>
+                <button type="button" class="secondary close">Cancel</button>
+              </div>
+            </form>
           </div>
         </div>
               <div id="workflowBuilder" class="content-section" style="display: none;">
@@ -174,29 +197,18 @@
                     <h1 class="custom2-title">Create new workflow</h1>
                     <p class="custom2-subtitle">Automated and personalised workflows that cover your needs</p>
                     <form>
-                      <label for="name" class="custom2-label">Name</label>
+                      <label for="name" class="custom2-label">Subject
+                      </label>
                       <input type="text" id="name" name="name" class="custom2-input" placeholder="Send birthday gift"></textarea>
                       <label for="description" class="custom2-label">Description</label>
                       <textarea id="description" name="description" class="custom2-textarea" placeholder="Automatically send birthday present"></textarea>
-                      <button type="submit" class="custom2-button">Create Workflow</button>
+                      <button type="submit" class="custom2-button">Save & Next</button>
                     </form>
                   </div>
                 </div>
               </div>
               <div id="customWorkflowSteps" class="custom2" style="display: none;">
-                <div class="header-custom2">
-                    <div class="back-custom2">
-                        <i class="fas fa-chevron-left"></i> Back
-                    </div>
-                    <div class="steps-custom2">
-                        <span class="active-custom2">Trigger</span>
-                        <span><img src="~/images/Line.png"></span>
-                        <span>Settings</span>
-                        <span><img src="~/images/Line.png"></span>
-                        <span>Workflow</span>
-                    </div>
-                    <button class="save-next-custom2" id="saveAndNextBtn">Save & Next</button>
-                </div>
+                
                 <div class="container-custom2">
                     <div class="content-custom2">
                         <h2>Workflow trigger</h2>
@@ -229,6 +241,7 @@
               <div class="custom3-container">
                 <div class="custom3-header">
                   Workflow Trigger
+                  <button id="saveAndSendBtn" class="custom3-button">Save & Send</button>
                 </div>
             
                 <div class="custom3-content">
@@ -286,11 +299,12 @@
                   <div class="custom3-section custom3-audience">
                     <h2>Audience</h2>
                     <p>Automated and personalized workflows that cover your needs</p>
-            
+                  
                     <div class="custom3-select-audience">
                       <h3>Select Audience</h3>
                       <hr />
-            
+                  
+                      <!-- Dynamic Audience Options -->
                       <div>
                         <input id="sasha-coen" name="audience" type="radio" />
                         <label for="sasha-coen">
@@ -298,7 +312,7 @@
                           Sasha Coen
                         </label>
                       </div>
-            
+                  
                       <div>
                         <input id="bruno-hurst" name="audience" type="radio" />
                         <label for="bruno-hurst">
@@ -306,7 +320,7 @@
                           Bruno Hurst
                         </label>
                       </div>
-            
+                  
                       <div>
                         <input id="eva-mendes" name="audience" type="radio" />
                         <label for="eva-mendes">
@@ -314,7 +328,7 @@
                           Eva Mendes
                         </label>
                       </div>
-            
+                  
                       <div>
                         <input checked id="engineer-team" name="audience" type="radio" />
                         <label for="engineer-team">
@@ -322,7 +336,7 @@
                           Engineer Team
                         </label>
                       </div>
-            
+                  
                       <div>
                         <input id="umar-riddle" name="audience" type="radio" />
                         <label for="umar-riddle">
@@ -331,11 +345,15 @@
                         </label>
                       </div>
                     </div>
+                  
+                    <!-- Add Button -->
+                    <button id="custom3PlusButton" class="plus-button" alt="Add">+</button>
                   </div>
                 </div>
               </div>
             </div>
             </div>
+
           </main>
           <div id="addOptionsPanel" class="new-user-panel" style="display: none;">
             <h2>Select Data Entry Method</h2>
