@@ -131,9 +131,6 @@ projectLinks.forEach(link => {
     });
 });
 
-// Get the container for audience options and the add button
-const audienceOptions = document.getElementById("audience-options");
-const addAudienceBtn = document.getElementById("add-audience-btn");
 
 // Function to add a new audience option
 function addAudienceOption() {
@@ -180,4 +177,4 @@ function addAudienceOption() {
 }
 
 // Add event listener to the button
-addAudienceBtn.addEventListener("click", addAudienceOption);
+

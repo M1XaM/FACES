@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", function() {
             if (match) {
                 const userId = match[1];
                 const projectId = match[2];
+                
+                console.log("User ID:", userId);
+                console.log("Project ID:", projectId);
 
                 // Empty the hardcoded list
                 const clients = []; // No predefined data
@@ -74,3 +77,4 @@ document.addEventListener("DOMContentLoaded", function() {
 
     fetchClients();
 });
+
