@@ -91,13 +91,7 @@ closeButtons.forEach(button => {
   });
 });
 
-// Handle form submission
-emailForm.addEventListener("submit", (e) => {
-  e.preventDefault(); // Prevent default form submission
-  alert("Email sent successfully!");
-  modal.style.display = "none"; // Close the modal
-  emailForm.reset(); // Clear all input fields
-});
+
 
 // Close modal when clicking outside the modal content
 window.addEventListener("click", (event) => {
@@ -179,5 +173,3 @@ function addAudienceOption() {
   audienceOptions.appendChild(newOption);
 }
 
-// Add event listener to the button
-addAudienceBtn.addEventListener("click", addAudienceOption);

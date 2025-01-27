@@ -61,13 +61,23 @@ buttons.forEach(button => {
   });
 });
 
-const headerCustom2 = document.querySelector('.header-custom2');
-const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-        if (window.getComputedStyle(headerCustom2).display === 'none') {
-            headerCustom2.style.display = 'flex';
-            console.log('Header was hidden, restored it to flex.');
-        }
-    });
+const parentObserver = new MutationObserver(() => {
+  const headerCustom2 = document.querySelector('.header-custom2');
+  if (headerCustom2) {
+      parentObserver.disconnect(); // Stop observing once the element is found
+
+      const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+              if (window.getComputedStyle(headerCustom2).display === 'none') {
+                  headerCustom2.style.display = 'flex';
+                  console.log('Header was hidden, restored it to flex.');
+              }
+          });
+      });
+
+      observer.observe(headerCustom2, { attributes: true, childList: true, subtree: true });
+      console.log("MutationObserver initialized for .header-custom2.");
+  }
 });
-observer.observe(headerCustom2, { attributes: true, childList: true, subtree: true });
+
+parentObserver.observe(document.body, { childList: true, subtree: true });
