@@ -11,5 +11,6 @@ pipeline {
       stage('Run and leave') {
         steps {
           sh 'docker-compose up --build'
+        }
     }
 }
